@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-//test
+
 public class Cell {
     // If you want to change any variable names just tell me
     private final int row;
