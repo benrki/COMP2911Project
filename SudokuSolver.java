@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class SudokuSolver implements SudokuSolverInterface{
     private Grid currentGrid;
     private Grid answerGrid;
@@ -10,21 +12,14 @@ public class SudokuSolver implements SudokuSolverInterface{
     public boolean findAnswers() {   
         int i=0;
         int j=0;
-        boolean hasSolution = true;
-        while(hasSolution) {
-            // Backtracked past the start of the grid (can't solve every cell)
-            if(i<0) {
-                hasSolution = false;
-            // Advance past the end of the grid (solved every cell)
-            } else if (i>8) {
-                return true;
-            }
+        boolean finished = true;
+        while(finished) {
             int potential = answerGrid.getCell(i,j).getNumber() + 1;
             // Exhausted all potential numbers, set 0 then backtrack 
             if(potential > 9) {
                 answerGrid.getCell(i, j).setNumber(0);
                 boolean backtracked = false;
-                while(!backtracked || !answerGrid.getCell(i, j).isGiven()) {
+                while(!backtracked || answerGrid.getCell(i, j).isGiven()) {
                     // Fix this later!!!
                     if(j==0) {
                         i--;
@@ -32,18 +27,29 @@ public class SudokuSolver implements SudokuSolverInterface{
                     } else {
                         j--;
                     }
+                    // Backtracked past the start of the grid (can't solve every cell)
+                    if(i<0) {
+                        return false;
+                    }
                     backtracked = true;
                 }
             } else {
                 answerGrid.getCell(i, j).setNumber(potential);
                 boolean valid = answerGrid.isCellValid(answerGrid.getCell(i,j));
                 if(valid) {
-                    i = i + j/9;
-                    j = (j+1)%9;
+                    boolean advanced = false;
+                    while(!advanced || answerGrid.getCell(i, j).isGiven()) {
+                        i = i + j/8;
+                        j = (j+1)%9;
+                        advanced = true;
+                        if (i>8) {
+                            return true;
+                        }
+                    }
                 }
             }
         }
-        return hasSolution;
+        return false;
     }
     
     /**
@@ -56,6 +62,52 @@ public class SudokuSolver implements SudokuSolverInterface{
             }
         }
     }
+
+    /*
+    @Override
+    public int getCurrentCellNumber(int row, int col) {
+        // TODO Auto-generated method stub
+        return 0;
+    }*/
+
+    @Override
+    public void setCurrentCellNumber(int row, int col, int n) {
+        this.currentGrid.getCell(row, col).setNumber(n); 
+    }
+    
+    public void giveCellNumber(int row, int col, int n) {
+        this.currentGrid.getCell(row, col).setNumber(n);
+        this.currentGrid.getCell(row, col).setGiven(true);
+        this.answerGrid.getCell(row, col).setNumber(n);
+        this.answerGrid.getCell(row, col).setGiven(true);
+    }
+    /*
+    @Override
+    public boolean currentCellHasCandidate(int row, int col, int n) {
+        return currentGrid.getCell(row, col).hasCandidate(n);
+    }
+
+    @Override
+    public void addCurrentCellCandidates(int row, int col, int n) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public boolean checkCurrentCell(int row, int col) {
+        // TODO Auto-generated method stub
+        return false;
+    }*/
+    
+    public void printCurrentGrid() {
+        this.currentGrid.printGrid();
+    }
+    public void printAnswerGrid() {
+        this.answerGrid.printGrid();
+    }
+    
+    
+    //public int getCurrentCellNumber()
     
     // (Make blank grid)
     // Input External Puzzle

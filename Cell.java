@@ -9,11 +9,11 @@ public class Cell {
     private boolean given; // If this cell was "given" (i.e You can't change the guess)
     private ArrayList<Boolean> candidates;
    
-    public Cell (int row, int column, int number, boolean given) {
+    public Cell (int row, int column, int number) {
         this.row = row;
         this.column = column;
         this.number = number;
-        this.given = given;
+        this.given = false;
         candidates = new ArrayList<Boolean>();
         for(int i=0; i<9; i++) {
            candidates.add(false);
@@ -24,6 +24,10 @@ public class Cell {
         this.number = number;
     }
  
+    public void setGiven (boolean given) {
+        this.given = given;
+    }
+    
     public int getNumber() {
         return this.number;
     }
