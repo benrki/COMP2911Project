@@ -22,10 +22,17 @@ public interface SudokuSolverInterface {
     // Checks if currentCell is CORRECT (different to valid)
     public boolean isCurrentCellValid(int row, int col);
     
+    public boolean isGridCorrect();
+    public boolean isRowCorrect(int row);
+    public boolean isColumnCorrect(int col);
+    public boolean isBoxCorrect(int box);
+    
     // Undo
     // Redo
     // Clear input
     // Clear possibles
+    // Start time
+    // Finish time
     
     // Extra:
     // Change "pencil marks" to "pen" (changes all single candidates to "pen")

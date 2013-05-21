@@ -126,12 +126,6 @@ public class Grid {
         }
         System.out.println();
     }
-        
-    // isCellCorrect()
-    // isGridCorrect()
-    // isRowCorrect()
-    // isColumnCorrect()
-    // isBoxCorrect()
     
     // Grid hasSolution() returns null or solution board
 }

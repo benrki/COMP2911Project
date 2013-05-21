@@ -1,5 +1,9 @@
 import java.util.ArrayList;
 
+// To do: 
+// rearrange order methods and maybe change names
+// rethink where each method belongs.
+
 public class SudokuSolver implements SudokuSolverInterface{
     private Grid currentGrid;
     private Grid answerGrid;
@@ -125,23 +129,48 @@ public class SudokuSolver implements SudokuSolverInterface{
     public boolean isCurrentCellCorrect(int row, int col) {
         return this.currentGrid.getCell(row, col).isCorrect(this.answerGrid.getCell(row, col));
     }
-    
-    
-    //public int getCurrentCellNumber()
-    
-    // (Make blank grid)
-    // Input External Puzzle
-    // (Every input has given==true)
-    // Play
-    // (Checks if hasSolution, returns grid)
-    // 
-    
-    
-    
-    
-    
-    // void startTime()
-    // void getTime()
-    // void undo()
-    // void redo()
+
+    @Override
+    public boolean isGridCorrect() {
+        for(int i=0; i<9; i++) {
+            if(!isRowCorrect(i) || !isColumnCorrect(i) || !isBoxCorrect(i) ) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isRowCorrect(int row) {
+        for(int i=0; i<Grid.NUM_COLS; i++) {
+            if(!currentGrid.getCell(row, i).isCorrect(answerGrid.getCell(row, i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isColumnCorrect(int col) {
+        for(int i=0; i<Grid.NUM_ROWS; i++) {
+            if(!currentGrid.getCell(i, col).isCorrect(answerGrid.getCell(i, col))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isBoxCorrect(int box) {
+        int row = (box/3)*3; // Row of top-left cell of box
+        int col = (box%3)*3; // Col of top-left cell of box
+        for(int i=row; i<row+3; i++) {
+            for(int j=col; j<col+3; j++) {
+                if(!currentGrid.getCell(i, j).isCorrect(answerGrid.getCell(i, j))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
