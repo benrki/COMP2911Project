@@ -1,4 +1,4 @@
-public class SudokuSolver {
+public class SudokuSolver implements SudokuSolverInterface{
 
     // (Make blank grid)
     // Input External Puzzle
