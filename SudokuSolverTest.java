@@ -38,10 +38,14 @@ public class SudokuSolverTest {
             }
         }
         s.close();
-        System.out.println("Unsolved board");
+        System.out.println("Unsolved grid");
         sudokuSolver.printCurrentGrid();
-        System.out.println("Solved board");
+        
+        System.out.println("Find answers");
         sudokuSolver.findAnswers();
+        sudokuSolver.printCurrentGrid();
+        
+        System.out.println("Solve grid");
         sudokuSolver.solveGrid();
         sudokuSolver.printCurrentGrid();
         

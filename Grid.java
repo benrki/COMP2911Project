@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
-//*** TO IMPLEMENT
-// IS VALID CHECKS FOR CURRENT (NOT ANSWER) FOR USER FEEDBACK
-// Change variable names, need to distinguish between "Is current valid" and "Is answer valid" for cell/row/col/box
+
 public class Grid {
     public static final int EMPTY = 0;
     public static final int NUM_ROWS = 9;
@@ -36,11 +34,8 @@ public class Grid {
      * Returns <tt>true</tt> if Cell is valid, false otherwise.
      * @return <tt>true</tt> if Cell is valid, false otherwise.
      */
-    public boolean isCellValid(Cell c) {
-       int row = c.getRow();
-       int col = c.getColumn();
-       int box = c.getBox();
-
+    public boolean isCellValid(int row, int col) {
+       int box = getCell(row, col).getBox();
        if(!isRowValid(row) || !isColumnValid(col) || !isBoxValid(box)) {
           return false;
        }

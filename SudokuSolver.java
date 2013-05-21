@@ -9,9 +9,13 @@ public class SudokuSolver implements SudokuSolverInterface{
         this.answerGrid = new Grid();
     }
     
+    /** Returns <tt>true</tt> if solution is found, <tt>false</tt> otherwise. Also stores the solution if found.
+     * @return  <tt>true</tt> if solution is found, <tt>false</tt> otherwise.
+     */
+    @Override
     public boolean findAnswers() {   
-        int i=0;
-        int j=0;
+        int i = 0;
+        int j = 0;
         boolean finished = true;
         while(finished) {
             int potential = answerGrid.getCell(i,j).getNumber() + 1;
@@ -23,10 +27,8 @@ public class SudokuSolver implements SudokuSolverInterface{
                     // Fix this later!!!
                     if(j==0) {
                         i--;
-                        j=8;
-                    } else {
-                        j--;
                     }
+                    j = Math.abs((j-1)%9);
                     // Backtracked past the start of the grid (can't solve every cell)
                     if(i<0) {
                         return false;
@@ -35,7 +37,7 @@ public class SudokuSolver implements SudokuSolverInterface{
                 }
             } else {
                 answerGrid.getCell(i, j).setNumber(potential);
-                boolean valid = answerGrid.isCellValid(answerGrid.getCell(i,j));
+                boolean valid = answerGrid.isCellValid(i,j);
                 if(valid) {
                     boolean advanced = false;
                     while(!advanced || answerGrid.getCell(i, j).isGiven()) {
@@ -55,6 +57,7 @@ public class SudokuSolver implements SudokuSolverInterface{
     /**
      * Sets all the numbers in the currentGrid to the numbers in the answerGrid.
      */
+    @Override
     public void solveGrid() {
         for(int i=0; i<Grid.NUM_ROWS; i++) {
             for(int j=0; j<Grid.NUM_COLS; j++) {
@@ -63,25 +66,39 @@ public class SudokuSolver implements SudokuSolverInterface{
         }
     }
 
-    /*
+    /**
+     * Returns the number in the specified cell in the currentGrid.
+     * @return the number in the specified cell in the currentGrid.
+     */
     @Override
     public int getCurrentCellNumber(int row, int col) {
-        // TODO Auto-generated method stub
-        return 0;
-    }*/
+        return this.currentGrid.getCell(row, col).getNumber();
+    }
 
+    /**
+     * Sets the number in the specified cell in the currentGrid as the specified number.
+     */
     @Override
     public void setCurrentCellNumber(int row, int col, int n) {
         this.currentGrid.getCell(row, col).setNumber(n); 
     }
     
+    /**
+     * Sets the number in the specified cell in the currentGrid as the specified number. 
+     * (Different to setCurrentCellNumber as it prevents the number from being changed in the future).
+     * Should be used when initialising the board.
+     * @param row The row of the cell.
+     * @param col The column of the cell.
+     * @param n The number to set the cell as.
+     */
+    @Override
     public void giveCellNumber(int row, int col, int n) {
         this.currentGrid.getCell(row, col).setNumber(n);
         this.currentGrid.getCell(row, col).setGiven(true);
         this.answerGrid.getCell(row, col).setNumber(n);
         this.answerGrid.getCell(row, col).setGiven(true);
     }
-    /*
+    
     @Override
     public boolean currentCellHasCandidate(int row, int col, int n) {
         return currentGrid.getCell(row, col).hasCandidate(n);
@@ -89,21 +106,24 @@ public class SudokuSolver implements SudokuSolverInterface{
 
     @Override
     public void addCurrentCellCandidates(int row, int col, int n) {
-        // TODO Auto-generated method stub
-        
+        currentGrid.getCell(row, col).addCandidate(n);
     }
 
     @Override
-    public boolean checkCurrentCell(int row, int col) {
-        // TODO Auto-generated method stub
-        return false;
-    }*/
+    public boolean isCurrentCellValid(int row, int col) {
+        return this.currentGrid.isCellValid(row, col);
+    }
     
     public void printCurrentGrid() {
         this.currentGrid.printGrid();
     }
     public void printAnswerGrid() {
         this.answerGrid.printGrid();
+    }
+
+    @Override
+    public boolean isCurrentCellCorrect(int row, int col) {
+        return this.currentGrid.getCell(row, col).isCorrect(this.answerGrid.getCell(row, col));
     }
     
     

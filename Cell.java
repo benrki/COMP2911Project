@@ -1,11 +1,11 @@
 import java.util.ArrayList;
  
 public class Cell {
-    // If you want to change any variable names just tell me
+    
     private final static int EMPTY = 0;
     private final int row;
     private final int column;
-    private int number; // The number the user will see on the grid or what the user guessed (we need to define what blank is)
+    private int number; 
     private boolean given; // If this cell was "given" (i.e You can't change the guess)
     private ArrayList<Boolean> candidates;
    
@@ -21,7 +21,9 @@ public class Cell {
     }
  
     public void setNumber(int number) {
-        this.number = number;
+        if(!this.given) {
+            this.number = number;
+        }
     }
  
     public void setGiven (boolean given) {
@@ -32,7 +34,6 @@ public class Cell {
         return this.number;
     }
    
- 
     public int getRow() {
         return this.row;
     }
@@ -61,9 +62,8 @@ public class Cell {
        return candidates.get(n-1);
     }
     
-    // if the current and answer are the same
-    public boolean isCorrect(Cell answer) {
-        if (this.getNumber() == answer.getNumber()) {
+    public boolean isCorrect(Cell answerCell) {
+        if (this.getNumber() == answerCell.getNumber()) {
             return true;
         }
         return false;
