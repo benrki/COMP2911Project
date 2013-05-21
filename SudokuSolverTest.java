@@ -41,6 +41,15 @@ public class SudokuSolverTest {
         System.out.println("Unsolved grid");
         sudokuSolver.printCurrentGrid();
         
+        System.out.println("Putting some numbers in");
+        sudokuSolver.setCurrentCellNumber(0, 0, 3);
+        sudokuSolver.setCurrentCellNumber(8, 1, 2);
+        sudokuSolver.setCurrentCellNumber(4, 4, 4);
+        sudokuSolver.printCurrentGrid();
+        
+        System.out.println("Trying to put a number in a cell that was given");
+        sudokuSolver.setCurrentCellNumber(0, 1, 2);
+        
         System.out.println("Find answers");
         sudokuSolver.findAnswers();
         sudokuSolver.printCurrentGrid();
@@ -52,5 +61,6 @@ public class SudokuSolverTest {
         
         System.out.println("Compare to solution");
         System.out.print(solution);
+        
     }
 }

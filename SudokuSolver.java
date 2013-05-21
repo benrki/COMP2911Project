@@ -17,18 +17,18 @@ public class SudokuSolver implements SudokuSolverInterface{
      * @return  <tt>true</tt> if solution is found, <tt>false</tt> otherwise.
      */
     @Override
-    public boolean findAnswers() {   
-        int i = 0;
-        int j = 0;
+    public boolean findAnswers() {   // I want to change this to findSolution later.
+        int i = 0, j = 0;
         boolean finished = true;
         while(finished) {
             int potential = answerGrid.getCell(i,j).getNumber() + 1;
-            // Exhausted all potential numbers, set 0 then backtrack 
+            // If exhausted all potential numbers, set cell to 0 then backtrack 
             if(potential > 9) {
                 answerGrid.getCell(i, j).setNumber(0);
                 boolean backtracked = false;
+                // Backtracks to the previous ungiven cell.
                 while(!backtracked || answerGrid.getCell(i, j).isGiven()) {
-                    // Fix this later!!!
+                    // Make this better later
                     if(j==0) {
                         i--;
                     }
@@ -39,15 +39,18 @@ public class SudokuSolver implements SudokuSolverInterface{
                     }
                     backtracked = true;
                 }
+            // Else, set potential to cell.
             } else {
                 answerGrid.getCell(i, j).setNumber(potential);
                 boolean valid = answerGrid.isCellValid(i,j);
+                // If valid, advances to the next ungiven cell.
                 if(valid) {
                     boolean advanced = false;
                     while(!advanced || answerGrid.getCell(i, j).isGiven()) {
                         i = i + j/8;
                         j = (j+1)%9;
                         advanced = true;
+                        // Advanced past the end of the grid (found solution)
                         if (i>8) {
                             return true;
                         }
@@ -127,7 +130,7 @@ public class SudokuSolver implements SudokuSolverInterface{
 
     @Override
     public boolean isCurrentCellCorrect(int row, int col) {
-        return this.currentGrid.getCell(row, col).isCorrect(this.answerGrid.getCell(row, col));
+        return (this.currentGrid.getCell(row, col).getNumber()==this.answerGrid.getCell(row, col).getNumber());
     }
 
     @Override
@@ -143,7 +146,7 @@ public class SudokuSolver implements SudokuSolverInterface{
     @Override
     public boolean isRowCorrect(int row) {
         for(int i=0; i<Grid.NUM_COLS; i++) {
-            if(!currentGrid.getCell(row, i).isCorrect(answerGrid.getCell(row, i))) {
+            if(currentGrid.getCell(row, i).getNumber()!=(answerGrid.getCell(row, i).getNumber())) {
                 return false;
             }
         }
@@ -153,7 +156,7 @@ public class SudokuSolver implements SudokuSolverInterface{
     @Override
     public boolean isColumnCorrect(int col) {
         for(int i=0; i<Grid.NUM_ROWS; i++) {
-            if(!currentGrid.getCell(i, col).isCorrect(answerGrid.getCell(i, col))) {
+            if(currentGrid.getCell(i, col).getNumber()!=(answerGrid.getCell(i, col).getNumber())) {
                 return false;
             }
         }
@@ -166,7 +169,7 @@ public class SudokuSolver implements SudokuSolverInterface{
         int col = (box%3)*3; // Col of top-left cell of box
         for(int i=row; i<row+3; i++) {
             for(int j=col; j<col+3; j++) {
-                if(!currentGrid.getCell(i, j).isCorrect(answerGrid.getCell(i, j))) {
+                if(currentGrid.getCell(i, j).getNumber()!=(answerGrid.getCell(i, j).getNumber())) {
                     return false;
                 }
             }
