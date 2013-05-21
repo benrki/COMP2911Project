@@ -9,37 +9,33 @@ public class Grid {
     public static final int NUM_COLS = 9;
     ArrayList<ArrayList<Cell>> grid;     
 
-    public Grid (String input) {
+    /**
+     * Constructs a Grid.
+     */
+    public Grid () {
         this.grid = new ArrayList<ArrayList<Cell>>();
-        Scanner s = new Scanner(input);
         for(int i=0; i<NUM_ROWS; i++) {
             grid.add(new ArrayList<Cell>());
             for(int j=0; j<NUM_COLS; j++) {
-                int n = s.nextInt();
-                boolean given = (n!=EMPTY);
-                grid.get(i).add(new Cell(i, j, n, n, given));
+                grid.get(i).add(new Cell(i, j, EMPTY, false));
             }
         }
-        s.close();
-    }
-    
-    /*public void setCellCurrent(int row, int col, int n) {
-       this.grid.get(row).get(col).setCurrent(n);
     }
 
-    public void setCellAnswer(int row, int col, int n) {
-        this.grid.get(row).get(col).setAnswer(n);
-    }*/
-    
-    public boolean isGridValid() {
-       for(int i=0; i<NUM_ROWS; i++) {
-           if(!isRowValid(i) || !isColumnValid(i) || !isBoxValid(i)) {
-              return false;
-           }
-       }
-       return true;
+    /**
+     * Returns the Cell in row "row" and column "col".
+     * @param row The row of the cell.
+     * @param col The column of the cell.
+     * @return the Cell in row "row" and column "col".
+     */
+    public Cell getCell(int row, int col) {
+        return this.grid.get(row).get(col);
     }
-
+    
+    /**
+     * Returns <tt>true</tt> if Cell is valid, false otherwise.
+     * @return <tt>true</tt> if Cell is valid, false otherwise.
+     */
     public boolean isCellValid(Cell c) {
        int row = c.getRow();
        int col = c.getColumn();
@@ -51,12 +47,30 @@ public class Grid {
        return true;
     }
     
+    /**
+     * Returns <tt>true</tt> if Grid is valid, false otherwise.
+     * @return <tt>true</tt> if Grid is valid, false otherwise.
+     */
+    public boolean isGridValid() {
+       for(int i=0; i<NUM_ROWS; i++) {
+           if(!isRowValid(i) || !isColumnValid(i) || !isBoxValid(i)) {
+              return false;
+           }
+       }
+       return true;
+    }
+
+    
+    /**
+     * Returns <tt>true</tt> if Row is valid, false otherwise.
+     * @return <tt>true</tt> if Row is valid, false otherwise.
+     */
     public boolean isRowValid(int n) {
        ArrayList<Integer> row = new ArrayList<Integer>();
        for(int i=0; i<NUM_COLS; i++) {
-          if(!row.contains(grid.get(n).get(i).getAnswer())) {
-              if(grid.get(n).get(i).getAnswer()!=EMPTY) {
-                  row.add(grid.get(n).get(i).getAnswer());
+          if(!row.contains(grid.get(n).get(i).getNumber())) {
+              if(grid.get(n).get(i).getNumber()!=EMPTY) {
+                  row.add(grid.get(n).get(i).getNumber());
               }
           } else {
              return false;
@@ -68,9 +82,9 @@ public class Grid {
     public boolean isColumnValid(int n) {
        ArrayList<Integer> col = new ArrayList<Integer>();
        for(int i=0; i<NUM_COLS; i++) {
-          if(!col.contains(grid.get(i).get(n).getAnswer())) {
-             if(grid.get(i).get(n).getAnswer()!=EMPTY) {
-                col.add(grid.get(i).get(n).getAnswer());
+          if(!col.contains(grid.get(i).get(n).getNumber())) {
+             if(grid.get(i).get(n).getNumber()!=EMPTY) {
+                col.add(grid.get(i).get(n).getNumber());
              }
           } else {
              return false;
@@ -86,9 +100,9 @@ public class Grid {
        ArrayList<Integer> box = new ArrayList<Integer>();
        for(int i=row; i<row+3; i++) {
            for(int j=col; j<col+3; j++) {
-               if(!box.contains(grid.get(i).get(j).getAnswer())) {
-                   if(grid.get(i).get(j).getAnswer()!=EMPTY) {
-                      box.add(grid.get(i).get(j).getAnswer());
+               if(!box.contains(grid.get(i).get(j).getNumber())) {
+                   if(grid.get(i).get(j).getNumber()!=EMPTY) {
+                      box.add(grid.get(i).get(j).getNumber());
                    }
                } else {
                    return false;
@@ -97,7 +111,7 @@ public class Grid {
        }
        return true;
     }
-
+    
     public void printGrid() {
         for(int i=0; i<NUM_ROWS; i++) {
             if(i%3==0&&i!=0) {
@@ -107,104 +121,15 @@ public class Grid {
                 if(j%3==0&&j!=0) {
                     System.out.print("| ");
                 }
-                if(this.grid.get(i).get(j).getCurrent()==EMPTY){
+                if(this.grid.get(i).get(j).getNumber()==EMPTY){
                     System.out.print("|-");
                 } else {
-                    System.out.print("|" + this.grid.get(i).get(j).getCurrent());
+                    System.out.print("|" + this.grid.get(i).get(j).getNumber());
                 }
             }
             System.out.println("|");
         }
         System.out.println();
-    }
-    
-    public void findAnswers() {
-        
-        int i=0;
-        int j=0;
-        boolean finished = false;
-        while(!finished) {
-            Cell current = grid.get(i).get(j);
-            if(!current.isGiven()) {
-                boolean advance = false;
-                int k = current.getAnswer();
-                while(!advance) {
-                    k++;
-                    if(k>9) {
-                        current.setAnswer(0);
-                        while(advance==false) {
-                            Cell c = this.prevCell(this.grid.get(i).get(j));
-                            i = c.getRow();
-                            j = c.getColumn();
-                            if(!this.grid.get(i).get(j).isGiven()) {
-                                advance = true;
-                            }   
-                        }
-                    } else {
-                        current.setAnswer(k);
-                        // No violations, go next ungiven
-                        if(this.isCellValid(current)) {
-                            advance = true;
-                            Cell c = this.nextCell(current);
-                            if(c!=null) {
-                                i = c.getRow();
-                                j = c.getColumn();
-                            } else {
-                                return;
-                            }
-                        }
-                    }
-                }
-            } else {
-                Cell c = this.nextCell(current);
-                if(c!=null) {
-                    i = c.getRow();
-                    j = c.getColumn();
-                } else {
-                    return;
-                }
-            }
-        }
-    }
-    
-    public void solveGrid() {
-        for(int i=0; i<NUM_ROWS; i++) {
-            for(int j=0; j<NUM_COLS; j++) {
-                int answer = this.grid.get(i).get(j).getAnswer();
-                this.grid.get(i).get(j).setCurrent(answer);
-            }
-        }
-    }
-
-    
-    public Cell nextCell(Cell c) {
-        int row = c.getRow();
-        int col = c.getColumn();
-        int nextRow = row;
-        int nextCol = col+1;
-        if(col==8) {
-            nextCol = 0;
-            nextRow = row+1;
-        }
-        if(nextRow>8 || nextCol >8) {
-            return null;
-        } 
-        return this.grid.get(nextRow).get(nextCol);
-    }
-    
-    public Cell prevCell (Cell c) {
-        int row = c.getRow();
-        int col = c.getColumn();
-        int prevRow = row;
-        int prevCol = col-1;
-        if(col==0) {
-            prevCol = 8;
-            prevRow = row-1;
-        }
-        if(prevRow>8 || prevCol >8) {
-            return null;
-        } 
-        return this.grid.get(prevRow).get(prevCol);
     }
         
     // isCellCorrect()

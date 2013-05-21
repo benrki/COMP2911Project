@@ -5,16 +5,14 @@ public class Cell {
     private final static int EMPTY = 0;
     private final int row;
     private final int column;
-    private int current; // The number the user will see on the grid or what the user guessed (we need to define what blank is)
-    private int answer; // The correct answer for the cell
-    private final boolean given; // If this cell was "given" (i.e You can't change the guess)
+    private int number; // The number the user will see on the grid or what the user guessed (we need to define what blank is)
+    private boolean given; // If this cell was "given" (i.e You can't change the guess)
     private ArrayList<Boolean> candidates;
    
-    public Cell (int row, int column, int current, int answer, boolean given) {
+    public Cell (int row, int column, int number, boolean given) {
         this.row = row;
         this.column = column;
-        this.current = current;
-        this.answer = answer;
+        this.number = number;
         this.given = given;
         candidates = new ArrayList<Boolean>();
         for(int i=0; i<9; i++) {
@@ -22,21 +20,14 @@ public class Cell {
         }
     }
  
-    public void setCurrent(int current) {
-        this.current = current;
+    public void setNumber(int number) {
+        this.number = number;
     }
-   
-    public void setAnswer(int answer) {
-        this.answer = answer;
-    }    
  
-    public int getCurrent() {
-        return this.current;
+    public int getNumber() {
+        return this.number;
     }
    
-    public int getAnswer() {
-        return this.answer;
-    }
  
     public int getRow() {
         return this.row;
@@ -50,18 +41,10 @@ public class Cell {
      return 3*(this.row/3) + (this.column/3);
      }
  
-    // returns given
     public boolean isGiven() {
         return this.given;
     }
    
-    // if the current and answer are the same
-    public boolean isCorrect() {
-        if (this.current == this.answer) {
-            return true;
-        }
-        return false;
-    }
     public void addCandidate(int n) {
        this.candidates.set(n-1, true);
     }
@@ -72,5 +55,13 @@ public class Cell {
    
     public boolean hasCandidate(int n) {
        return candidates.get(n-1);
+    }
+    
+    // if the current and answer are the same
+    public boolean isCorrect(Cell answer) {
+        if (this.getNumber() == answer.getNumber()) {
+            return true;
+        }
+        return false;
     }
 }
