@@ -71,22 +71,27 @@ public class SudokuSolver implements SudokuSolverInterface{
      * @return  <tt>true</tt> if solution is found, <tt>false</tt> otherwise.
      */
     @Override
+    // Recursion this later
     public boolean findSolution() {
         int i = 0, j = 0;
         boolean finished = true;
         while(finished) {
+            this.printAnswerGrid();
+            System.out.println("------------------------------------------------------------");
             int potential = answerGrid.getCell(i,j).getNumber() + 1;
             // If exhausted all potential numbers, set cell to 0 then backtrack 
             if(potential > 9) {
-                answerGrid.getCell(i, j).setNumber(0);
+                answerGrid.getCell(i, j).setNumber(Grid.EMPTY);
                 boolean backtracked = false;
                 // Backtracks to the previous ungiven cell.
                 while(!backtracked || answerGrid.getCell(i, j).isGiven()) {
                     // Make this better later
                     if(j==0) {
                         i--;
+                        j = 8;
+                    } else {
+                        j--;
                     }
-                    j = Math.abs((j-1)%9);
                     // Backtracked past the start of the grid (can't solve every cell)
                     if(i<0) {
                         return false;
@@ -257,7 +262,7 @@ public class SudokuSolver implements SudokuSolverInterface{
     public void revealSolution() {
         for(int i=0; i<Grid.NUM_ROWS; i++) {
             for(int j=0; j<Grid.NUM_COLS; j++) {
-                currentGrid.getCell(i, j).setNumber(answerGrid.getCell(i, j).getNumber());
+                this.revealCell(i, j);
             }
         }
     }

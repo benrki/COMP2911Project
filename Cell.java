@@ -32,9 +32,9 @@ public class Cell {
      * @param number The number to set the Cell number to.
      */
     public void setNumber(int number) {
-        if(!this.given && 0 < number && number < 10) {
+        //if(!this.given && 0 <= number && number <= 9) {
             this.number = number;
-        }
+        //}
     }
  
     /**

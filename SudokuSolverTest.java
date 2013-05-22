@@ -38,7 +38,10 @@ public class SudokuSolverTest {
             }
         }
         s.close();
-        System.out.println("Unsolved grid");
+        sudokuSolver.findSolution();
+        sudokuSolver.printAnswerGrid();
+        sudokuSolver.printCurrentGrid();
+        /*        System.out.println("Unsolved grid");
         sudokuSolver.printCurrentGrid();
         
         System.out.println("Putting some numbers in");
@@ -50,14 +53,10 @@ public class SudokuSolverTest {
         System.out.println("Trying to put a number in a cell that was given");
         sudokuSolver.setCellNumber(0, 1, 2);
         
-        System.out.println("Find answers");
-        sudokuSolver.findSolution();
-        sudokuSolver.printCurrentGrid();
-        
         System.out.println("Reveal solution");
         sudokuSolver.revealSolution();
         sudokuSolver.printCurrentGrid();
-        
+*/
         
         System.out.println("Compare to (hard-coded) solution");
         System.out.print(solution);
