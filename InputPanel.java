@@ -7,19 +7,25 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.*;
-public class InputPanel implements KeyListener {
+/**
+ * @author Ben
+ *
+ */
+public class InputPanel extends JPanel  {
+	
+	/**
+	 * Default serialization
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public InputPanel() {
-		JFrame frame = new JFrame("Input Panel");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		String keyLabels = "7894561230";
-		final JPanel keyPanel = new JPanel();
-		keyPanel.setLayout(new GridLayout(4, 3));
+		super();
+		String keyLabels = "789456123";
+		this.setLayout(new GridLayout(4, 3));
 		for (int i = 0; i < keyLabels.length(); i++) {
 			final String label = keyLabels.substring(i, i + 1);
 			JButton keyButton = new JButton(label);
-			keyPanel.add(keyButton);
+			this.add(keyButton);
 			keyButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent event) {
 					// Send label to be the next action
@@ -29,7 +35,7 @@ public class InputPanel implements KeyListener {
 		}
 		
 		JButton clear = new JButton("CLEAR");
-		keyPanel.add(clear);
+		this.add(clear);
 		clear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				// Clear selected cell if number entered
@@ -37,45 +43,20 @@ public class InputPanel implements KeyListener {
 		});
 
 		JToggleButton mark = new JToggleButton("MARK");
-		keyPanel.add(mark);
+		this.add(mark);
 		mark.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				// Toggle candidate marking mode
 			}
 		});
-
-		// Requests keyPanel get the focus whenever frame is activated.
-		frame.addWindowFocusListener(new WindowAdapter() {
-			public void windowGainedFocus(WindowEvent e) {
-				// Remove later
-				System.out.println("keyPanel in focus");
-				// Requires keyPanel be final? Ask Sam about this
-				keyPanel.requestFocusInWindow();
+		
+		JButton hint = new JButton("HINT");
+		this.add(hint);
+		hint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				// Clear selected cell if number entered
 			}
 		});
-
-		keyPanel.addKeyListener(this);
-
-		frame.add(keyPanel);
-		frame.pack();
-		frame.setVisible(true);
-	}
-	
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// Do nothing
-	}
-
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// Sends keyboard input to be next action for a currently selected tile
 		
-		// Remove later
-		System.out.println(e.getKeyChar());
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// Do nothing
-	}
+	}	
 }
