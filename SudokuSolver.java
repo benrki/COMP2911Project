@@ -76,8 +76,6 @@ public class SudokuSolver implements SudokuSolverInterface{
         int i = 0, j = 0;
         boolean finished = true;
         while(finished) {
-            this.printAnswerGrid();
-            System.out.println("------------------------------------------------------------");
             int potential = answerGrid.getCell(i,j).getNumber() + 1;
             // If exhausted all potential numbers, set cell to 0 then backtrack 
             if(potential > 9) {
