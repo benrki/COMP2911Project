@@ -34,6 +34,14 @@ public class InputPanel extends JPanel  {
 			});
 		}
 		
+		JButton hint = new JButton("HINT");
+		this.add(hint);
+		hint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				// Clear selected cell if number entered
+			}
+		});
+		
 		JButton clear = new JButton("CLEAR");
 		this.add(clear);
 		clear.addActionListener(new ActionListener() {
@@ -50,13 +58,7 @@ public class InputPanel extends JPanel  {
 			}
 		});
 		
-		JButton hint = new JButton("HINT");
-		this.add(hint);
-		hint.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				// Clear selected cell if number entered
-			}
-		});
+
 		
 	}	
 }

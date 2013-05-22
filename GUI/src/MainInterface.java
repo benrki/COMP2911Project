@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JPanel;
 
 
 /**
@@ -25,14 +26,16 @@ public class MainInterface {
 		mainFrame.setLayout(new GridBagLayout());
 		
 		c.anchor = GridBagConstraints.NORTH;
-		GridPanel gridPanel = new GridPanel();
-		mainFrame.getContentPane().add(gridPanel, c);
+		BoardGUI b = new BoardGUI();
+		JPanel grid = b.getBoard();
+		mainFrame.getContentPane().add(grid, c);
 		
 		c.gridy = 1;
 		c.anchor = GridBagConstraints.SOUTH;
 		InputPanel inputPanel = new InputPanel();
 		mainFrame.getContentPane().add(inputPanel, c);
 		
+		mainFrame.setSize(1000, 1000); // wtf no werk
 		mainFrame.pack();
 		mainFrame.setVisible(true);
 	}
