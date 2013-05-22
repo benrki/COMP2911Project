@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 // To do: 
 // rearrange order methods and maybe change names
@@ -7,17 +8,70 @@ import java.util.ArrayList;
 public class SudokuSolver implements SudokuSolverInterface{
     private Grid currentGrid;
     private Grid answerGrid;
-    
+    private ArrayList<String> history;
     public SudokuSolver () {
         this.currentGrid = new Grid();
         this.answerGrid = new Grid();
+        this.history = new ArrayList<String>();
+    }
+    
+    //*****************************************
+    //*** Creating/Generating phase methods ***
+    //*****************************************
+    @Override
+    public void generatePuzzle() {
+        //TO DO!!!!
+    }
+    
+    /**
+     * Sets the number in the specified cell in the currentGrid as the specified number. 
+     * (Different to setCurrentCellNumber as it prevents the number from being changed in the future).
+     * Should be used when initialising the board.
+     * @param row The row of the cell.
+     * @param col The column of the cell.
+     * @param n The number to set the cell as.
+     */
+    @Override
+    public void giveCellNumber(int row, int col, int n) {
+        this.currentGrid.getCell(row, col).setNumber(n);
+        this.currentGrid.getCell(row, col).setGiven(true);
+        this.answerGrid.getCell(row, col).setNumber(n);
+        this.answerGrid.getCell(row, col).setGiven(true);
+    } 
+    @Override
+    public void removeCellNumber(int row, int col) {
+        this.currentGrid.getCell(row, col).setNumber(Grid.EMPTY);
+        this.currentGrid.getCell(row, col).setGiven(false);
+        this.answerGrid.getCell(row, col).setNumber(Grid.EMPTY);
+        this.answerGrid.getCell(row, col).setGiven(false);
+    }
+    
+    @Override
+    public boolean isGridValid() {
+        return this.currentGrid.isGridValid();
+    }
+    @Override
+    public boolean isRowValid(int row){
+        return this.currentGrid.isRowValid(row);
+    }
+    @Override
+    public boolean isColumnValid(int column){
+        return this.currentGrid.isColumnValid(column);
+    }
+    @Override
+    public boolean isBoxValid(int box){
+        return this.currentGrid.isBoxValid(box);
+    }
+    @Override
+    public boolean isCellValid(int row, int col) {
+        return this.currentGrid.isCellValid(row, col);
     }
     
     /** Returns <tt>true</tt> if solution is found, <tt>false</tt> otherwise. Also stores the solution if found.
      * @return  <tt>true</tt> if solution is found, <tt>false</tt> otherwise.
      */
     @Override
-    public boolean findAnswers() {   // I want to change this to findSolution later.
+    public boolean findSolution() {
         int i = 0, j = 0;
         boolean finished = true;
         while(finished) {
@@ -61,78 +115,60 @@ public class SudokuSolver implements SudokuSolverInterface{
         return false;
     }
     
-    /**
-     * Sets all the numbers in the currentGrid to the numbers in the answerGrid.
-     */
-    @Override
-    public void solveGrid() {
-        for(int i=0; i<Grid.NUM_ROWS; i++) {
-            for(int j=0; j<Grid.NUM_COLS; j++) {
-                currentGrid.getCell(i, j).setNumber(answerGrid.getCell(i, j).getNumber());
-            }
-        }
-    }
-
+    //*****************************************
+    //********* Solving phase methods *********
+    //*****************************************
+    
     /**
      * Returns the number in the specified cell in the currentGrid.
      * @return the number in the specified cell in the currentGrid.
      */
     @Override
-    public int getCurrentCellNumber(int row, int col) {
+    public int getCellNumber(int row, int col) {
         return this.currentGrid.getCell(row, col).getNumber();
     }
-
     /**
      * Sets the number in the specified cell in the currentGrid as the specified number.
      */
     @Override
-    public void setCurrentCellNumber(int row, int col, int n) {
+    public void setCellNumber(int row, int col, int n) {
         this.currentGrid.getCell(row, col).setNumber(n); 
     }
-    
-    /**
-     * Sets the number in the specified cell in the currentGrid as the specified number. 
-     * (Different to setCurrentCellNumber as it prevents the number from being changed in the future).
-     * Should be used when initialising the board.
-     * @param row The row of the cell.
-     * @param col The column of the cell.
-     * @param n The number to set the cell as.
-     */
     @Override
-    public void giveCellNumber(int row, int col, int n) {
-        this.currentGrid.getCell(row, col).setNumber(n);
-        this.currentGrid.getCell(row, col).setGiven(true);
-        this.answerGrid.getCell(row, col).setNumber(n);
-        this.answerGrid.getCell(row, col).setGiven(true);
+    public void clearCellNumber(int row, int col) {
+        this.currentGrid.getCell(row, col).setNumber(Grid.EMPTY);
     }
     
     @Override
-    public boolean currentCellHasCandidate(int row, int col, int n) {
+    public boolean hasCellCandidate(int row, int col, int n) {
         return currentGrid.getCell(row, col).hasCandidate(n);
     }
-
     @Override
-    public void addCurrentCellCandidates(int row, int col, int n) {
+    public void addCellCandidate(int row, int col, int n) {
         currentGrid.getCell(row, col).addCandidate(n);
     }
+    public void removeCellCandidate(int row, int col, int n) {
+        currentGrid.getCell(row, col).removeCandidate(n);
+    }
+    public void clearCellCandidates (int row, int col) {
+        for(int i=1; i<=9; i++) {
+            currentGrid.getCell(row, col).removeCandidate(i);
+        }
+    }
+    public void clearAllCandidates () {
+        for(int i=0; i<9; i++) {
+            for(int j=0; j<9; j++) {
+                for(int k=1; k<=9; k++) {
+                    currentGrid.getCell(i, j).removeCandidate(k);
+                }
+            }
+        }
+    }
 
     @Override
-    public boolean isCurrentCellValid(int row, int col) {
-        return this.currentGrid.isCellValid(row, col);
-    }
-    
-    public void printCurrentGrid() {
-        this.currentGrid.printGrid();
-    }
-    public void printAnswerGrid() {
-        this.answerGrid.printGrid();
-    }
-
-    @Override
-    public boolean isCurrentCellCorrect(int row, int col) {
+    public boolean isCellCorrect(int row, int col) {
         return (this.currentGrid.getCell(row, col).getNumber()==this.answerGrid.getCell(row, col).getNumber());
     }
-
     @Override
     public boolean isGridCorrect() {
         for(int i=0; i<9; i++) {
@@ -142,38 +178,96 @@ public class SudokuSolver implements SudokuSolverInterface{
         }
         return true;
     }
-
     @Override
     public boolean isRowCorrect(int row) {
         for(int i=0; i<Grid.NUM_COLS; i++) {
-            if(currentGrid.getCell(row, i).getNumber()!=(answerGrid.getCell(row, i).getNumber())) {
+            if(!isCellCorrect(row, i)) {
                 return false;
             }
         }
         return true;
     }
-
     @Override
     public boolean isColumnCorrect(int col) {
         for(int i=0; i<Grid.NUM_ROWS; i++) {
-            if(currentGrid.getCell(i, col).getNumber()!=(answerGrid.getCell(i, col).getNumber())) {
+            if(!isCellCorrect(i, col)) {
                 return false;
             }
         }
         return true;
     }
-
     @Override
     public boolean isBoxCorrect(int box) {
         int row = (box/3)*3; // Row of top-left cell of box
         int col = (box%3)*3; // Col of top-left cell of box
         for(int i=row; i<row+3; i++) {
             for(int j=col; j<col+3; j++) {
-                if(currentGrid.getCell(i, j).getNumber()!=(answerGrid.getCell(i, j).getNumber())) {
+                if(!isCellCorrect(i, j)) {
                     return false;
                 }
             }
         }
         return true;
     }
+
+    public void revealRandom() {
+        // NEED TO FIX, CURRENTLY INFINITELY LOOPS WHEN YOU TRY TO REVEAL WHEN BOARD IS FINISHED ALREADY
+        Random r = new Random();
+        int row;
+        int col;
+        boolean revealed = false;
+        while(!revealed) {
+            row = r.nextInt(9);
+            col = r.nextInt(9);
+            if(this.currentGrid.getCell(row, col).getNumber()==Grid.EMPTY) {
+                this.revealCell(row, col);
+                revealed = true;
+            }
+        }
+    }    
+    public void revealCell(int row, int col) {
+        this.currentGrid.getCell(row, col).setNumber(this.answerGrid.getCell(row, col).getNumber());
+    }
+    
+    public void undoMove() {
+        
+    }
+    public void redoMove() {
+        
+    }
+    
+    @Override
+    public void saveGame(String location, String name) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void loadGame() {
+        // TODO Auto-generated method stub
+        
+    }
+    //*****************************************
+    //********** Reveal phase methods *********
+    //*****************************************
+    /**
+     * Sets all the numbers in the currentGrid to the numbers in the answerGrid.
+     */
+    @Override
+    public void revealSolution() {
+        for(int i=0; i<Grid.NUM_ROWS; i++) {
+            for(int j=0; j<Grid.NUM_COLS; j++) {
+                currentGrid.getCell(i, j).setNumber(answerGrid.getCell(i, j).getNumber());
+            }
+        }
+    }
+    
+    // FOR TESTING ONLY METHODS
+    public void printCurrentGrid() {
+        this.currentGrid.printGrid();
+    }
+    public void printAnswerGrid() {
+        this.answerGrid.printGrid();
+    }
+
 }

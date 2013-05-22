@@ -42,24 +42,24 @@ public class SudokuSolverTest {
         sudokuSolver.printCurrentGrid();
         
         System.out.println("Putting some numbers in");
-        sudokuSolver.setCurrentCellNumber(0, 0, 3);
-        sudokuSolver.setCurrentCellNumber(8, 1, 2);
-        sudokuSolver.setCurrentCellNumber(4, 4, 4);
+        sudokuSolver.setCellNumber(0, 0, 3);
+        sudokuSolver.setCellNumber(8, 1, 2);
+        sudokuSolver.setCellNumber(4, 4, 4);
         sudokuSolver.printCurrentGrid();
         
         System.out.println("Trying to put a number in a cell that was given");
-        sudokuSolver.setCurrentCellNumber(0, 1, 2);
+        sudokuSolver.setCellNumber(0, 1, 2);
         
         System.out.println("Find answers");
-        sudokuSolver.findAnswers();
+        sudokuSolver.findSolution();
         sudokuSolver.printCurrentGrid();
         
-        System.out.println("Solve grid");
-        sudokuSolver.solveGrid();
+        System.out.println("Reveal solution");
+        sudokuSolver.revealSolution();
         sudokuSolver.printCurrentGrid();
         
         
-        System.out.println("Compare to solution");
+        System.out.println("Compare to (hard-coded) solution");
         System.out.print(solution);
         
     }
