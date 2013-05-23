@@ -5,12 +5,14 @@ import java.awt.event.ActionListener;
 
 public class InputPanelController {
 	private InputPanel inputPanel;
+	private SudokuModel model;
 	
-	public InputPanelController(InputPanel inputPanel){
+	public InputPanelController(SudokuModel model, InputPanel inputPanel){
+		this.model = model;
 		this.inputPanel = inputPanel;
-		inputPanel.addActionListener(new ClearPress(inputPanel.getBoard()), inputPanel.getClearButton());
+		this.inputPanel.addActionListener(new ClearPress(inputPanel.getBoard()), inputPanel.getClearButton());
 		for(KeyButton k : inputPanel.getKeyButtons()){
-			inputPanel.addActionListener(new KeyClick(inputPanel.getBoard(), k.getLabel()), k);
+			this.inputPanel.addActionListener(new KeyClick(inputPanel.getBoard(), k.getLabel()), k);
 		}
 	}
 	
@@ -23,8 +25,15 @@ public class InputPanelController {
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if(board.getSelectedCell() != null){
-				board.getSelectedButton().setText(null);
+			Position p = board.getSelectedCell();
+			if (p != null) {
+				model.clearCellNumber(p.getX(), p.getY());
+				int curr = model.getCellNumber(p.getX(), p.getY());
+				if (curr == 0) {
+					board.getButton(p).setText(null);
+				} else {
+					board.getButton(p).setText(Integer.toString(curr));
+				}
 			}
 		}
 	}
@@ -40,10 +49,12 @@ public class InputPanelController {
 			this.label = label;
 			this.font = new Font("sansserif",Font.BOLD,36);
 		}
-		
+
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			if(board.getSelectedCell() != null){
+			Position p = board.getSelectedCell();
+			if (p != null) {
+				model.setCellNumber(p.getX(), p.getY(), Integer.parseInt(label));
 				board.getSelectedButton().setText(label);
 				board.getSelectedButton().setFont(font);
 			}
