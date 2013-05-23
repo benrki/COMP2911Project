@@ -329,7 +329,7 @@ public class SudokuModel implements SudokuModelInterface{
 		} catch (IOException e) {
 			
 		}
-    	String original = "Original:\n";
+    	String original = "Original:" + Grid.newline;
     	for (int i=0; i<Grid.NUM_ROWS; i++) {
     		for (int j=0; j<Grid.NUM_COLS; j++) {
     			if (currentGrid.grid.get(i).get(j).isGiven() == true) {
@@ -338,9 +338,9 @@ public class SudokuModel implements SudokuModelInterface{
     				original = original + "0 ";
     			}
     		}
-    		original = original + "\n";
+    		original = original + Grid.newline;
     	}
-    	String save = original + "\nCurrent:\n" + currentGrid.toString();
+    	String save = original + Grid.newline + "Current:" + Grid.newline + currentGrid.toString();
     	try {
 			PrintWriter print = new PrintWriter(file);
 			print.write(save);
