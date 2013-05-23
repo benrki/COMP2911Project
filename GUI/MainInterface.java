@@ -2,19 +2,7 @@
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.KeyStroke;
 
 
 /**
@@ -23,14 +11,19 @@ import javax.swing.KeyStroke;
  * @author Ben
  *
  */
-public class MainInterface {
+public class MainInterface extends JFrame {
 	
-	public static void main(String[] Args) {
-		JFrame mainFrame = new JFrame("Sudoku");
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public MainInterface() {
+		super("Sudoku");
 		
-		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainFrame.setResizable(false);
-		mainFrame.setLayout(new GridBagLayout());
+		super.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		super.setResizable(false);
+		super.setLayout(new GridBagLayout());
 		
 		GridBagConstraints boardConstraints = new GridBagConstraints();
 		boardConstraints.anchor = GridBagConstraints.NORTH;
@@ -38,21 +31,20 @@ public class MainInterface {
 		boardConstraints.weightx = 1;
 		boardConstraints.weighty = 1;
 		BoardGUI board = new BoardGUI();
-		mainFrame.getContentPane().add(board, boardConstraints);
+		super.getContentPane().add(board, boardConstraints);
 		
 		GridBagConstraints inputConstraints = new GridBagConstraints();
 		inputConstraints.gridy = 1;
 		inputConstraints.fill = GridBagConstraints.BOTH;
 		inputConstraints.anchor = GridBagConstraints.SOUTH;
 		InputPanel inputPanel = new InputPanel();
-		mainFrame.getContentPane().add(inputPanel, inputConstraints);
+		super.getContentPane().add(inputPanel, inputConstraints);
 		
 		MenuBar menuBar = new MenuBar();
 
-		mainFrame.setJMenuBar(menuBar);
-		mainFrame.getContentPane().setPreferredSize(new Dimension(500, 500));
-		mainFrame.pack();
-		mainFrame.setVisible(true);
+		super.setJMenuBar(menuBar);
+		super.getContentPane().setPreferredSize(new Dimension(500, 500));
+		super.pack();
 	}
 
 	

@@ -54,6 +54,16 @@ public class MenuBar extends JMenuBar {
 		});
 		newGameMenu.add(hard);
 		
+		JMenuItem custom = new JMenuItem("Custom");
+		custom.setAccelerator(KeyStroke.getKeyStroke(
+		        KeyEvent.VK_3, ActionEvent.ALT_MASK));
+		custom.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				JOptionPane.showMessageDialog(null, "Filler option item");
+			}
+		});
+		newGameMenu.add(custom);
+		
 		JMenu optionsMenu = new JMenu("Settings");
 		optionsMenu.setMnemonic(KeyEvent.VK_S);
 		optionsMenu.getAccessibleContext().setAccessibleDescription(
