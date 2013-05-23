@@ -21,6 +21,9 @@ public class SudokuModel implements SudokuModelInterface{
     //*****************************************
     //*** Creating/Generating phase methods ***
     //*****************************************
+    /**
+     * Generates a random puzzle (with numbers "missing") and stores the corresponding answer.
+     */
     @Override
     public void generatePuzzle() {
         //http://zhangroup.aporc.org/images/files/Paper_3485.pdf

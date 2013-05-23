@@ -3,30 +3,36 @@ import java.util.Scanner;
 
 public class SudokuGenerator {
     //http://zhangroup.aporc.org/images/files/Paper_3485.pdf
+    private Random random;
     private Grid currentGrid;
     private Grid answerGrid;
-    private Random random;
+    
     
     public SudokuGenerator (Grid currentGrid, Grid answerGrid) {
-        this.currentGrid = currentGrid;
-        this.answerGrid = this.initialiseAnswerGrid(answerGrid);
         this.random = new Random();
+        this.currentGrid = currentGrid;
+        this.answerGrid = answerGrid;
     }
     
+    // Basic logic:
+    // 1) Take in a blank currentGrid and a blank answerGrid
+    // 2) Overwrite the answerGrid with a default grid
+    // 3) "Shuffle" this answerGrid
+    // 4) Copy the "shuffled" answerGrid to currentGrid
+    // 5) "Dig holes" in the currentGrid
+    // 6) Finish.
     public void generate() {
-        this.gridShuffle();
-        this.duplicateAnswerGrid();
-        this.removeCells();
+        this.defaultGrid(); // Step 2)
+        this.gridShuffle(); // Step 3)
+        this.duplicateAnswerGrid(); // Step 4)
+        this.removeCells(); // Step 5)
+        // Step 6)
     }
-    private void duplicateAnswerGrid() {
-        for(int i=0; i<Grid.NUM_ROWS; i++) {
-            for(int j=0; j<Grid.NUM_COLS; j++) {
-                currentGrid.getCell(i, j).setNumber(answerGrid.getCell(i, j).getNumber());
-                currentGrid.getCell(i, j).setGiven(true);
-            }
-        }
-    }
-    private Grid initialiseAnswerGrid(Grid answerGrid) {
+    
+    // **************************************
+    // ************** STEP 1 ****************
+    // **************************************
+    private void defaultGrid() {
         String input = 
                 "3 5 9 4 7 1 6 2 8\n" +
                 "7 8 2 9 5 6 3 4 1\n" +
@@ -41,39 +47,20 @@ public class SudokuGenerator {
         for(int i=0; i<Grid.NUM_ROWS; i++) {
             for(int j=0; j<Grid.NUM_COLS; j++) {
                 int n = s.nextInt();
-                answerGrid.getCell(i, j).setNumber(n);
-                answerGrid.getCell(i, j).setGiven(true);
+                answerGrid.getCell(i, j).giveNumber(n);
             }
         }
         s.close();
-        return answerGrid;
     }
-    
-    private void removeCells() {
-        int remove = 20;
-        for(int i=0; i<remove; i++) {
-            this.removeRandomCellInBox(i%9);
-        }
-    }
-    private void removeRandomCellInBox(int box) {
-        // Position of top-left cell in Box "box"
-        int boxRow = 3*(box/3);
-        int boxCol = 3*(box%3);
-        int row = boxRow + random.nextInt(3);
-        int col = boxCol + random.nextInt(3);
-        while(this.currentGrid.getCell(row, col).getNumber()==Grid.EMPTY) {
-            row = boxRow + random.nextInt(3);
-            col = boxCol + random.nextInt(3);
-        }
-        this.currentGrid.getCell(row, col).setNumber(Grid.EMPTY);    
-        this.currentGrid.getCell(row, col).setGiven(false);
-    }
+    // **************************************
+    // ************** STEP 2 ****************
+    // **************************************
     private void gridShuffle() {
-        for(int i=0; i<50; i++) {
+        int shuffle = 50; // Change number of "shuffle" moves
+        for(int i=0; i<shuffle; i++) {
             int method = random.nextInt(7)+1;
             this.doMethod(method);
         }
-        this.doMethod(1);
     }
     
     private void doMethod(int n) {
@@ -183,4 +170,33 @@ public class SudokuGenerator {
     private void rotateRight() {
         // To do
     }
+    
+    private void duplicateAnswerGrid() {
+        for(int i=0; i<Grid.NUM_ROWS; i++) {
+            for(int j=0; j<Grid.NUM_COLS; j++) {
+                currentGrid.getCell(i, j).giveNumber(answerGrid.getCell(i, j).getNumber());
+            }
+        }
+    }
+    
+    
+    private void removeCells() {
+        int remove = 20;
+        for(int i=0; i<remove; i++) {
+            this.removeRandomCellInBox(i%9);
+        }
+    }
+    private void removeRandomCellInBox(int box) {
+        // Position of top-left cell in Box "box"
+        int boxRow = 3*(box/3);
+        int boxCol = 3*(box%3);
+        int row = boxRow + random.nextInt(3);
+        int col = boxCol + random.nextInt(3);
+        while(this.currentGrid.getCell(row, col).getNumber()==Grid.EMPTY) {
+            row = boxRow + random.nextInt(3);
+            col = boxCol + random.nextInt(3);
+        }
+        this.currentGrid.getCell(row, col).removeNumber();
+    }
+    
 }
