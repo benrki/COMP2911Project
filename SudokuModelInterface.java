@@ -1,4 +1,4 @@
-public interface SudokuSolverInterface {
+public interface SudokuModelInterface {
     //*****************************************
     //*** Creating/Generating phase methods ***
     //*****************************************

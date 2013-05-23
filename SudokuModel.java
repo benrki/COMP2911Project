@@ -4,12 +4,15 @@ import java.util.Random;
 // To do: 
 // rearrange order methods and maybe change names
 // rethink where each method belongs.
+// Undo/Redo
+// Can remove a lot of the "checks" since I've implemented them in Cell
 
-public class SudokuSolver implements SudokuSolverInterface{
+public class SudokuModel implements SudokuModelInterface{
     private Grid currentGrid;
     private Grid answerGrid;
     private ArrayList<String> history;
-    public SudokuSolver () {
+    
+    public SudokuModel () {
         this.currentGrid = new Grid();
         this.answerGrid = new Grid();
         this.history = new ArrayList<String>();
@@ -38,18 +41,15 @@ public class SudokuSolver implements SudokuSolverInterface{
     @Override
     public void giveCellNumber(int row, int col, int n) {
         if(1<=n && n<=9) {
-            this.currentGrid.getCell(row, col).setNumber(n);
-            this.currentGrid.getCell(row, col).setGiven(true);
-            this.answerGrid.getCell(row, col).setNumber(n);
-            this.answerGrid.getCell(row, col).setGiven(true);
+            this.currentGrid.getCell(row, col).giveNumber(n);
+            this.answerGrid.getCell(row, col).giveNumber(n);
         }
     } 
+    
     @Override
     public void removeCellNumber(int row, int col) {
-        this.currentGrid.getCell(row, col).setNumber(Grid.EMPTY);
-        this.currentGrid.getCell(row, col).setGiven(false);
-        this.answerGrid.getCell(row, col).setNumber(Grid.EMPTY);
-        this.answerGrid.getCell(row, col).setGiven(false);
+        this.currentGrid.getCell(row, col).removeNumber();
+        this.answerGrid.getCell(row, col).removeNumber();
     }
     
     @Override
@@ -147,7 +147,7 @@ public class SudokuSolver implements SudokuSolverInterface{
     }
     @Override
     public void clearCellNumber(int row, int col) {
-        this.currentGrid.getCell(row, col).setNumber(Grid.EMPTY);
+        this.currentGrid.getCell(row, col).clearNumber();
     }
     
     @Override

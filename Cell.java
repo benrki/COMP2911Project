@@ -2,8 +2,10 @@ import java.util.ArrayList;
  
 public class Cell {
     
-    // Fix documentation in every class to make things consistent.
-    // Use consistent parameters (col/column n/number)
+    // To do:
+    // Reorder methods
+    // Fix documentation
+    
     private final static int EMPTY = 0;
     private final int row;
     private final int column;
@@ -22,28 +24,57 @@ public class Cell {
         this.number = EMPTY;
         this.given = false;
         candidates = new ArrayList<Boolean>();
-        for(int i=0; i<9; i++) {
+        for(int i=1; i<=9; i++) {
            candidates.add(false);
         }
     }
  
     /**
-     * Sets the Cell number.
+     * Sets the Cell number. (Only if it's not a given cell).
      * @param number The number to set the Cell number to.
      */
     public void setNumber(int number) {
-        //if(!this.given && 0 <= number && number <= 9) {
+        if(!this.given && 0 <= number && number <= 9) {
             this.number = number;
-        //}
+        }
     }
  
+    /**
+     * Clears the Cell number. (Only if it's not a given cell).
+     */
+    public void clearNumber() {
+        if(!this.given) {
+            this.number = EMPTY;
+        }
+    }
+    
+    /**
+     * Gives the Cell the number. Sets the Cell as given.
+     * @param number The number to give the Cell.
+     */
+    public void giveNumber(int number) {
+        if(1<=number && number<=9) {
+            this.number = number;
+            this.given = true;
+        }
+    }
+    
+    /**
+     * Remove the Cell number. Sets the Cell as not given.
+     */
+    public void removeNumber() {
+        this.number = EMPTY;
+        this.given = false;
+    }
+    
+    
     /**
      * Sets the given to true/false.
      * @param given <tt>true</tt> or <tt>false</tt>
      */
-    public void setGiven (boolean given) {
+    /*public void setGiven (boolean given) {
         this.given = given;
-    }
+    }*/
     
     /**
      * Returns the number of the Cell.
@@ -90,7 +121,9 @@ public class Cell {
      * @param number The candidate to this cell.
      */
     public void addCandidate(int number) {
-       this.candidates.set(number-1, true);
+        if(1<=number && number<=9) {
+            this.candidates.set(number-1, true);
+        }
     }
    
     /**
@@ -98,7 +131,9 @@ public class Cell {
      * @param number The candidate to this cell.
      */
     public void removeCandidate(int number) {
-        this.candidates.set(number-1, false);
+        if(1<=number && number<=9) {
+            this.candidates.set(number-1, false);
+        }
     }
    
     /**
@@ -107,6 +142,9 @@ public class Cell {
      * @return <tt>true</tt> if the number is a candidate to this Cell, <tt>false</tt> otherwise.
      */
     public boolean hasCandidate(int number) {
-       return candidates.get(number-1);
+       if(1<=number && number<=9) {
+           return candidates.get(number-1);
+       } 
+       return false;
     }
 }

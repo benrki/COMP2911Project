@@ -1,7 +1,11 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Grid {
+    
+    // To do:
+    // Reorder methods
+    // Fix documentation
+    
     public static final int EMPTY = 0;
     public static final int NUM_ROWS = 9;
     public static final int NUM_COLS = 9;
@@ -107,6 +111,7 @@ public class Grid {
        return true;
     }
     
+    // Used only for testing
     public void printGrid() {
         for(int i=0; i<NUM_ROWS; i++) {
             if(i%3==0&&i!=0) {
@@ -126,6 +131,4 @@ public class Grid {
         }
         System.out.println();
     }
-    
-    // Grid hasSolution() returns null or solution board
 }

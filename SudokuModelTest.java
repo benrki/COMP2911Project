@@ -1,9 +1,9 @@
 import java.util.Scanner;
 
-public class SudokuSolverTest {
+public class SudokuModelTest {
     public static void main(String[] args) {
         // Testing generating puzzles
-        SudokuSolverModel sudokuSolver = new SudokuSolverModel();
+        SudokuModel sudokuSolver = new SudokuModel();
         sudokuSolver.generatePuzzle();
         sudokuSolver.printAnswerGrid();
         sudokuSolver.printCurrentGrid();
