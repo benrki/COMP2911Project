@@ -4,9 +4,10 @@ import java.awt.event.ActionListener;
 
 
 public class InputPanelController {
-	
+	private InputPanel inputPanel;
 	
 	public InputPanelController(InputPanel inputPanel){
+		this.inputPanel = inputPanel;
 		inputPanel.addActionListener(new ClearPress(inputPanel.getBoard()), inputPanel.getClearButton());
 		for(KeyButton k : inputPanel.getKeyButtons()){
 			inputPanel.addActionListener(new KeyClick(inputPanel.getBoard(), k.getLabel()), k);
@@ -14,9 +15,9 @@ public class InputPanelController {
 	}
 	
 	class ClearPress implements ActionListener {
-		private BoardGUI board;
+		private BoardPanel board;
 		
-		public ClearPress(BoardGUI board){
+		public ClearPress(BoardPanel board){
 			this.board = board;
 		}
 		
@@ -30,11 +31,11 @@ public class InputPanelController {
 	
 	class KeyClick implements ActionListener {
 		
-		private BoardGUI board;
+		private BoardPanel board;
 		private String label;
 		private Font font;
 		
-		public KeyClick(BoardGUI board, String label){
+		public KeyClick(BoardPanel board, String label){
 			this.board = board;
 			this.label = label;
 			this.font = new Font("sansserif",Font.BOLD,36);

@@ -11,7 +11,7 @@ import javax.swing.JPanel;
  * @author Ben
  *
  */
-public class BoardGUI extends JPanel {
+public class BoardPanel extends JPanel {
 	/**
 	 * 
 	 */
@@ -27,7 +27,7 @@ public class BoardGUI extends JPanel {
 	/**
 	 * 
 	 */
-	public BoardGUI(){
+	public BoardPanel(){
 		super();
 		GridLayout layout = new GridLayout(NO_OF_ROWS_IN_SQ, NO_OF_COLUMNS_IN_SQ, 5, 5);
 		buttons = new ArrayList<ArrayList<CellButton>>();

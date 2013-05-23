@@ -4,10 +4,10 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 
-public class BoardGUIController {
-	private BoardGUI board;
+public class BoardPanelController {
+	private BoardPanel board;
 	
-	public BoardGUIController(BoardGUI board){
+	public BoardPanelController(BoardPanel board){
 		this.board = board;
 		
 		for(ArrayList<CellButton> a : board.getButtons()){
@@ -46,5 +46,19 @@ public class BoardGUIController {
 			}
 		}
 	}
+	
+	public void setCell(Position position) {
+		board.setSelectedCell(position);
+	}
+	
+	public void setBoard(SudokuModel model) {
+		for (ArrayList<CellButton> cbList: board.getButtons()) {
+			for (CellButton cb : cbList) {
+				int curr = (model.getCellNumber(cb.getPosition().getX(), cb.getPosition().getY()));
+				board.getSelectedButton().setText(Integer.toString(curr));
+			}
+		}
+	}
+	
 }
 

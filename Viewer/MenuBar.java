@@ -83,11 +83,7 @@ public class MenuBar extends JMenuBar {
 	}
 	
 	void addEasyGameListener(ActionListener l) {
-		easy.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				JOptionPane.showMessageDialog(null, "Filler option item");
-			}
-		});
+		easy.addActionListener(l);
 	}
 
 	void addMediumGameListener(ActionListener l) {

@@ -1,5 +1,4 @@
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
@@ -15,11 +14,11 @@ public class InputPanel extends JPanel  {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private BoardGUI board;
+	private BoardPanel board;
 	private JButton clearButton;
 	private ArrayList<KeyButton> keyButtons;
 
-	public InputPanel(BoardGUI board) {
+	public InputPanel(BoardPanel board) {
 		super();
 		this.board = board;
 		this.keyButtons = new ArrayList<KeyButton>();
@@ -43,7 +42,7 @@ public class InputPanel extends JPanel  {
 
 	}	
 	
-	public BoardGUI getBoard(){
+	public BoardPanel getBoard(){
 		return board;
 	}
 	
