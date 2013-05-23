@@ -1,4 +1,3 @@
-
 public interface SudokuSolverInterface {
     //*****************************************
     //*** Creating/Generating phase methods ***
