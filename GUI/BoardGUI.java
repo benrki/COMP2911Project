@@ -10,7 +10,7 @@ import javax.swing.JPanel;
  * @author Ben
  *
  */
-public class BoardGUI {
+public class BoardGUI extends JPanel {
 	/**
 	 * 
 	 */
@@ -20,7 +20,6 @@ public class BoardGUI {
 	final static int NO_OF_ROWS_IN_SQ = 3;
 	final static int NO_OF_COLUMNS_IN_SQ = 3;
 	
-	private JPanel board;
 	private ArrayList<ArrayList<CellButton>> buttons;
 	private Position selectedCell;
 	
@@ -28,10 +27,11 @@ public class BoardGUI {
 	 * 
 	 */
 	public BoardGUI(){
+		super();
 		GridLayout layout = new GridLayout(NO_OF_ROWS_IN_SQ, NO_OF_COLUMNS_IN_SQ, 5, 5);
 		buttons = new ArrayList<ArrayList<CellButton>>();
-		this.board = new JPanel(layout);
-		board.setBackground(Color.BLACK);
+		this.setLayout(layout);
+		this.setBackground(Color.BLACK);
 		selectedCell = null;
 		
 		for(int h = 0; h < NO_OF_SQ; h++) {
@@ -57,12 +57,8 @@ public class BoardGUI {
 					square.add(cell);
 				}
 			}
-			board.add(square);
+			this.add(square);
 		}
-	}
-	
-	public JPanel getBoard(){
-		return board;
 	}
 	
 	public ArrayList<ArrayList<CellButton>> getButtons(){

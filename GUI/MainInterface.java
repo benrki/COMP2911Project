@@ -37,9 +37,8 @@ public class MainInterface {
 		boardConstraints.fill = GridBagConstraints.BOTH;
 		boardConstraints.weightx = 1;
 		boardConstraints.weighty = 1;
-		BoardGUI b = new BoardGUI();
-		JPanel grid = b.getBoard();
-		mainFrame.getContentPane().add(grid, boardConstraints);
+		BoardGUI board = new BoardGUI();
+		mainFrame.getContentPane().add(board, boardConstraints);
 		
 		GridBagConstraints inputConstraints = new GridBagConstraints();
 		inputConstraints.gridy = 1;
