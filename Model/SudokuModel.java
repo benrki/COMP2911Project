@@ -256,6 +256,18 @@ public class SudokuModel implements SudokuModelInterface{
         return true;
     }
 
+    @Override
+    public boolean isSodokuFinished() {
+        for(int i=0; i<Grid.NUM_ROWS; i++) {
+            for(int j=0; j<Grid.NUM_COLS; j++) {
+                if(this.currentGrid.getCell(i, j).getNumber()!=this.answerGrid.getCell(i, j).getNumber()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
     public void revealRandom() {
         // NEED TO FIX, CURRENTLY INFINITELY LOOPS WHEN YOU TRY TO REVEAL WHEN BOARD IS FINISHED ALREADY
         Random r = new Random();
