@@ -321,14 +321,13 @@ public class SudokuModel implements SudokuModelInterface{
     
  @Override
     public void saveGame(String location, String name) {
-        File parentDir = new File(location);
+    	File parentDir = new File(location);
     	parentDir.mkdir();
-    	String fileName = name + ".txt";
-    	File file = new File(parentDir, fileName);
+    	File file = new File(parentDir, name + ".txt");
     	try {
 			file.createNewFile();
 		} catch (IOException e) {
-			System.err.println();
+			
 		}
     	String original = "Original:\n";
     	for (int i=0; i<Grid.NUM_ROWS; i++) {
@@ -369,7 +368,11 @@ public class SudokuModel implements SudokuModelInterface{
 	    		}
 	    	}
 			save.close();
-		} catch (FileNotFoundException e) {}
+		} catch (FileNotFoundException e) {
+			
+		} catch (NoSuchElementException e) {
+    	
+		}
     }
     
     //*****************************************
