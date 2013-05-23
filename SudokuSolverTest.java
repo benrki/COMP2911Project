@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class SudokuSolverTest {
     public static void main(String[] args) {
         // Testing generating puzzles
-        SudokuSolver sudokuSolver = new SudokuSolver();
+        SudokuSolverModel sudokuSolver = new SudokuSolverModel();
         sudokuSolver.generatePuzzle();
         sudokuSolver.printAnswerGrid();
         sudokuSolver.printCurrentGrid();
@@ -18,7 +18,7 @@ public class SudokuSolverTest {
         sudokuSolver.printCurrentGrid();
         
         // Testing findSolution, setting and solve.
-        /*i went 
+        /*
         String solution = 
                 "3 5 9 4 7 1 6 2 8\n" +
                 "7 8 2 9 5 6 3 4 1\n" +
