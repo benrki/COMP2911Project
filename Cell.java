@@ -1,23 +1,3 @@
-<<<<<<< HEAD
-import javax.swing.JButton;
-
-
-/**
- * @author Ben
- *
- */
-public class Cell extends JButton {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	public Cell() {
-		super("0");
-	}
-
-}
-=======
 import java.util.ArrayList;
  
 public class Cell {
@@ -130,4 +110,3 @@ public class Cell {
        return candidates.get(number-1);
     }
 }
->>>>>>> 6b2d3fecfd0138fa918617e2c29f21dbacd08160

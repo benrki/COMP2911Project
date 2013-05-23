@@ -18,17 +18,7 @@ public class SudokuSolverTest {
         sudokuSolver.printCurrentGrid();
         
         // Testing findSolution, setting and solve.
-        /*String input = 
-                "0 5 9 0 0 0 0 0 8\n" +
-                "7 0 2 0 5 0 0 4 1\n" + 
-                "0 0 0 3 2 8 0 0 0\n" +
-                "0 4 0 1 0 0 7 6 5\n" +
-                "0 0 5 7 0 2 8 0 0\n" +
-                "9 7 3 0 0 5 0 1 0\n" +
-                "0 0 4 2 6 7 0 0 0\n" +
-                "8 3 0 0 1 0 2 0 4\n" +
-                "1 0 0 8 0 0 5 9 0\n";
-        
+        /*i went 
         String solution = 
                 "3 5 9 4 7 1 6 2 8\n" +
                 "7 8 2 9 5 6 3 4 1\n" +
