@@ -2,7 +2,23 @@ import java.util.Scanner;
 
 public class SudokuSolverTest {
     public static void main(String[] args) {
-        String input = 
+        // Testing generating puzzles
+        SudokuSolver sudokuSolver = new SudokuSolver();
+        sudokuSolver.generatePuzzle();
+        sudokuSolver.printAnswerGrid();
+        sudokuSolver.printCurrentGrid();
+
+        System.out.println("Another ");
+        sudokuSolver.generatePuzzle();
+        sudokuSolver.printAnswerGrid();
+        sudokuSolver.printCurrentGrid();
+        System.out.println("Another ");
+        sudokuSolver.generatePuzzle();
+        sudokuSolver.printAnswerGrid();
+        sudokuSolver.printCurrentGrid();
+        
+        // Testing findSolution, setting and solve.
+        /*String input = 
                 "0 5 9 0 0 0 0 0 8\n" +
                 "7 0 2 0 5 0 0 4 1\n" + 
                 "0 0 0 3 2 8 0 0 0\n" +
@@ -39,9 +55,8 @@ public class SudokuSolverTest {
         }
         s.close();
         sudokuSolver.findSolution();
-        sudokuSolver.printAnswerGrid();
-        sudokuSolver.printCurrentGrid();
-        /*        System.out.println("Unsolved grid");
+                
+        System.out.println("Unsolved grid");
         sudokuSolver.printCurrentGrid();
         
         System.out.println("Putting some numbers in");
@@ -56,10 +71,10 @@ public class SudokuSolverTest {
         System.out.println("Reveal solution");
         sudokuSolver.revealSolution();
         sudokuSolver.printCurrentGrid();
-*/
+
         
         System.out.println("Compare to (hard-coded) solution");
-        System.out.print(solution);
+        System.out.print(solution);*/
         
     }
 }

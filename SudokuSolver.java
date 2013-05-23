@@ -20,7 +20,11 @@ public class SudokuSolver implements SudokuSolverInterface{
     //*****************************************
     @Override
     public void generatePuzzle() {
+        //http://zhangroup.aporc.org/images/files/Paper_3485.pdf
         //TO DO!!!!
+        SudokuGenerator generator = new SudokuGenerator(this.currentGrid, this.answerGrid);
+        generator.generate();
+        
     }
     
     /**
@@ -33,10 +37,12 @@ public class SudokuSolver implements SudokuSolverInterface{
      */
     @Override
     public void giveCellNumber(int row, int col, int n) {
-        this.currentGrid.getCell(row, col).setNumber(n);
-        this.currentGrid.getCell(row, col).setGiven(true);
-        this.answerGrid.getCell(row, col).setNumber(n);
-        this.answerGrid.getCell(row, col).setGiven(true);
+        if(1<=n && n<=9) {
+            this.currentGrid.getCell(row, col).setNumber(n);
+            this.currentGrid.getCell(row, col).setGiven(true);
+            this.answerGrid.getCell(row, col).setNumber(n);
+            this.answerGrid.getCell(row, col).setGiven(true);
+        }
     } 
     @Override
     public void removeCellNumber(int row, int col) {
@@ -79,7 +85,7 @@ public class SudokuSolver implements SudokuSolverInterface{
             int potential = answerGrid.getCell(i,j).getNumber() + 1;
             // If exhausted all potential numbers, set cell to 0 then backtrack 
             if(potential > 9) {
-                answerGrid.getCell(i, j).setNumber(Grid.EMPTY);
+                this.removeCellNumber(i, j);
                 boolean backtracked = false;
                 // Backtracks to the previous ungiven cell.
                 while(!backtracked || answerGrid.getCell(i, j).isGiven()) {
@@ -135,7 +141,9 @@ public class SudokuSolver implements SudokuSolverInterface{
      */
     @Override
     public void setCellNumber(int row, int col, int n) {
-        this.currentGrid.getCell(row, col).setNumber(n); 
+        if(1<=n && n<=9) {
+            this.currentGrid.getCell(row, col).setNumber(n); 
+        }
     }
     @Override
     public void clearCellNumber(int row, int col) {
@@ -144,14 +152,21 @@ public class SudokuSolver implements SudokuSolverInterface{
     
     @Override
     public boolean hasCellCandidate(int row, int col, int n) {
-        return currentGrid.getCell(row, col).hasCandidate(n);
+        if(1<=n && n<=9) {
+            return currentGrid.getCell(row, col).hasCandidate(n);
+        }
+        return false;
     }
     @Override
     public void addCellCandidate(int row, int col, int n) {
-        currentGrid.getCell(row, col).addCandidate(n);
+        if(1<=n && n<=9) {
+            currentGrid.getCell(row, col).addCandidate(n);
+        }
     }
     public void removeCellCandidate(int row, int col, int n) {
-        currentGrid.getCell(row, col).removeCandidate(n);
+        if(1<=n && n<=9) {
+            currentGrid.getCell(row, col).removeCandidate(n);
+        }
     }
     public void clearCellCandidates (int row, int col) {
         for(int i=1; i<=9; i++) {

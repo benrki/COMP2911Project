@@ -6,6 +6,7 @@ public interface SudokuSolverInterface {
     
     // Generates a random puzzle (and reveals a set number of Cells in random positions)
     // (Will be expanded on later to generateEasy, generateIntermediate, generateHard, generateExpert)
+    
     public void generatePuzzle();
     
     // Sets the number in the specified cell in the currentGrid as the specified number. 
