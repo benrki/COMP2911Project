@@ -43,8 +43,8 @@ public class MainInterface extends JFrame {
 		inputConstraints.gridy = 1;
 		inputConstraints.fill = GridBagConstraints.BOTH;
 		inputConstraints.anchor = GridBagConstraints.SOUTH;
-		inputPanel = new InputPanel();
-		//inputController = new InputPanelController(board);
+		inputPanel = new InputPanel(board);
+		InputPanelController inputPanelController = new InputPanelController(inputPanel);
 		super.getContentPane().add(inputPanel, inputConstraints);
 		
 		menuBar = new MenuBar();

@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -79,6 +80,10 @@ public class BoardGUI extends JPanel {
 		}else{
 			return buttons.get(selectedCell.getX()).get(selectedCell.getY());
 		}
+	}
+	
+	public void addActionListener(ActionListener selectCellListener, CellButton b){
+		b.addActionListener(selectCellListener);
 	}
 
 }

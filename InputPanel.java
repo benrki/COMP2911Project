@@ -1,6 +1,7 @@
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.*;
 /**
@@ -13,45 +14,48 @@ public class InputPanel extends JPanel  {
 	 * Default serialization
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private BoardGUI board;
+	private JButton clearButton;
+	private ArrayList<KeyButton> keyButtons;
 
-	public InputPanel() {
+	public InputPanel(BoardGUI board) {
 		super();
+		this.board = board;
+		this.keyButtons = new ArrayList<KeyButton>();
 		String keyLabels = "789456123";
 		this.setLayout(new GridLayout(4, 3));
 		for (int i = 0; i < keyLabels.length(); i++) {
 			final String label = keyLabels.substring(i, i + 1);
-			JButton keyButton = new JButton(label);
+			KeyButton keyButton = new KeyButton(label);
 			this.add(keyButton);
-			keyButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent event) {
-					// Send label to be the next action
-					// Integer.parseInt(label)
-				}
-			});
+			keyButtons.add(keyButton);
 		}
 		
-		JButton hint = new JButton("HINT");
-		this.add(hint);
-		hint.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				// Clear selected cell if number entered
-			}
-		});
-		
-		JButton clear = new JButton("CLEAR");
-		this.add(clear);
-		clear.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				// Clear selected cell if number entered
-			}
-		});
+		this.clearButton = new JButton("CLEAR");
+		this.add(clearButton);
 
 		JToggleButton mark = new JToggleButton("MARK");
 		this.add(mark);
-		mark.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				// Toggle candidate marking mode
-			}
-		});
+		
+		JButton hint = new JButton("HINT");
+		this.add(hint);
+
 	}	
+	
+	public BoardGUI getBoard(){
+		return board;
+	}
+	
+	public JButton getClearButton(){
+		return clearButton;
+	}
+	
+	public ArrayList<KeyButton> getKeyButtons(){
+		return keyButtons;
+	}
+	
+	public void addActionListener(ActionListener listener, JButton button){
+		button.addActionListener(listener);
+	}
 }
