@@ -1,7 +1,6 @@
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -52,7 +51,6 @@ public class BoardPanel extends JPanel {
 					} else {
 						row = j+6;
 					}
-					
 					CellButton cell = new CellButton(new Position(row, buttons.get(row).size()));
 					cell.setBackground(Color.WHITE);
 					buttons.get(row).add(cell);
@@ -89,10 +87,6 @@ public class BoardPanel extends JPanel {
 	
 	public void addActionListener(ActionListener selectCellListener, CellButton b){
 		b.addActionListener(selectCellListener);
-	}
-	
-	public void addKeyListener(KeyListener listener, CellButton button){
-		button.addKeyListener(listener);
 	}
 
 }

@@ -20,6 +20,8 @@ public class MenuBar extends JMenuBar {
 	JMenuItem medium;
 	JMenuItem hard;
 	JMenuItem custom;
+	JMenu solveMenu;
+	JMenuItem solve;
 	JMenu optionsMenu;
 	JMenuItem option;
 	JMenu aboutMenu;
@@ -54,8 +56,20 @@ public class MenuBar extends JMenuBar {
 		        KeyEvent.VK_3, ActionEvent.ALT_MASK));
 		newGameMenu.add(custom);
 		
+		solveMenu = new JMenu("Solve");
+		solveMenu.setMnemonic(KeyEvent.VK_S);
+		solveMenu.getAccessibleContext().setAccessibleDescription(
+				"Solve");
+		this.add(solveMenu);
+		
+		solve = new JMenuItem("Solve Current Puzzle");
+		solve.setMnemonic(KeyEvent.VK_1);
+		solve.getAccessibleContext().setAccessibleDescription(
+				"Solve the current puzzle");
+		solveMenu.add(solve);
+		
 		optionsMenu = new JMenu("Settings");
-		optionsMenu.setMnemonic(KeyEvent.VK_S);
+		optionsMenu.setMnemonic(KeyEvent.VK_T);
 		optionsMenu.getAccessibleContext().setAccessibleDescription(
 				"Application settings");
 		this.add(optionsMenu);
@@ -66,7 +80,7 @@ public class MenuBar extends JMenuBar {
 		optionsMenu.add(option);
 		
 		aboutMenu = new JMenu("About");
-		aboutMenu.setMnemonic(KeyEvent.VK_O);
+		aboutMenu.setMnemonic(KeyEvent.VK_A);
 		aboutMenu.getAccessibleContext().setAccessibleDescription(
 				"About this program");
 		this.add(aboutMenu);
@@ -82,23 +96,27 @@ public class MenuBar extends JMenuBar {
 		aboutMenu.add(aboutItem);
 	}
 	
-	void addEasyGameListener(ActionListener l) {
+	public void addEasyGameListener(ActionListener l) {
 		easy.addActionListener(l);
 	}
 
-	void addMediumGameListener(ActionListener l) {
+	public void addMediumGameListener(ActionListener l) {
 		medium.addActionListener(l);
 	}
 
-	void addHardGameListener(ActionListener l) {
+	public void addHardGameListener(ActionListener l) {
 		hard.addActionListener(l);
 	}
 
-	void addCustomGameListener(ActionListener l) {
+	public void addCustomGameListener(ActionListener l) {
 		custom.addActionListener(l);
 	}
+	
+	public void addSolveListener(ActionListener l) {
+		solve.addActionListener(l);
+	}
 
-	void addOptionListener(ActionListener l) {
+	public void addOptionListener(ActionListener l) {
 		option.addActionListener(l);
 	}
 

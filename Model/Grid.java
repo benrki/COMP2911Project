@@ -9,7 +9,6 @@ public class Grid {
     public static final int EMPTY = 0;
     public static final int NUM_ROWS = 9;
     public static final int NUM_COLS = 9;
-    public static String newline = System.getProperty("line.separator");
     ArrayList<ArrayList<Cell>> grid;     
 
     /**
@@ -132,17 +131,4 @@ public class Grid {
         }
         System.out.println();
     }
-    
-    @Override
-    public String toString() {
-        String sudoku = "";
-    	for (int i=0; i<NUM_ROWS; i++) {
-    		for (int j=0; j<NUM_COLS; j++) {
-    			sudoku = sudoku + grid.get(i).get(j).getNumber() + " ";
-    		}
-    		sudoku = sudoku + newline;
-    	}
-    	return sudoku;
-    }
-
 }

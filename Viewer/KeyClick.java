@@ -4,10 +4,10 @@ import java.awt.event.ActionListener;
 
 public class KeyClick implements ActionListener {
 	
-	private BoardGUI board;
+	private BoardPanel board;
 	private String label;
 	
-	public KeyClick(BoardGUI board, String label){
+	public KeyClick(BoardPanel board, String label){
 		this.board = board;
 		this.label = label;
 	}

@@ -17,6 +17,7 @@ public class MenuBarController {
 		this.menuBar.addMediumGameListener(new mediumGameListener());
 		this.menuBar.addHardGameListener(new hardGameListener());
 		this.menuBar.addCustomGameListener(new customGameListener());
+		this.menuBar.addSolveListener(new solveListener());
 		this.menuBar.addOptionListener(new optionListener());
 	}
 	
@@ -43,6 +44,7 @@ public class MenuBarController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			model.generatePuzzle();// Change for difficulty later
+			boardController.setBoard(model);
 		}
 		
 	}
@@ -56,17 +58,31 @@ public class MenuBarController {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			model.generatePuzzle();// Change for difficulty later
+			boardController.setBoard(model);
 		}
 		
 	}
+	
 	class customGameListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			model.generatePuzzle();// Change for difficulty later
+			boardController.setBoard(model);
 		}
 		
 	}
+	
+	class solveListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// Solve sudoku
+			boardController.solve(model);
+		}
+		
+	}
+	
 	class optionListener implements ActionListener {
 
 		@Override

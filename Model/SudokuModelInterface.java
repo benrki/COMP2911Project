@@ -61,8 +61,7 @@ public interface SudokuModelInterface {
     public boolean isColumnCorrect(int col);
     // Checks if the specified box is correct.
     public boolean isBoxCorrect(int box);
-    // Checks if entire grid is correct and complete
-    public boolean isSodokuFinished();
+    
     // Reveals a random blank cell (changes to the correct answer)
     public void revealRandom();
     // Reveals specified cell (changes to the correct answer, can be blank or not blank).

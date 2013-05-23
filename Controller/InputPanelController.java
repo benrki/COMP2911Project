@@ -2,12 +2,14 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JOptionPane;
+
 
 public class InputPanelController {
 	private InputPanel inputPanel;
 	private SudokuModel model;
 	
-	public InputPanelController(SudokuModel model, InputPanel inputPanel){
+	public InputPanelController(SudokuModel model, InputPanel inputPanel) {
 		this.model = model;
 		this.inputPanel = inputPanel;
 		this.inputPanel.addActionListener(new ClearPress(inputPanel.getBoard()), inputPanel.getClearButton());
@@ -49,7 +51,7 @@ public class InputPanelController {
 			this.label = label;
 			this.font = new Font("sansserif",Font.BOLD,36);
 		}
-
+		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			Position p = board.getSelectedCell();
@@ -57,6 +59,9 @@ public class InputPanelController {
 				model.setCellNumber(p.getX(), p.getY(), Integer.parseInt(label));
 				board.getSelectedButton().setText(label);
 				board.getSelectedButton().setFont(font);
+				if (model.isGridCorrect()) {
+					JOptionPane.showMessageDialog(null, "Trophy 4 u");
+				}
 			}
 		}
 	}
