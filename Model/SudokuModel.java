@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
+import java.util.Stack;
 
 // To do: 
 // rearrange order methods and maybe change names
@@ -10,12 +12,14 @@ import java.util.Random;
 public class SudokuModel implements SudokuModelInterface{
     private Grid currentGrid;
     private Grid answerGrid;
-    private ArrayList<String> history;
+    private Stack<String> undoStack;
+    private Stack<String> redoStack;
     
     public SudokuModel () {
         this.currentGrid = new Grid();
         this.answerGrid = new Grid();
-        this.history = new ArrayList<String>();
+        this.undoStack = new Stack<String>();
+        this.redoStack = new Stack<String>();
     }
     
     //*****************************************
@@ -46,14 +50,22 @@ public class SudokuModel implements SudokuModelInterface{
         if(1<=n && n<=9) {
             this.currentGrid.getCell(row, col).giveNumber(n);
             this.answerGrid.getCell(row, col).giveNumber(n);
+            this.undoStack.push("giveCellNumber " + row + " " + col + " " + n);
+            this.redoStack.clear();
         }
     } 
     
     @Override
     public void removeCellNumber(int row, int col) {
-        this.currentGrid.getCell(row, col).removeNumber();
-        this.answerGrid.getCell(row, col).removeNumber();
+        int n = this.answerGrid.getCell(row, col).getNumber();
+        if(n!=Grid.EMPTY) {
+            this.currentGrid.getCell(row, col).removeNumber();
+            this.answerGrid.getCell(row, col).removeNumber();
+            this.undoStack.push("removeCellNumber " + row + " " + col + " " + n);
+            this.redoStack.clear();
+        }
     }
+    
     
     @Override
     public boolean isGridValid() {
@@ -146,11 +158,19 @@ public class SudokuModel implements SudokuModelInterface{
     public void setCellNumber(int row, int col, int n) {
         if(1<=n && n<=9) {
             this.currentGrid.getCell(row, col).setNumber(n); 
+            this.undoStack.push("setCellNumber " + row + " " + col + " " + n);
+            this.redoStack.clear();
         }
     }
+    
     @Override
     public void clearCellNumber(int row, int col) {
-        this.currentGrid.getCell(row, col).clearNumber();
+        int n = this.currentGrid.getCell(row, col).getNumber();
+        if(n!=Grid.EMPTY) {
+            this.currentGrid.getCell(row, col).clearNumber();
+            this.undoStack.push("clearCellNumber " + row + " " + col + " " + n);
+            this.redoStack.clear();
+        }
     }
     
     @Override
@@ -251,10 +271,48 @@ public class SudokuModel implements SudokuModelInterface{
     }
     
     public void undoMove() {
+        if(undoStack.isEmpty()) {
+            return;
+        }
+        String move = undoStack.pop();
+        Scanner s = new Scanner(move);
+        String command = s.next();
+        Stack<String> tmp = this.redoStack;
+        this.redoStack = new Stack<String>();
+        if(command.equals("giveCellNumber")) {
+            removeCellNumber(s.nextInt(), s.nextInt());
+        } else if (command.equals("removeCellNumber")) {
+            giveCellNumber(s.nextInt(), s.nextInt(), s.nextInt());
+        } else if (command.equals("setCellNumber")) {
+            clearCellNumber(s.nextInt(), s.nextInt());
+        } else if (command.equals("clearCellNumber")) {
+            setCellNumber(s.nextInt(), s.nextInt(), s.nextInt());
+        }
+        s.close();
+        this.redoStack = tmp;
+        this.redoStack.push(undoStack.pop());
         
     }
     public void redoMove() {
-        
+        if(redoStack.isEmpty()) {
+            return;
+        }
+        String move = redoStack.pop();
+        Scanner s = new Scanner(move);
+        String command = s.next();
+        Stack<String> tmp = this.redoStack;
+        this.redoStack = new Stack<String>();
+        if(command.equals("giveCellNumber")) {
+            removeCellNumber(s.nextInt(), s.nextInt());
+        } else if (command.equals("removeCellNumber")) {
+            giveCellNumber(s.nextInt(), s.nextInt(), s.nextInt());
+        } else if (command.equals("setCellNumber")) {
+            clearCellNumber(s.nextInt(), s.nextInt());
+        } else if (command.equals("clearCellNumber")) {
+            setCellNumber(s.nextInt(), s.nextInt(), s.nextInt());
+        }
+        s.close();
+        this.redoStack = tmp;
     }
     
     @Override

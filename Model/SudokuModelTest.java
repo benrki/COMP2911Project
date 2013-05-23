@@ -2,8 +2,49 @@ import java.util.Scanner;
 
 public class SudokuModelTest {
     public static void main(String[] args) {
+        
         // Testing generating puzzles
-        SudokuModel sudokuSolver = new SudokuModel();
+        SudokuModel sudoku = new SudokuModel();
+        //sudoku.generatePuzzle();
+        System.out.println("Empty Grid");
+        sudoku.printCurrentGrid();
+        System.out.println("Putting numbers in");
+        sudoku.setCellNumber(0, 0, 1);
+        sudoku.setCellNumber(0, 1, 2);
+        sudoku.setCellNumber(0, 2, 3);
+        sudoku.setCellNumber(0, 3, 4);
+        sudoku.setCellNumber(0, 4, 5);
+        sudoku.setCellNumber(0, 5, 6);
+        sudoku.printCurrentGrid();
+        System.out.println("Undo two moves");
+        sudoku.undoMove();
+        sudoku.undoMove();
+        sudoku.printCurrentGrid();
+        System.out.println("Redo two moves");
+        sudoku.redoMove();
+        sudoku.redoMove();
+        sudoku.printCurrentGrid();
+        System.out.println("Undo two moves");
+        sudoku.undoMove();
+        sudoku.undoMove();
+        sudoku.printCurrentGrid();
+        System.out.println("Do a move");
+        sudoku.setCellNumber(0, 4, 7);
+        sudoku.printCurrentGrid();
+        System.out.println("Redo (should be nothing)");
+        sudoku.redoMove();
+        sudoku.printCurrentGrid();
+        System.out.println("Undo (should remove 7)");
+        sudoku.undoMove();
+        sudoku.printCurrentGrid();
+        
+        // Testing findSolution, setting and solve.
+        /*
+        
+        
+        
+        // Testing generating puzzles
+        /*SudokuModel sudokuSolver = new SudokuModel();
         sudokuSolver.generatePuzzle();
         sudokuSolver.printAnswerGrid();
         sudokuSolver.printCurrentGrid();
@@ -16,7 +57,7 @@ public class SudokuModelTest {
         sudokuSolver.generatePuzzle();
         sudokuSolver.printAnswerGrid();
         sudokuSolver.printCurrentGrid();
-        
+        */
         // Testing findSolution, setting and solve.
         /*
         String solution = 
