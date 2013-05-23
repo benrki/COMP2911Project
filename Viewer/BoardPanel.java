@@ -82,6 +82,10 @@ public class BoardPanel extends JPanel {
 		}
 	}
 	
+	public JButton getButton(Position position) {
+		return buttons.get(position.getX()).get(position.getY());
+	}
+	
 	public void addActionListener(ActionListener selectCellListener, CellButton b){
 		b.addActionListener(selectCellListener);
 	}

@@ -54,8 +54,10 @@ public class BoardPanelController {
 	public void setBoard(SudokuModel model) {
 		for (ArrayList<CellButton> cbList: board.getButtons()) {
 			for (CellButton cb : cbList) {
-				int curr = (model.getCellNumber(cb.getPosition().getX(), cb.getPosition().getY()));
-				board.getSelectedButton().setText(Integer.toString(curr));
+				int x = cb.getPosition().getX();
+				int y = cb.getPosition().getY();
+				int curr = (model.getCellNumber(x, y));
+				board.getButton(new Position(x, y)).setText(Integer.toString(curr));
 			}
 		}
 	}
