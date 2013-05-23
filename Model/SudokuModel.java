@@ -2,6 +2,10 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Stack;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 // To do: 
 // rearrange order methods and maybe change names
@@ -315,16 +319,57 @@ public class SudokuModel implements SudokuModelInterface{
         this.redoStack = tmp;
     }
     
-    @Override
+ @Override
     public void saveGame(String location, String name) {
-        // TODO Auto-generated method stub
-        
+        File parentDir = new File(location);
+    	parentDir.mkdir();
+    	String fileName = name + ".txt";
+    	File file = new File(parentDir, fileName);
+    	try {
+			file.createNewFile();
+		} catch (IOException e) {
+			System.err.println();
+		}
+    	String original = "Original:\n";
+    	for (int i=0; i<Grid.NUM_ROWS; i++) {
+    		for (int j=0; j<Grid.NUM_COLS; j++) {
+    			if (currentGrid.grid.get(i).get(j).isGiven() == true) {
+    				original = original + currentGrid.grid.get(i).get(j).getNumber() + " ";
+    			} else if (currentGrid.grid.get(i).get(j).isGiven() == false) {
+    				original = original + "0 ";
+    			}
+    		}
+    		original = original + "\n";
+    	}
+    	String save = original + "\nCurrent:\n" + currentGrid.toString();
+    	try {
+			PrintWriter print = new PrintWriter(file);
+			print.write(save);
+			print.close();
+		} catch (FileNotFoundException e) {}
     }
 
     @Override
     public void loadGame(String location) {
-        // TODO Auto-generated method stub
-        
+    	File file = new File(location);
+    	try {
+			Scanner save = new Scanner(file);
+			for (int i=0; i<Grid.NUM_ROWS; i++) {
+	    		for (int j=0; j<Grid.NUM_COLS; j++) {
+	    			giveCellNumber(i, j, save.nextInt());
+	    		}
+	    	}
+			for (int i=0; i<Grid.NUM_ROWS; i++) {
+	    		for (int j=0; j<Grid.NUM_COLS; j++) {
+	    			if (currentGrid.grid.get(i).get(j).isGiven() == false) {
+	    				setCellNumber(i, j, save.nextInt());
+	    			} else {
+	    				giveCellNumber(i, j, save.nextInt());
+	    			}
+	    		}
+	    	}
+			save.close();
+		} catch (FileNotFoundException e) {}
     }
     
     //*****************************************
