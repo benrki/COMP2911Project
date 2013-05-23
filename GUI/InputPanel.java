@@ -53,8 +53,5 @@ public class InputPanel extends JPanel  {
 				// Toggle candidate marking mode
 			}
 		});
-		
-
-		
 	}	
 }

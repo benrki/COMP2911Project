@@ -15,78 +15,63 @@ public class MenuBar extends JMenuBar {
 	 */
 	private static final long serialVersionUID = 1L;
 	private static final String ABOUT_MESSAGE = "2013s1 COMP2911 Project\n\nCreated by Benjamin Ki, Kenny Ho, Nathan Ho and Denaysh Selvakkumar.";
+	JMenu newGameMenu;
+	JMenuItem easy;
+	JMenuItem medium;
+	JMenuItem hard;
+	JMenuItem custom;
+	JMenu optionsMenu;
+	JMenuItem option;
+	JMenu aboutMenu;
+	JMenuItem aboutItem;
+	
 	
 	public MenuBar() {
 		super();
-		JMenu newGameMenu = new JMenu("New Game");
+		newGameMenu = new JMenu("New Game");
 		newGameMenu.setMnemonic(KeyEvent.VK_N);
 		newGameMenu.getAccessibleContext().setAccessibleDescription(
 				"Create a new game");
 		this.add(newGameMenu);
 		
-		JMenuItem easy = new JMenuItem("Easy");
+		easy = new JMenuItem("Easy");
 		easy.setAccelerator(KeyStroke.getKeyStroke(
 		        KeyEvent.VK_1, ActionEvent.ALT_MASK));
-		easy.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				JOptionPane.showMessageDialog(null, "Filler option item");
-			}
-		});
 		newGameMenu.add(easy);
 		
-		JMenuItem medium = new JMenuItem("Medium");
+		medium = new JMenuItem("Medium");
 		medium.setAccelerator(KeyStroke.getKeyStroke(
 		        KeyEvent.VK_2, ActionEvent.ALT_MASK));
-		medium.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				JOptionPane.showMessageDialog(null, "Filler option item");
-			}
-		});
 		newGameMenu.add(medium);
 		
-		JMenuItem hard = new JMenuItem("Hard");
+		hard = new JMenuItem("Hard");
 		hard.setAccelerator(KeyStroke.getKeyStroke(
 		        KeyEvent.VK_3, ActionEvent.ALT_MASK));
-		hard.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				JOptionPane.showMessageDialog(null, "Filler option item");
-			}
-		});
 		newGameMenu.add(hard);
 		
-		JMenuItem custom = new JMenuItem("Custom");
+		custom = new JMenuItem("Custom");
 		custom.setAccelerator(KeyStroke.getKeyStroke(
 		        KeyEvent.VK_3, ActionEvent.ALT_MASK));
-		custom.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				JOptionPane.showMessageDialog(null, "Filler option item");
-			}
-		});
 		newGameMenu.add(custom);
 		
-		JMenu optionsMenu = new JMenu("Settings");
+		optionsMenu = new JMenu("Settings");
 		optionsMenu.setMnemonic(KeyEvent.VK_S);
 		optionsMenu.getAccessibleContext().setAccessibleDescription(
 				"Application settings");
 		this.add(optionsMenu);
 		
-		JMenuItem temp = new JMenuItem("Filler");
-		temp.setAccelerator(KeyStroke.getKeyStroke(
+		option = new JMenuItem("Filler");
+		option.setAccelerator(KeyStroke.getKeyStroke(
 		        KeyEvent.VK_1, ActionEvent.ALT_MASK));
-		temp.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				JOptionPane.showMessageDialog(null, "Filler option item");
-			}
-		});
-		optionsMenu.add(temp);
+		optionsMenu.add(option);
 		
-		JMenu aboutMenu = new JMenu("About");
+		aboutMenu = new JMenu("About");
 		aboutMenu.setMnemonic(KeyEvent.VK_O);
 		aboutMenu.getAccessibleContext().setAccessibleDescription(
 				"About this program");
 		this.add(aboutMenu);
 		
-		JMenuItem aboutItem = new JMenuItem("About Sudoku");
+		aboutItem = new JMenuItem("About Sudoku");
 		aboutItem.setAccelerator(KeyStroke.getKeyStroke(
 		        KeyEvent.VK_1, ActionEvent.ALT_MASK));
 		aboutItem.addActionListener(new ActionListener() {
@@ -95,6 +80,30 @@ public class MenuBar extends JMenuBar {
 			}
 		});
 		aboutMenu.add(aboutItem);
+	}
+	
+	void addEasyGameListener(ActionListener l) {
+		easy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				JOptionPane.showMessageDialog(null, "Filler option item");
+			}
+		});
+	}
+
+	void addMediumGameListener(ActionListener l) {
+		medium.addActionListener(l);
+	}
+
+	void addHardGameListener(ActionListener l) {
+		hard.addActionListener(l);
+	}
+
+	void addCustomGameListener(ActionListener l) {
+		custom.addActionListener(l);
+	}
+
+	void addOptionListener(ActionListener l) {
+		option.addActionListener(l);
 	}
 
 }
