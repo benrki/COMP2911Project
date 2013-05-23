@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Stack;
@@ -109,12 +111,8 @@ public class SudokuModel implements SudokuModelInterface{
                 // Backtracks to the previous ungiven cell.
                 while(!backtracked || answerGrid.getCell(i, j).isGiven()) {
                     // Make this better later
-                    if(j==0) {
-                        i--;
-                        j = 8;
-                    } else {
-                        j--;
-                    }
+                    i = i + (j-9)/9;
+                    j--;
                     // Backtracked past the start of the grid (can't solve every cell)
                     if(i<0) {
                         return false;
@@ -123,7 +121,7 @@ public class SudokuModel implements SudokuModelInterface{
                 }
             // Else, set potential to cell.
             } else {
-                answerGrid.getCell(i, j).setNumber(potential);
+                answerGrid.getCell(i, j).giveNumber(potential);
                 boolean valid = answerGrid.isCellValid(i,j);
                 // If valid, advances to the next ungiven cell.
                 if(valid) {
@@ -212,6 +210,9 @@ public class SudokuModel implements SudokuModelInterface{
 
     @Override
     public boolean isCellCorrect(int row, int col) {
+        if(this.currentGrid.getCell(row, col).getNumber()==Grid.EMPTY) {
+            return true;
+        }
         return (this.currentGrid.getCell(row, col).getNumber()==this.answerGrid.getCell(row, col).getNumber());
     }
     @Override
