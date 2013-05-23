@@ -56,7 +56,7 @@ public class SudokuGenerator {
     // ************** STEP 2 ****************
     // **************************************
     private void gridShuffle() {
-        int shuffle = 50; // Change number of "shuffle" moves
+        int shuffle = 500; // Change number of "shuffle" moves
         for(int i=0; i<shuffle; i++) {
             int method = random.nextInt(7)+1;
             this.doMethod(method);
@@ -87,13 +87,12 @@ public class SudokuGenerator {
         while(two==one) {
             two = random.nextInt(9)+1;
         }
-        
         for(int i=0; i<Grid.NUM_ROWS; i++) {
             for(int j=0; j<Grid.NUM_COLS; j++) {
                 if(answerGrid.getCell(i, j).getNumber()==one) {
-                    answerGrid.getCell(i, j).setNumber(two);
+                    answerGrid.getCell(i, j).giveNumber(two);
                 } else if (answerGrid.getCell(i, j).getNumber()==two) {
-                    answerGrid.getCell(i, j).setNumber(one);
+                    answerGrid.getCell(i, j).giveNumber(one);
                 }
             }
         }
@@ -110,8 +109,8 @@ public class SudokuGenerator {
         }
         for(int i=0; i<Grid.NUM_ROWS; i++) {
             tmp = answerGrid.getCell(i, one).getNumber();
-            answerGrid.getCell(i, one).setNumber(answerGrid.getCell(i, two).getNumber());
-            answerGrid.getCell(i, two).setNumber(tmp);
+            answerGrid.getCell(i, one).giveNumber(answerGrid.getCell(i, two).getNumber());
+            answerGrid.getCell(i, two).giveNumber(tmp);
         }
     }
     
@@ -126,8 +125,8 @@ public class SudokuGenerator {
         for(int i=0; i<Grid.NUM_ROWS; i++) {
             for(int j=0; j<3; j++) {
                 tmp = answerGrid.getCell(i, one+j).getNumber();
-                answerGrid.getCell(i, one+j).setNumber(answerGrid.getCell(i, two+j).getNumber());
-                answerGrid.getCell(i, two+j).setNumber(tmp);
+                answerGrid.getCell(i, one+j).giveNumber(answerGrid.getCell(i, two+j).getNumber());
+                answerGrid.getCell(i, two+j).giveNumber(tmp);
             }
         }
         
@@ -142,8 +141,8 @@ public class SudokuGenerator {
         }
         for(int i=0; i<Grid.NUM_COLS; i++) {
             tmp = answerGrid.getCell(one, i).getNumber();
-            answerGrid.getCell(one, i).setNumber(answerGrid.getCell(two, i).getNumber());
-            answerGrid.getCell(two, i).setNumber(tmp);
+            answerGrid.getCell(one, i).giveNumber(answerGrid.getCell(two, i).getNumber());
+            answerGrid.getCell(two, i).giveNumber(tmp);
         }  
     }
     
@@ -157,8 +156,8 @@ public class SudokuGenerator {
         for(int i=0; i<Grid.NUM_COLS; i++) {
             for(int j=0; j<3; j++) {
                 tmp = answerGrid.getCell(one+j, i).getNumber();
-                answerGrid.getCell(one+j, i).setNumber(answerGrid.getCell(two+j, i).getNumber());
-                answerGrid.getCell(two+j, i).setNumber(tmp);
+                answerGrid.getCell(one+j, i).giveNumber(answerGrid.getCell(two+j, i).getNumber());
+                answerGrid.getCell(two+j, i).giveNumber(tmp);
             }
         }
     }
@@ -181,7 +180,7 @@ public class SudokuGenerator {
     
     
     private void removeCells() {
-        int remove = 20;
+        int remove = 40;
         for(int i=0; i<remove; i++) {
             this.removeRandomCellInBox(i%9);
         }

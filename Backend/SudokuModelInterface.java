@@ -3,11 +3,12 @@ public interface SudokuModelInterface {
     //*** Creating/Generating phase methods ***
     //*****************************************
     
+    // *** RANDOM GENERATING METHODS ***
     // Generates a random puzzle (and reveals a set number of Cells in random positions)
     // (Will be expanded on later to generateEasy, generateIntermediate, generateHard, generateExpert)
-    
     public void generatePuzzle();
     
+    // *** USER GENERATING METHODS ***
     // Sets the number in the specified cell in the currentGrid as the specified number. 
     // Makes this cell a "given" cell. (Different to setCellNumber).
     public void giveCellNumber(int row, int col, int n);
@@ -67,6 +68,7 @@ public interface SudokuModelInterface {
     public void revealCell(int row, int col);
     
     // Things that can be undo/redo for the moment:
+    // giveCellNumber, removeCellNumber
     // setCellNumber, clearCellNumber
     // Undo
     public void undoMove();
@@ -75,7 +77,8 @@ public interface SudokuModelInterface {
 
     // Saves game to textfile to <specified location> with <specified name>
     public void saveGame(String location, String name);
-    public void loadGame();
+    // Load game from <specified location> (includes the file name)
+    public void loadGame(String location);
     
     //*****************************************
     //********** Reveal phase methods *********

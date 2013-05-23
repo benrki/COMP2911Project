@@ -67,15 +67,6 @@ public class Cell {
         this.given = false;
     }
     
-    
-    /**
-     * Sets the given to true/false.
-     * @param given <tt>true</tt> or <tt>false</tt>
-     */
-    /*public void setGiven (boolean given) {
-        this.given = given;
-    }*/
-    
     /**
      * Returns the number of the Cell.
      * @return the number of the Cell.

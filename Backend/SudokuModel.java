@@ -264,10 +264,11 @@ public class SudokuModel implements SudokuModelInterface{
     }
 
     @Override
-    public void loadGame() {
+    public void loadGame(String location) {
         // TODO Auto-generated method stub
         
     }
+    
     //*****************************************
     //********** Reveal phase methods *********
     //*****************************************
