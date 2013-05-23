@@ -8,7 +8,7 @@ public class SudokuModelTest {
         //sudoku.generatePuzzle();
         System.out.println("Empty Grid");
         sudoku.printCurrentGrid();
-        System.out.println("Putting numbers in");
+        System.out.println("Putting numbers in (Should add 1..6");
         sudoku.setCellNumber(0, 0, 1);
         sudoku.setCellNumber(0, 1, 2);
         sudoku.setCellNumber(0, 2, 3);
@@ -16,19 +16,19 @@ public class SudokuModelTest {
         sudoku.setCellNumber(0, 4, 5);
         sudoku.setCellNumber(0, 5, 6);
         sudoku.printCurrentGrid();
-        System.out.println("Undo two moves");
+        System.out.println("Undo two moves (Should remove 5, 6)");
         sudoku.undoMove();
         sudoku.undoMove();
         sudoku.printCurrentGrid();
-        System.out.println("Redo two moves");
+        System.out.println("Redo two moves (Should add 5, 6)");
         sudoku.redoMove();
         sudoku.redoMove();
         sudoku.printCurrentGrid();
-        System.out.println("Undo two moves");
+        System.out.println("Undo two moves (Should remove 5, 6)");
         sudoku.undoMove();
         sudoku.undoMove();
         sudoku.printCurrentGrid();
-        System.out.println("Do a move");
+        System.out.println("Do a move (Should add 7)");
         sudoku.setCellNumber(0, 4, 7);
         sudoku.printCurrentGrid();
         System.out.println("Redo (should be nothing)");
@@ -36,11 +36,7 @@ public class SudokuModelTest {
         sudoku.printCurrentGrid();
         System.out.println("Undo (should remove 7)");
         sudoku.undoMove();
-        sudoku.printCurrentGrid();
-        
-        // Testing findSolution, setting and solve.
-        /*
-        
+        sudoku.printCurrentGrid();      
         
         
         // Testing generating puzzles
