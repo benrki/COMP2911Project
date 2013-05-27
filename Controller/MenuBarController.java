@@ -29,7 +29,7 @@ public class MenuBarController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			model.generatePuzzle();	// Change for difficulty later
+			model.generateEasyPuzzle();	// Change for difficulty later
 			boardController.setBoard(model);
 		}
 		
@@ -43,7 +43,7 @@ public class MenuBarController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			model.generatePuzzle();// Change for difficulty later
+			model.generateIntermediatePuzzle();// Change for difficulty later
 			boardController.setBoard(model);
 		}
 		
@@ -57,7 +57,7 @@ public class MenuBarController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			model.generatePuzzle();// Change for difficulty later
+			model.generateHardPuzzle();// Change for difficulty later
 			boardController.setBoard(model);
 		}
 		

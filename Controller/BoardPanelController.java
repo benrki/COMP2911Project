@@ -64,7 +64,8 @@ public class BoardPanelController {
 				if (curr != 0) {
 					board.getButton(p).setText(Integer.toString(curr));
 				}
-				board.getButton(p).setFont(new Font("sansserif",Font.BOLD,36));
+				board.getButton(p).setFont(new Font("sansserif",Font.BOLD,18));
+				board.getButton(p).setForeground(Color.BLACK);
 			}
 		}
 	}

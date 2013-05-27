@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,7 +50,7 @@ public class InputPanelController {
 		public KeyClick(BoardPanel board, String label){
 			this.board = board;
 			this.label = label;
-			this.font = new Font("sansserif",Font.BOLD,36);
+			this.font = new Font("sansserif",Font.BOLD,18);
 		}
 		
 		@Override
@@ -59,6 +60,7 @@ public class InputPanelController {
 				model.setCellNumber(p.getX(), p.getY(), Integer.parseInt(label));
 				board.getSelectedButton().setText(label);
 				board.getSelectedButton().setFont(font);
+				board.getSelectedButton().setForeground(Color.BLUE);
 				if (model.isGridCorrect()) {
 					JOptionPane.showMessageDialog(null, "Trophy 4 u");
 				}
