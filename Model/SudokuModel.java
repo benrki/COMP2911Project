@@ -42,6 +42,23 @@ public class SudokuModel implements SudokuModelInterface{
         generator.generate();
         
     }
+    @Override
+    public void generateEasyPuzzle() {
+    	SudokuGenerator generator = new EasyGenerator(this.currentGrid, this.answerGrid);
+        generator.generate();
+    }
+    
+    @Override
+    public void generateIntermediatePuzzle() {
+    	SudokuGenerator generator = new IntermediateGenerator(this.currentGrid, this.answerGrid);
+        generator.generate();
+    }
+    
+    @Override
+    public void generateHardPuzzle() {
+    	SudokuGenerator generator = new HardGenerator(this.currentGrid, this.answerGrid);
+        generator.generate();
+    }
     
     /**
      * Sets the number in the specified cell in the currentGrid as the specified number. 
@@ -255,6 +272,18 @@ public class SudokuModel implements SudokuModelInterface{
         }
         return true;
     }
+    
+    @Override
+	public boolean isSudokuFinished() {
+    	for(int i=0; i<9; i++) {
+    		for(int j=0; j<9; j++) {
+    			if(this.currentGrid.getCell(i, j).getNumber()!=this.answerGrid.getCell(i, j).getNumber()) {
+    				return false;
+    			}
+    		}
+    	}
+        return true;
+	}
 
     public void revealRandom() {
         // NEED TO FIX, CURRENTLY INFINITELY LOOPS WHEN YOU TRY TO REVEAL WHEN BOARD IS FINISHED ALREADY
@@ -320,7 +349,7 @@ public class SudokuModel implements SudokuModelInterface{
         this.redoStack = tmp;
     }
     
- @Override
+    @Override
     public void saveGame(String location, String name) {
     	File parentDir = new File(location);
     	parentDir.mkdir();

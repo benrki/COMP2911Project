@@ -10,7 +10,7 @@ public class Grid {
     public static final int NUM_ROWS = 9;
     public static final int NUM_COLS = 9;
     ArrayList<ArrayList<Cell>> grid;     
-
+    public static final String newline = System.getProperty("line.separator");
     /**
      * Constructs a Grid.
      */

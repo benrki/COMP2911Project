@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class SudokuModelTest {
     public static void main(String[] args) {
-        /*
+        
         // Testing generating puzzles
         SudokuModel sudoku = new SudokuModel();
         //sudoku.generatePuzzle();
@@ -37,10 +37,10 @@ public class SudokuModelTest {
         System.out.println("Undo (should remove 7)");
         sudoku.undoMove();
         sudoku.printCurrentGrid();      
-        */
         
+        /*
         // Testing generating puzzles
-        /*SudokuModel sudokuSolver = new SudokuModel();
+        SudokuModel sudokuSolver = new SudokuModel();
         sudokuSolver.generatePuzzle();
         sudokuSolver.printAnswerGrid();
         sudokuSolver.printCurrentGrid();
@@ -56,6 +56,7 @@ public class SudokuModelTest {
         */
         
         // Testing findSolution, setting and solve.
+    	/*
         String input = 
                 "0 5 9 1 1 1 1 1 8\n" +
                 "7 0 2 0 5 0 0 4 1\n" + 
@@ -97,6 +98,7 @@ public class SudokuModelTest {
         System.out.println("Unsolved grid");
         sudoku.printCurrentGrid();
         sudoku.printAnswerGrid();
+        */
         /*System.out.println("Putting some numbers in");
         sudoku.setCellNumber(0, 0, 3);
         sudoku.setCellNumber(8, 1, 2);

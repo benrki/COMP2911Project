@@ -105,7 +105,7 @@ public class SudokuGenerator {
         int two = one;
         int tmp;
         while(two==one) {
-            two = one/3 + random.nextInt(3);
+            two = 3*(one/3) + random.nextInt(3);       
         }
         for(int i=0; i<Grid.NUM_ROWS; i++) {
             tmp = answerGrid.getCell(i, one).getNumber();
@@ -124,9 +124,9 @@ public class SudokuGenerator {
         }
         for(int i=0; i<Grid.NUM_ROWS; i++) {
             for(int j=0; j<3; j++) {
-                tmp = answerGrid.getCell(i, one+j).getNumber();
-                answerGrid.getCell(i, one+j).giveNumber(answerGrid.getCell(i, two+j).getNumber());
-                answerGrid.getCell(i, two+j).giveNumber(tmp);
+                tmp = answerGrid.getCell(i, (3*one)+j).getNumber();
+                answerGrid.getCell(i, (3*one)+j).giveNumber(answerGrid.getCell(i, (3*two)+j).getNumber());
+                answerGrid.getCell(i, (3*two)+j).giveNumber(tmp);
             }
         }
         
@@ -137,7 +137,7 @@ public class SudokuGenerator {
         int two = one;
         int tmp;
         while(two==one) {
-            two = one/3 + random.nextInt(3);
+            two = 3*(one/3) + random.nextInt(3);
         }
         for(int i=0; i<Grid.NUM_COLS; i++) {
             tmp = answerGrid.getCell(one, i).getNumber();
@@ -155,9 +155,9 @@ public class SudokuGenerator {
         }
         for(int i=0; i<Grid.NUM_COLS; i++) {
             for(int j=0; j<3; j++) {
-                tmp = answerGrid.getCell(one+j, i).getNumber();
-                answerGrid.getCell(one+j, i).giveNumber(answerGrid.getCell(two+j, i).getNumber());
-                answerGrid.getCell(two+j, i).giveNumber(tmp);
+                tmp = answerGrid.getCell((3*one)+j, i).getNumber();
+                answerGrid.getCell((3*one)+j, i).giveNumber(answerGrid.getCell((3*two)+j, i).getNumber());
+                answerGrid.getCell((3*two)+j, i).giveNumber(tmp);
             }
         }
     }
@@ -179,13 +179,13 @@ public class SudokuGenerator {
     }
     
     
-    private void removeCells() {
+    protected void removeCells() {
         int remove = 40;
         for(int i=0; i<remove; i++) {
             this.removeRandomCellInBox(i%9);
         }
     }
-    private void removeRandomCellInBox(int box) {
+    protected void removeRandomCellInBox(int box) {
         // Position of top-left cell in Box "box"
         int boxRow = 3*(box/3);
         int boxCol = 3*(box%3);
