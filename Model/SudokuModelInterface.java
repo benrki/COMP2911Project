@@ -7,7 +7,9 @@ public interface SudokuModelInterface {
     // Generates a random puzzle (and reveals a set number of Cells in random positions)
     // (Will be expanded on later to generateEasy, generateIntermediate, generateHard, generateExpert)
     public void generatePuzzle();
-    
+    public void generateEasyPuzzle();
+    public void generateIntermediatePuzzle();
+    public void generateHardPuzzle();
     // *** USER GENERATING METHODS ***
     // Sets the number in the specified cell in the currentGrid as the specified number. 
     // Makes this cell a "given" cell. (Different to setCellNumber).
@@ -79,6 +81,8 @@ public interface SudokuModelInterface {
     public void saveGame(String location, String name);
     // Load game from <specified location> (includes the file name)
     public void loadGame(String location);
+    
+    public boolean isSudokuFinished();
     
     //*****************************************
     //********** Reveal phase methods *********
