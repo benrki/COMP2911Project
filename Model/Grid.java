@@ -131,7 +131,6 @@ public class Grid {
         }
         System.out.println();
     }
-}
 
     @Override
     public String toString() {
@@ -144,3 +143,4 @@ public class Grid {
     	}
     	return sudoku;
     }
+}
