@@ -132,3 +132,15 @@ public class Grid {
         System.out.println();
     }
 }
+
+    @Override
+    public String toString() {
+        String sudoku = "";
+    	for (int i=0; i<NUM_ROWS; i++) {
+    		for (int j=0; j<NUM_COLS; j++) {
+    			sudoku = sudoku + grid.get(i).get(j).getNumber() + " ";
+    		}
+    		sudoku = sudoku + newline;
+    	}
+    	return sudoku;
+    }
