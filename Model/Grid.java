@@ -121,6 +121,7 @@ public class Grid {
     
     @Override
     public String toString() {
+        String newline = System.getProperty("line.separator");
         String sudoku = "";
     	for (int i=0; i<NUM_ROWS; i++) {
     		for (int j=0; j<NUM_COLS; j++) {
