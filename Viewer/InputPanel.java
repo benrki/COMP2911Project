@@ -17,6 +17,7 @@ public class InputPanel extends JPanel  {
 	private BoardPanel board;
 	private JButton clearButton;
 	private ArrayList<KeyButton> keyButtons;
+	private JToggleButton candidateButton;
 
 	public InputPanel(BoardPanel board) {
 		super();
@@ -27,14 +28,18 @@ public class InputPanel extends JPanel  {
 		for (int i = 0; i < keyLabels.length(); i++) {
 			final String label = keyLabels.substring(i, i + 1);
 			KeyButton keyButton = new KeyButton(label);
+			keyButton.setFocusable(false);
 			this.add(keyButton);
 			keyButtons.add(keyButton);
 		}
 		
 		this.clearButton = new JButton("CLEAR");
+		clearButton.setFocusable(false);
 		this.add(clearButton);
 
 		JToggleButton mark = new JToggleButton("MARK");
+		mark.setFocusable(false);
+		this.candidateButton = mark; // change name later
 		this.add(mark);
 		
 		JButton hint = new JButton("HINT");
@@ -52,6 +57,10 @@ public class InputPanel extends JPanel  {
 	
 	public ArrayList<KeyButton> getKeyButtons(){
 		return keyButtons;
+	}
+	
+	public JToggleButton getCandidateButton(){
+		return candidateButton;
 	}
 	
 	public void addActionListener(ActionListener listener, JButton button){

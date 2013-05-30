@@ -1,5 +1,3 @@
-import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -30,12 +28,17 @@ public class InputPanelController {
 		public void actionPerformed(ActionEvent arg0) {
 			Position p = board.getSelectedCell();
 			if (p != null) {
-				model.clearCellNumber(p.getX(), p.getY());
-				int curr = model.getCellNumber(p.getX(), p.getY());
-				if (curr == 0) {
-					board.getButton(p).setText(null);
-				} else {
-					board.getButton(p).setText(Integer.toString(curr));
+				if(!inputPanel.getCandidateButton().isSelected()){
+					model.clearCellNumber(p.getX(), p.getY());
+					int curr = model.getCellNumber(p.getX(), p.getY());
+					if (curr == 0) {
+						board.getButton(p).setNumberLabel(null);
+					} else {
+						board.getButton(p).setNumberLabel(Integer.toString(curr));
+					}
+				}else{
+					model.clearCellCandidates(p.getX(), p.getY());
+					board.getButton(p).clearCandidateLabel();
 				}
 			}
 		}
@@ -45,24 +48,32 @@ public class InputPanelController {
 		
 		private BoardPanel board;
 		private String label;
-		private Font font;
 		
 		public KeyClick(BoardPanel board, String label){
 			this.board = board;
 			this.label = label;
-			this.font = new Font("sansserif",Font.BOLD,18);
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			Position p = board.getSelectedCell();
-			if (p != null) {
-				model.setCellNumber(p.getX(), p.getY(), Integer.parseInt(label));
-				board.getSelectedButton().setText(label);
-				board.getSelectedButton().setFont(font);
-				board.getSelectedButton().setForeground(Color.BLUE);
-				if (model.isGridCorrect()) {
-					JOptionPane.showMessageDialog(null, "Trophy 4 u");
+			if (p != null && !model.isCellGiven(p.getX(), p.getY())) {
+				if(!inputPanel.getCandidateButton().isSelected()){
+					model.setCellNumber(p.getX(), p.getY(), Integer.parseInt(label));
+					board.getSelectedButton().setNumberLabel(label);
+					if (model.isSudokuFinished()) {
+						JOptionPane.showMessageDialog(null, "Trophy 4 u");
+					}
+				}else{
+					if(model.hasCellCandidate(p.getX(), p.getY(), Integer.parseInt(label))){
+					//	System.out.println(label);
+						model.removeCellCandidate(p.getX(), p.getY(), Integer.parseInt(label));
+						board.getSelectedButton().setCandidateLabel(model.getCandidates(p.getX(), p.getY()));
+					}else{
+					//	System.out.println(label);
+						model.addCellCandidate(p.getX(), p.getY(), Integer.parseInt(label));
+						board.getSelectedButton().setCandidateLabel(model.getCandidates(p.getX(), p.getY()));
+					}
 				}
 			}
 		}

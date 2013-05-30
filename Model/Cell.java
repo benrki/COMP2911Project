@@ -6,12 +6,14 @@ public class Cell {
     // Reorder methods
     // Fix documentation
     
-    private final static int EMPTY = 0;
+    public final static int EMPTY = 0;
+    public final static int MIN_NUM = 1;
+    public final static int MAX_NUM = 9;
     private final int row;
     private final int column;
     private int number; 
     private boolean given; // If this cell was "given" (i.e You can't change the guess)
-    private ArrayList<Boolean> candidates;
+    private ArrayList<Integer> candidates;
    
     /**
      * Constructs a Cell.
@@ -21,20 +23,36 @@ public class Cell {
     public Cell (int row, int column) {
         this.row = row;
         this.column = column;
-        this.number = EMPTY;
+        this.number = Cell.EMPTY;
         this.given = false;
-        candidates = new ArrayList<Boolean>();
-        for(int i=1; i<=9; i++) {
-           candidates.add(false);
-        }
+        candidates = new ArrayList<Integer>();
     }
  
+    /**
+     * Gives the Cell the number. Sets the Cell as given.
+     * @param number The number to give the Cell.
+     */
+    public void giveNumber(int number) {
+        if( (Cell.MIN_NUM <= number) && (number <= Cell.MAX_NUM)) {
+            this.number = number;
+            this.given = true;
+        }
+    }
+    
+    /**
+     * Remove the Cell number. Sets the Cell as not given.
+     */
+    public void removeNumber() {
+        this.number = EMPTY;
+        this.given = false;
+    }
+    
     /**
      * Sets the Cell number. (Only if it's not a given cell).
      * @param number The number to set the Cell number to.
      */
     public void setNumber(int number) {
-        if(!this.given && 0 <= number && number <= 9) {
+        if(!this.given && (Cell.MIN_NUM <= number) && (number <= Cell.MAX_NUM)) {
             this.number = number;
         }
     }
@@ -48,24 +66,6 @@ public class Cell {
         }
     }
     
-    /**
-     * Gives the Cell the number. Sets the Cell as given.
-     * @param number The number to give the Cell.
-     */
-    public void giveNumber(int number) {
-        if(1<=number && number<=9) {
-            this.number = number;
-            this.given = true;
-        }
-    }
-    
-    /**
-     * Remove the Cell number. Sets the Cell as not given.
-     */
-    public void removeNumber() {
-        this.number = EMPTY;
-        this.given = false;
-    }
     
     /**
      * Returns the number of the Cell.
@@ -112,8 +112,15 @@ public class Cell {
      * @param number The candidate to this cell.
      */
     public void addCandidate(int number) {
-        if(1<=number && number<=9) {
-            this.candidates.set(number-1, true);
+        if(!this.candidates.contains(number) && (Cell.MIN_NUM <= number) && (number <= Cell.MAX_NUM)) {
+            for(int i=0; i<candidates.size(); i++) {
+                if(number < this.candidates.get(i)) {
+                    this.candidates.add(i, number);
+                    return;
+                }
+            }
+            // Hasn't added candidate yet (i.e hasn't returned)
+            this.candidates.add(number);
         }
     }
    
@@ -122,8 +129,8 @@ public class Cell {
      * @param number The candidate to this cell.
      */
     public void removeCandidate(int number) {
-        if(1<=number && number<=9) {
-            this.candidates.set(number-1, false);
+        if(this.candidates.contains(number)) {
+            this.candidates.remove(this.candidates.indexOf(number));
         }
     }
    
@@ -133,9 +140,15 @@ public class Cell {
      * @return <tt>true</tt> if the number is a candidate to this Cell, <tt>false</tt> otherwise.
      */
     public boolean hasCandidate(int number) {
-       if(1<=number && number<=9) {
-           return candidates.get(number-1);
-       } 
-       return false;
+        return this.candidates.contains(number);
+    }
+    
+    /**
+     * Returns an ordered ArrayList of the candidates.
+     * @param number The candidate to this cell.
+     * @return an ordered ArrayList of the candidates.
+     */
+    public ArrayList<Integer> getCandidates() {
+        return this.candidates;
     }
 }

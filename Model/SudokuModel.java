@@ -81,7 +81,7 @@ public class SudokuModel implements SudokuModelInterface{
     @Override
     public void removeCellNumber(int row, int col) {
         int n = this.answerGrid.getCell(row, col).getNumber();
-        if(n!=Grid.EMPTY) {
+        if(n!=Cell.EMPTY) {
             this.currentGrid.getCell(row, col).removeNumber();
             this.answerGrid.getCell(row, col).removeNumber();
             this.undoStack.push("removeCellNumber " + row + " " + col + " " + n);
@@ -185,20 +185,13 @@ public class SudokuModel implements SudokuModelInterface{
     @Override
     public void clearCellNumber(int row, int col) {
         int n = this.currentGrid.getCell(row, col).getNumber();
-        if(n!=Grid.EMPTY) {
+        if(n!=Cell.EMPTY) {
             this.currentGrid.getCell(row, col).clearNumber();
             this.undoStack.push("clearCellNumber " + row + " " + col + " " + n);
             this.redoStack.clear();
         }
     }
     
-    @Override
-    public boolean hasCellCandidate(int row, int col, int n) {
-        if(1<=n && n<=9) {
-            return currentGrid.getCell(row, col).hasCandidate(n);
-        }
-        return false;
-    }
     @Override
     public void addCellCandidate(int row, int col, int n) {
         if(1<=n && n<=9) {
@@ -210,6 +203,18 @@ public class SudokuModel implements SudokuModelInterface{
             currentGrid.getCell(row, col).removeCandidate(n);
         }
     }
+    @Override
+    public boolean hasCellCandidate(int row, int col, int n) {
+        if(1<=n && n<=9) {
+            return currentGrid.getCell(row, col).hasCandidate(n);
+        }
+        return false;
+    }
+    @Override
+    public ArrayList<Integer> getCandidates(int row, int col) {
+        return currentGrid.getCell(row, col).getCandidates();
+    }
+    
     public void clearCellCandidates (int row, int col) {
         for(int i=1; i<=9; i++) {
             currentGrid.getCell(row, col).removeCandidate(i);
@@ -227,7 +232,7 @@ public class SudokuModel implements SudokuModelInterface{
 
     @Override
     public boolean isCellCorrect(int row, int col) {
-        if(this.currentGrid.getCell(row, col).getNumber()==Grid.EMPTY) {
+        if(this.currentGrid.getCell(row, col).getNumber()==Cell.EMPTY) {
             return true;
         }
         return (this.currentGrid.getCell(row, col).getNumber()==this.answerGrid.getCell(row, col).getNumber());
@@ -294,7 +299,7 @@ public class SudokuModel implements SudokuModelInterface{
         while(!revealed) {
             row = r.nextInt(9);
             col = r.nextInt(9);
-            if(this.currentGrid.getCell(row, col).getNumber()==Grid.EMPTY) {
+            if(this.currentGrid.getCell(row, col).getNumber()==Cell.EMPTY) {
                 this.revealCell(row, col);
                 revealed = true;
             }
@@ -351,6 +356,7 @@ public class SudokuModel implements SudokuModelInterface{
     
     @Override
     public void saveGame(String location, String name) {
+        String newline = System.getProperty("line.separator");
     	File parentDir = new File(location);
     	parentDir.mkdir();
     	File file = new File(parentDir, name + ".txt");
@@ -359,7 +365,7 @@ public class SudokuModel implements SudokuModelInterface{
 		} catch (IOException e) {
 			
 		}
-    	String original = "Original:" + Grid.newline;
+    	String original = "Original:" + newline;
     	for (int i=0; i<Grid.NUM_ROWS; i++) {
     		for (int j=0; j<Grid.NUM_COLS; j++) {
     			if (currentGrid.grid.get(i).get(j).isGiven() == true) {
@@ -368,9 +374,9 @@ public class SudokuModel implements SudokuModelInterface{
     				original = original + "0 ";
     			}
     		}
-    		original = original + Grid.newline;
+    		original = original + newline;
     	}
-    	String save = original + Grid.newline + "Current:" + Grid.newline + currentGrid.toString();
+    	String save = original + newline + "Current:" + newline + currentGrid.toString();
     	try {
 			PrintWriter print = new PrintWriter(file);
 			print.write(save);
@@ -418,6 +424,11 @@ public class SudokuModel implements SudokuModelInterface{
                 this.revealCell(i, j);
             }
         }
+    }
+    
+    @Override
+    public boolean isCellGiven(int row, int col) {
+        return this.currentGrid.getCell(row, col).isGiven();
     }
     
     // FOR TESTING ONLY METHODS
