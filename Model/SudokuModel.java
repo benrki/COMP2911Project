@@ -475,55 +475,57 @@ public class SudokuModel implements SudokuModelInterface{
     }
     
     @Override
-    public void saveGame(String location, String name) {
-        String newline = System.getProperty("line.separator");
-    	File parentDir = new File(location);
+    public void saveGame(File save) {
+    	/*File parentDir = new File(location);
     	parentDir.mkdir();
-    	File file = new File(parentDir, name + ".txt");
+    	File save = new File(parentDir, name + ".txt");
     	try {
-			file.createNewFile();
+			save.createNewFile();
 		} catch (IOException e) {
 			
-		}
-    	String original = "Original:" + newline;
+		}*/
+    	String original = "Original:" + Grid.newline;
     	for (int i=0; i<Grid.NUM_ROWS; i++) {
     		for (int j=0; j<Grid.NUM_COLS; j++) {
     			if (currentGrid.grid.get(i).get(j).isGiven() == true) {
-    				original = original + currentGrid.grid.get(i).get(j).getNumber() + " ";
+    				original = original + "|" + currentGrid.grid.get(i).get(j).getNumber();
     			} else if (currentGrid.grid.get(i).get(j).isGiven() == false) {
-    				original = original + "- ";
+    				original = original + "|-";
+    			}
+    			if ((j+1)%3 == 0) {
+    				original = original + "| ";
     			}
     		}
-    		original = original + newline;
+    		original = original + Grid.newline;
     	}
-    	String save = original + newline + "Current:" + newline + currentGrid.toString();
+    	String s = original + Grid.newline + "Current:" + Grid.newline + currentGrid.toString();
     	try {
-			PrintWriter print = new PrintWriter(file);
-			print.write(save);
+			PrintWriter print = new PrintWriter(save);
+			print.write(s);
 			print.close();
 		} catch (FileNotFoundException e) {}
     }
 
     @Override
-    public void loadGame(String location) {
-    	File file = new File(location);
+    public void loadGame(File save) {
+//    	File save = new File(location);
     	try {
-			Scanner save = new Scanner(file);
+			Scanner s = new Scanner(save);
 			for (int i=0; i<Grid.NUM_ROWS; i++) {
 	    		for (int j=0; j<Grid.NUM_COLS; j++) {
-	    			giveCellNumber(i, j, save.nextInt());
+	    			giveCellNumber(i, j, s.nextInt());
 	    		}
 	    	}
 			for (int i=0; i<Grid.NUM_ROWS; i++) {
 	    		for (int j=0; j<Grid.NUM_COLS; j++) {
 	    			if (currentGrid.grid.get(i).get(j).isGiven() == false) {
-	    				setCellNumber(i, j, save.nextInt());
+	    				setCellNumber(i, j, s.nextInt());
 	    			} else {
-	    				giveCellNumber(i, j, save.nextInt());
+	    				giveCellNumber(i, j, s.nextInt());
 	    			}
 	    		}
 	    	}
-			save.close();
+			s.close();
 		} catch (FileNotFoundException e) {
 			
 		} catch (NoSuchElementException e) {
