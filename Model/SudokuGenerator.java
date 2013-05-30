@@ -1,36 +1,37 @@
 import java.util.Random;
 import java.util.Scanner;
 
-public class SudokuGenerator {
+public abstract class SudokuGenerator {
     //http://zhangroup.aporc.org/images/files/Paper_3485.pdf
-    private Random random;
-    private Grid currentGrid;
-    private Grid answerGrid;
-    
-    
-    public SudokuGenerator (Grid currentGrid, Grid answerGrid) {
-        this.random = new Random();
-        this.currentGrid = currentGrid;
-        this.answerGrid = answerGrid;
-    }
-    
     // Basic logic:
     // 1) Take in a blank currentGrid and a blank answerGrid
     // 2) Overwrite the answerGrid with a default grid
     // 3) "Shuffle" this answerGrid
     // 4) Copy the "shuffled" answerGrid to currentGrid
     // 5) "Dig holes" in the currentGrid
-    // 6) Finish.
+    
+    private Random random;
+    private Grid currentGrid;
+    private Grid answerGrid;
+    
+    // **************************************
+    // ************** STEP 1 ****************
+    // **************************************
+    public SudokuGenerator (Grid currentGrid, Grid answerGrid) {
+        this.random = new Random();
+        this.currentGrid = currentGrid;
+        this.answerGrid = answerGrid;
+    }
+    
     public void generate() {
         this.defaultGrid(); // Step 2)
         this.gridShuffle(); // Step 3)
         this.duplicateAnswerGrid(); // Step 4)
         this.removeCells(); // Step 5)
-        // Step 6)
     }
     
     // **************************************
-    // ************** STEP 1 ****************
+    // ************** STEP 2 ****************
     // **************************************
     private void defaultGrid() {
         String input = 
@@ -53,7 +54,7 @@ public class SudokuGenerator {
         s.close();
     }
     // **************************************
-    // ************** STEP 2 ****************
+    // ************** STEP 3 ****************
     // **************************************
     private void gridShuffle() {
         int shuffle = 500; // Change number of "shuffle" moves
@@ -170,6 +171,9 @@ public class SudokuGenerator {
         // To do
     }
     
+    // **************************************
+    // ************** STEP 4 ****************
+    // **************************************
     private void duplicateAnswerGrid() {
         for(int i=0; i<Grid.NUM_ROWS; i++) {
             for(int j=0; j<Grid.NUM_COLS; j++) {
@@ -178,20 +182,19 @@ public class SudokuGenerator {
         }
     }
     
+    // **************************************
+    // ************** STEP 5 ****************
+    // **************************************
     
-    protected void removeCells() {
-        int remove = 40;
-        for(int i=0; i<remove; i++) {
-            this.removeRandomCellInBox(i%9);
-        }
-    }
+    protected abstract void removeCells();
+
     protected void removeRandomCellInBox(int box) {
         // Position of top-left cell in Box "box"
         int boxRow = 3*(box/3);
         int boxCol = 3*(box%3);
         int row = boxRow + random.nextInt(3);
         int col = boxCol + random.nextInt(3);
-        while(this.currentGrid.getCell(row, col).getNumber()==Grid.EMPTY) {
+        while(this.currentGrid.getCell(row, col).getNumber()==Cell.EMPTY) {
             row = boxRow + random.nextInt(3);
             col = boxCol + random.nextInt(3);
         }

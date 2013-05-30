@@ -6,11 +6,11 @@ public class Grid {
     // Reorder methods
     // Fix documentation
     
-    public static final int EMPTY = 0;
     public static final int NUM_ROWS = 9;
     public static final int NUM_COLS = 9;
+    public static final int NUM_CELLS = 81;
     ArrayList<ArrayList<Cell>> grid;     
-    public static final String newline = System.getProperty("line.separator");
+    
     /**
      * Constructs a Grid.
      */
@@ -61,14 +61,14 @@ public class Grid {
 
     
     /**
-     * Returns <tt>true</tt> if Row is valid, false otherwise.
-     * @return <tt>true</tt> if Row is valid, false otherwise.
+     * Returns <tt>true</tt> if Row 'n' is valid, false otherwise.
+     * @return <tt>true</tt> if Row 'n' is valid, false otherwise.
      */
     public boolean isRowValid(int n) {
        ArrayList<Integer> row = new ArrayList<Integer>();
        for(int i=0; i<NUM_COLS; i++) {
           if(!row.contains(grid.get(n).get(i).getNumber())) {
-              if(grid.get(n).get(i).getNumber()!=EMPTY) {
+              if(grid.get(n).get(i).getNumber()!=Cell.EMPTY) {
                   row.add(grid.get(n).get(i).getNumber());
               }
           } else {
@@ -78,11 +78,15 @@ public class Grid {
        return true;
     }
     
+    /**
+     * Returns <tt>true</tt> if Column 'n' is valid, false otherwise.
+     * @return <tt>true</tt> if Column 'n' is valid, false otherwise.
+     */   
     public boolean isColumnValid(int n) {
        ArrayList<Integer> col = new ArrayList<Integer>();
        for(int i=0; i<NUM_COLS; i++) {
           if(!col.contains(grid.get(i).get(n).getNumber())) {
-             if(grid.get(i).get(n).getNumber()!=EMPTY) {
+             if(grid.get(i).get(n).getNumber()!=Cell.EMPTY) {
                 col.add(grid.get(i).get(n).getNumber());
              }
           } else {
@@ -92,7 +96,11 @@ public class Grid {
        return true;
     
     }
-    
+ 
+    /**
+     * Returns <tt>true</tt> if Box 'n' is valid, false otherwise.
+     * @return <tt>true</tt> if Box 'n' is valid, false otherwise.
+     */
     public boolean isBoxValid(int n) {
        int row = (n/3)*3;
        int col = (n%3)*3;
@@ -100,7 +108,7 @@ public class Grid {
        for(int i=row; i<row+3; i++) {
            for(int j=col; j<col+3; j++) {
                if(!box.contains(grid.get(i).get(j).getNumber())) {
-                   if(grid.get(i).get(j).getNumber()!=EMPTY) {
+                   if(grid.get(i).get(j).getNumber()!=Cell.EMPTY) {
                       box.add(grid.get(i).get(j).getNumber());
                    }
                } else {
@@ -109,6 +117,26 @@ public class Grid {
            }
        }
        return true;
+    }
+    
+    @Override
+    public String toString() {
+        String newline = System.getProperty("line.separator");
+        String sudoku = "";
+    	for (int i=0; i<NUM_ROWS; i++) {
+    		for (int j=0; j<NUM_COLS; j++) {
+    			if (grid.get(i).get(j).getNumber() == EMPTY) {
+    				sudoku = sudoku + "|-";
+    			} else {
+    				sudoku = sudoku + "|" + grid.get(i).get(j).getNumber();
+    			}
+    			if ((j+1)%3 == 0) {
+    				sudoku = sudoku + "| ";
+    			}
+    		}
+    		sudoku = sudoku + newline;
+    	}
+    	return sudoku;
     }
     
     // Used only for testing
@@ -121,7 +149,7 @@ public class Grid {
                 if(j%3==0&&j!=0) {
                     System.out.print("| ");
                 }
-                if(this.grid.get(i).get(j).getNumber()==EMPTY){
+                if(this.grid.get(i).get(j).getNumber()==Cell.EMPTY){
                     System.out.print("|-");
                 } else {
                     System.out.print("|" + this.grid.get(i).get(j).getNumber());

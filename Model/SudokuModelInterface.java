@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public interface SudokuModelInterface {
     //*****************************************
     //*** Creating/Generating phase methods ***
@@ -89,6 +91,8 @@ public interface SudokuModelInterface {
     //*****************************************
     // Changes the current Grid to the solution.
     public void revealSolution();
+	boolean isCellGiven(int row, int col);
+	ArrayList<Integer> getCandidates(int row, int col);
 
 
     
