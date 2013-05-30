@@ -484,7 +484,8 @@ public class SudokuModel implements SudokuModelInterface{
 		} catch (IOException e) {
 			
 		}*/
-    	String original = "Original:" + Grid.newline;
+	String newline = System.getProperty("line.separator");
+    	String original = "Original:" + newline;
     	for (int i=0; i<Grid.NUM_ROWS; i++) {
     		for (int j=0; j<Grid.NUM_COLS; j++) {
     			if (currentGrid.grid.get(i).get(j).isGiven() == true) {
@@ -496,9 +497,9 @@ public class SudokuModel implements SudokuModelInterface{
     				original = original + "| ";
     			}
     		}
-    		original = original + Grid.newline;
+    		original = original + newline;
     	}
-    	String s = original + Grid.newline + "Current:" + Grid.newline + currentGrid.toString();
+    	String s = original + newline + "Current:" + newline + currentGrid.toString();
     	try {
 			PrintWriter print = new PrintWriter(save);
 			print.write(s);
