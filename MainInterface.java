@@ -34,15 +34,6 @@ public class MainInterface extends JFrame {
 		mainController = new MainController();
 		model = new SudokuModel();
 		
-		GridBagConstraints boardConstraints = new GridBagConstraints();
-		boardConstraints.anchor = GridBagConstraints.NORTH;
-		boardConstraints.fill = GridBagConstraints.BOTH;
-		boardConstraints.weightx = 1;
-		boardConstraints.weighty = 1;
-		board = new BoardPanel();
-		boardController = new BoardPanelController(board);
-		super.getContentPane().add(board, boardConstraints);
-		
 		GridBagConstraints inputConstraints = new GridBagConstraints();
 		inputConstraints.gridy = 1;
 		inputConstraints.fill = GridBagConstraints.BOTH;
@@ -51,8 +42,17 @@ public class MainInterface extends JFrame {
 		inputController = new InputPanelController(model, inputPanel);
 		super.getContentPane().add(inputPanel, inputConstraints);
 		
+		GridBagConstraints boardConstraints = new GridBagConstraints();
+		boardConstraints.anchor = GridBagConstraints.NORTH;
+		boardConstraints.fill = GridBagConstraints.BOTH;
+		boardConstraints.weightx = 1;
+		boardConstraints.weighty = 1;
+		board = new BoardPanel();
+		boardController = new BoardPanelController(board, model, inputPanel);
+		super.getContentPane().add(board, boardConstraints);
+		
 		menuBar = new MenuBar();
-		menuController = new MenuBarController(model, menuBar, boardController);
+		menuController = new MenuBarController(model, menuBar, boardController, this);
 
 		super.setJMenuBar(menuBar);
 		super.getContentPane().setPreferredSize(new Dimension(500, 500));

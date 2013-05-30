@@ -5,11 +5,7 @@ public class Cell {
     // To do:
     // Reorder methods
     // Fix documentation
-<<<<<<< HEAD
-    
-=======
-   
->>>>>>> 9034fd60d8f3570373ddc4ce0e2bd0a01c6613ff
+	
     public final static int EMPTY = 0;
     public final static int MIN_NUM = 1;
     public final static int MAX_NUM = 9;
@@ -42,11 +38,6 @@ public class Cell {
             this.given = true;
         }
     }
-<<<<<<< HEAD
-    
-=======
-   
->>>>>>> 9034fd60d8f3570373ddc4ce0e2bd0a01c6613ff
     /**
      * Remove the Cell number. Sets the Cell as not given.
      */
@@ -54,11 +45,7 @@ public class Cell {
         this.number = EMPTY;
         this.given = false;
     }
-<<<<<<< HEAD
     
-=======
-   
->>>>>>> 9034fd60d8f3570373ddc4ce0e2bd0a01c6613ff
     /**
      * Sets the Cell number. (Only if it's not a given cell).
      * @param number The number to set the Cell number to.
@@ -77,13 +64,7 @@ public class Cell {
             this.number = EMPTY;
         }
     }
-<<<<<<< HEAD
-    
-    
-=======
-   
-   
->>>>>>> 9034fd60d8f3570373ddc4ce0e2bd0a01c6613ff
+
     /**
      * Returns the number of the Cell.
      * @return the number of the Cell.
@@ -159,11 +140,7 @@ public class Cell {
     public boolean hasCandidate(int number) {
         return this.candidates.contains(number);
     }
-<<<<<<< HEAD
-    
-=======
-   
->>>>>>> 9034fd60d8f3570373ddc4ce0e2bd0a01c6613ff
+
     /**
      * Returns an ordered ArrayList of the candidates.
      * @param number The candidate to this cell.

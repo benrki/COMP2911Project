@@ -57,7 +57,7 @@ public class BoardPanelController {
 		}
 	}
 	
-	public void setBoard(SudokuModel model) {
+	public void updateBoard() {
 		for (ArrayList<CellButton> cbList: board.getButtons()) {
 			for (CellButton cb : cbList) {
 				cb.clearNumberLabel();
@@ -79,9 +79,9 @@ public class BoardPanelController {
 		}
 	}
 	
-	public void solve(SudokuModel model) {
+	public void solve() {
 		model.revealSolution();
-		this.setBoard(model);
+		this.updateBoard();
 	}
 	
 	class KeyPress implements KeyListener {

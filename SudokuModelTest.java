@@ -1,4 +1,3 @@
-import java.util.Scanner;
 
 public class SudokuModelTest {
     public static void main(String[] args) {

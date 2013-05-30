@@ -2,6 +2,7 @@ import java.util.Random;
 import java.util.Scanner;
 
 public abstract class SudokuGenerator {
+	
     //http://zhangroup.aporc.org/images/files/Paper_3485.pdf
     // Basic logic:
     // 1) Take in a blank currentGrid and a blank answerGrid

@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Scanner;
@@ -38,8 +37,8 @@ public class SudokuModel implements SudokuModelInterface{
     public void generatePuzzle() {
         //http://zhangroup.aporc.org/images/files/Paper_3485.pdf
         //TO DO!!!!
-        SudokuGenerator generator = new SudokuGenerator(this.currentGrid, this.answerGrid);
-        generator.generate();
+     //   SudokuGenerator generator = new SudokuGenerator(this.currentGrid, this.answerGrid);
+     //   generator.generate();
         
     }
     @Override

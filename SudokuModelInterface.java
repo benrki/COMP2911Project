@@ -44,7 +44,7 @@ public interface SudokuModelInterface {
     // Clears the number of the specified Cell.
     public void clearCellNumber(int row, int col);
     
-    // Checks if specified Cell from the currentGrid has specified candidiate
+    // Checks if specified Cell from the currentGrid has specified candidate
     public boolean hasCellCandidate(int row, int col, int candidate);
     // Adds candidate to specified Cell.
     public void addCellCandidate(int row, int col, int n);

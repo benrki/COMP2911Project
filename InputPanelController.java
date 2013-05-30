@@ -1,3 +1,4 @@
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -48,14 +49,20 @@ public class InputPanelController {
 		
 		private BoardPanel board;
 		private String label;
+		private Font font;
 		
 		public KeyClick(BoardPanel board, String label){
 			this.board = board;
 			this.label = label;
+			this.font = new Font("sansserif",Font.BOLD,18);
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			setSelectedCell();
+		}
+
+		private void setSelectedCell() {
 			Position p = board.getSelectedCell();
 			if (p != null && !model.isCellGiven(p.getX(), p.getY())) {
 				if(!inputPanel.getCandidateButton().isSelected()){
@@ -75,7 +82,15 @@ public class InputPanelController {
 						board.getSelectedButton().setCandidateLabel(model.getCandidates(p.getX(), p.getY()));
 					}
 				}
+				checkFinished();
+			}
+		}
+
+		private void checkFinished() {
+			if (model.isSudokuFinished()) {
+				JOptionPane.showMessageDialog(null, "Trophy 4 u!");
 			}
 		}
 	}
+	
 }
