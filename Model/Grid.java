@@ -122,17 +122,20 @@ public class Grid {
     @Override
     public String toString() {
         String sudoku = "";
-        for (int i=0; i<NUM_ROWS; i++) {
-            for (int j=0; j<NUM_COLS; j++) {
-                if(grid.get(i).get(j).getNumber()==Cell.EMPTY) {
-                    sudoku = sudoku + "- ";
-                } else {
-                   sudoku = sudoku + grid.get(i).get(j).getNumber() + " ";
-                }
-            }
-            sudoku = sudoku + System.getProperty("line.separator");
-        }
-        return sudoku;
+    	for (int i=0; i<NUM_ROWS; i++) {
+    		for (int j=0; j<NUM_COLS; j++) {
+    			if (grid.get(i).get(j).getNumber() == EMPTY) {
+    				sudoku = sudoku + "|-";
+    			} else {
+    				sudoku = sudoku + "|" + grid.get(i).get(j).getNumber();
+    			}
+    			if ((j+1)%3 == 0) {
+    				sudoku = sudoku + "| ";
+    			}
+    		}
+    		sudoku = sudoku + newline;
+    	}
+    	return sudoku;
     }
     
     // Used only for testing
