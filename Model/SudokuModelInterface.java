@@ -86,9 +86,9 @@ public interface SudokuModelInterface {
     public void redoMove();
 
     // Saves game to textfile to <specified location> with <specified name>
-    public void saveGame(String location, String name);
+    public void saveGame(File save);
     // Load game from <specified location> (includes the file name)
-    public void loadGame(String location);
+    public void loadGame(File save);
     
     
     //*****************************************
