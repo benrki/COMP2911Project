@@ -1,27 +1,24 @@
-import java.io.File;
 
+public class ModelCountdown implements ModelTimer{
 
-public class ModelStopwatch implements ModelTimer{
-
-    private long startingTime;
+    private long countdown;
     private long startTime;
     private long pauseStartTime;
     private long pausedTime;
-    
-    public ModelStopwatch (long startingTime) {
-        this.startingTime = startingTime;
+    public ModelCountdown(long remainingSeconds) {
+        this.countdown = remainingSeconds*1000;
         this.startTime = System.currentTimeMillis();
         this.pauseStartTime = 0;
         this.pausedTime = 0;
-    }    
-
+    }
+    
     @Override
     public long getTimer() {
         if(this.pauseStartTime!=0) {
             this.pausedTime = this.pausedTime + System.currentTimeMillis() - this.pauseStartTime;
             this.pauseStartTime = System.currentTimeMillis();
         }
-        return System.currentTimeMillis() - (this.startTime+this.pausedTime) + this.startingTime; 
+        return this.countdown - (System.currentTimeMillis() - (this.startTime+this.pausedTime)); 
     }
     
     @Override
@@ -34,4 +31,5 @@ public class ModelStopwatch implements ModelTimer{
         this.pausedTime = this.pausedTime + System.currentTimeMillis() - this.pauseStartTime;
         this.pauseStartTime = 0;
     }
+
 }

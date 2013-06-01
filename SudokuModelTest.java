@@ -1,6 +1,75 @@
+import java.util.Scanner;
 
 public class SudokuModelTest {
     public static void main(String[] args) {
+    
+        
+        
+        
+        
+        
+        
+        /*
+    SudokuModel sudokuModel = new SudokuModel();
+    System.out.println("Generating easy puzzle");
+    sudokuModel.generateEasyPuzzle();
+    sudokuModel.printCurrentGrid();
+    System.out.println("Generating intermediate puzzle");
+    sudokuModel.generateIntermediatePuzzle();
+    sudokuModel.printCurrentGrid();
+    System.out.println("Generating hard puzzle");
+    sudokuModel.generateHardPuzzle();
+    sudokuModel.printCurrentGrid();
+    
+    System.out.println("Custom puzzle");    
+    sudokuModel.clearPuzzle();
+    sudokuModel.printCurrentGrid();
+        */
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         // Testing generating puzzles
         SudokuModel sudoku = new SudokuModel();
@@ -36,6 +105,12 @@ public class SudokuModelTest {
         System.out.println("Undo (should remove 7)");
         sudoku.undoMove();
         sudoku.printCurrentGrid();      
+        System.out.println("Change 4 to a 5");
+        sudoku.setCellNumber(0, 3, 5);
+        sudoku.printCurrentGrid();
+        System.out.println("Undo (should change 5 to a 4");
+        sudoku.undoMove();
+        sudoku.printCurrentGrid();  
         
         /*
         // Testing generating puzzles
