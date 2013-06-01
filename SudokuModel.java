@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Scanner;
@@ -13,63 +14,94 @@ import java.io.PrintWriter;
 // rethink where each method belongs.
 // Undo/Redo
 // Can remove a lot of the "checks" since I've implemented them in Cell
-
+// Potential bug: Generating then pressing undo will "ungive" (Potential fix: add undoStack.clear to hasAnswer (right before it returns true)
 public class SudokuModel implements SudokuModelInterface{
+    
     private Grid currentGrid;
     private Grid answerGrid;
     private Stack<String> undoStack;
     private Stack<String> redoStack;
+    //private String generator;
     
     public SudokuModel () {
         this.currentGrid = new Grid();
         this.answerGrid = new Grid();
         this.undoStack = new Stack<String>();
         this.redoStack = new Stack<String>();
+        //this.generator = "clearPuzzle";
     }
     
     //*****************************************
     //*** Creating/Generating phase methods ***
     //*****************************************
+
     /**
-     * Generates a random puzzle (with numbers "missing") and stores the corresponding answer.
+     * Generates an easy puzzle (with numbers "missing").
      */
-    @Override
-    public void generatePuzzle() {
-        //http://zhangroup.aporc.org/images/files/Paper_3485.pdf
-        //TO DO!!!!
-     //   SudokuGenerator generator = new SudokuGenerator(this.currentGrid, this.answerGrid);
-     //   generator.generate();
-        
-    }
     @Override
     public void generateEasyPuzzle() {
     	SudokuGenerator generator = new EasyGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
+        this.undoStack.clear();
+        this.redoStack.clear();
+        //this.generator = "genereateEasyPuzzle";
     }
     
+    /**
+     * Generates an intermediate puzzle (with numbers "missing").
+     */
     @Override
     public void generateIntermediatePuzzle() {
     	SudokuGenerator generator = new IntermediateGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
+        this.undoStack.clear();
+        this.redoStack.clear();
+      //this.generator = "genereateIntermediatePuzzle";
     }
     
+    /**
+     * Generates a hard puzzle (with numbers "missing").
+     */
     @Override
     public void generateHardPuzzle() {
     	SudokuGenerator generator = new HardGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
+        this.undoStack.clear();
+        this.redoStack.clear();
+      //this.generator = "genereateHardPuzzle";
     }
     
+    @Override
+    public void clearPuzzle() {
+        this.currentGrid = new Grid();
+        this.answerGrid = new Grid();
+      //this.generator = "clearPuzzle";
+    }
+    
+    /*
+    @Override
+    public void regenerate() {
+      if(this.generator.equals("genereateEasyPuzzle")) {
+          this.generateEasyPuzzle();
+      } else if(this.generator.equals("genereateIntermediatePuzzle")) {
+          this.generateIntermediatePuzzle();
+      } else if(this.generator.equals("genereateHardPuzzle")) {
+          this.generateHardPuzzle();
+      } else if(this.generator.equals("clearPuzzle")) {
+          this.clearPuzzle();
+      }
+    }
+    */
     /**
-     * Sets the number in the specified cell in the currentGrid as the specified number. 
-     * (Different to setCurrentCellNumber as it prevents the number from being changed in the future).
-     * Should be used when initialising the board.
+     * Sets the number in the specified cell in the grid as the specified number. 
+     * (Different to setCellNumber as it makes the cell a "given", preventing it from being changed by setCellNumber and clearCellNumber.)
      * @param row The row of the cell.
      * @param col The column of the cell.
      * @param n The number to set the cell as.
      */
     @Override
     public void giveCellNumber(int row, int col, int n) {
-        if(1<=n && n<=9) {
+        if((Cell.MIN_NUM <= n) && (n <= Cell.MAX_NUM)) {
             this.currentGrid.getCell(row, col).giveNumber(n);
             this.answerGrid.getCell(row, col).giveNumber(n);
             this.undoStack.push("giveCellNumber " + row + " " + col + " " + n);
@@ -77,6 +109,12 @@ public class SudokuModel implements SudokuModelInterface{
         }
     } 
     
+    /**
+     * Removes the number in the specified cell in the grid.
+     * (Differs from clearCellNumber as it can clear "givens").
+     * @param row
+     * @param col
+     */
     @Override
     public void removeCellNumber(int row, int col) {
         int n = this.answerGrid.getCell(row, col).getNumber();
@@ -88,23 +126,51 @@ public class SudokuModel implements SudokuModelInterface{
         }
     }
     
-    
+    /**
+     * Returns <tt>true</tt> if the grid conforms to row, column and box constraints, <tt>false</tt> otherwise.
+     * @return <tt>true</tt> if the grid conforms to row, column and box constraints, <tt>false</tt> otherwise.
+     */
     @Override
     public boolean isGridValid() {
         return this.currentGrid.isGridValid();
     }
+    
+    /**
+     * Returns <tt>true</tt> if the specified row conforms to row constraints, <tt>false</tt> otherwise.
+     * @param row
+     * @return <tt>true</tt> if the specified row conforms to row constraints, <tt>false</tt> otherwise.
+     */
     @Override
     public boolean isRowValid(int row){
         return this.currentGrid.isRowValid(row);
     }
+
+    /**
+     * Returns <tt>true</tt> if the specified column conforms to column constraints, <tt>false</tt> otherwise.
+     * @param column
+     * @return <tt>true</tt> if the specified column conforms to column constraints, <tt>false</tt> otherwise.
+     */
     @Override
     public boolean isColumnValid(int column){
         return this.currentGrid.isColumnValid(column);
     }
+    
+    /**
+     * Returns <tt>true</tt> if the specified box conforms to box constraints, <tt>false</tt> otherwise.
+     * @param box
+     * @return <tt>true</tt> if the specified box conforms to box constraints, <tt>false</tt> otherwise.
+     */
     @Override
     public boolean isBoxValid(int box){
         return this.currentGrid.isBoxValid(box);
     }
+    
+    /**
+     * Returns <tt>true</tt> if the specified cell conforms to row, column and box constraints, <tt>false</tt> otherwise.
+     * @param row
+     * @param col
+     * @return <tt>true</tt> if the specified cell conforms to row, column and box constraints, <tt>false</tt> otherwise.
+     */
     @Override
     public boolean isCellValid(int row, int col) {
         return this.currentGrid.isCellValid(row, col);
@@ -163,6 +229,8 @@ public class SudokuModel implements SudokuModelInterface{
     
     /**
      * Returns the number in the specified cell in the currentGrid.
+     * @param row
+     * @param col
      * @return the number in the specified cell in the currentGrid.
      */
     @Override
@@ -171,16 +239,24 @@ public class SudokuModel implements SudokuModelInterface{
     }
     /**
      * Sets the number in the specified cell in the currentGrid as the specified number.
+     * @param row
+     * @param col
+     * @param n
      */
     @Override
     public void setCellNumber(int row, int col, int n) {
-        if(1<=n && n<=9) {
+        if((Cell.MIN_NUM <= n) && (n <= Cell.MAX_NUM)) {
             this.currentGrid.getCell(row, col).setNumber(n); 
             this.undoStack.push("setCellNumber " + row + " " + col + " " + n);
             this.redoStack.clear();
         }
     }
     
+    /**
+     * Clears the specified cell. (Sets it to blank.)
+     * @param row
+     * @param col
+     */
     @Override
     public void clearCellNumber(int row, int col) {
         int n = this.currentGrid.getCell(row, col).getNumber();
@@ -191,20 +267,28 @@ public class SudokuModel implements SudokuModelInterface{
         }
     }
     
+    /**
+     * Adds specified candidate to the specified cell.
+     * @param row
+     * @param col
+     * @param n
+     */
     @Override
     public void addCellCandidate(int row, int col, int n) {
-        if(1<=n && n<=9) {
+        if((Cell.MIN_NUM <= n) && (n <= Cell.MAX_NUM)) {
             currentGrid.getCell(row, col).addCandidate(n);
         }
     }
+    
+    
     public void removeCellCandidate(int row, int col, int n) {
-        if(1<=n && n<=9) {
+        if((Cell.MIN_NUM <= n) && (n <= Cell.MAX_NUM)) {
             currentGrid.getCell(row, col).removeCandidate(n);
         }
     }
     @Override
     public boolean hasCellCandidate(int row, int col, int n) {
-        if(1<=n && n<=9) {
+        if((Cell.MIN_NUM <= n) && (n <= Cell.MAX_NUM)) {
             return currentGrid.getCell(row, col).hasCandidate(n);
         }
         return false;
@@ -214,6 +298,34 @@ public class SudokuModel implements SudokuModelInterface{
         return currentGrid.getCell(row, col).getCandidates();
     }
     
+    @Override
+    public void addAllCellCandidates(int row, int col) {
+        if(currentGrid.getCell(row, col).isGiven()) {
+            return;
+        }
+        // Clear candidates
+        clearCellCandidates(row, col);
+        int tmp = currentGrid.getCell(row, col).getNumber();
+        // Check each number
+        for (int i=1; i<=9; i++) {
+            currentGrid.getCell(row, col).setNumber(i);
+            if(this.currentGrid.isCellValid(row, col)) {
+                currentGrid.getCell(row, col).addCandidate(i);
+            }
+        }
+        currentGrid.getCell(row, col).setNumber(tmp);
+        
+    }
+    
+    @Override
+    public void addAllCandidates() {
+        for (int i=0; i<Grid.NUM_ROWS; i++) {
+            for (int j=0; j<Grid.NUM_COLS; j++) {
+                addAllCellCandidates(i, j);
+            }
+        }
+        
+    }
     public void clearCellCandidates (int row, int col) {
         for(int i=1; i<=9; i++) {
             currentGrid.getCell(row, col).removeCandidate(i);
@@ -276,7 +388,7 @@ public class SudokuModel implements SudokuModelInterface{
         }
         return true;
     }
-    
+    /*
     @Override
 	public boolean isSudokuFinished() {
     	for(int i=0; i<9; i++) {
@@ -287,150 +399,173 @@ public class SudokuModel implements SudokuModelInterface{
     		}
     	}
         return true;
-	}
+	}*/
 
-    public void revealRandom() {
-        // NEED TO FIX, CURRENTLY INFINITELY LOOPS WHEN YOU TRY TO REVEAL WHEN BOARD IS FINISHED ALREADY
-        Random r = new Random();
-        int row;
-        int col;
-        boolean revealed = false;
-        while(!revealed) {
-            row = r.nextInt(9);
-            col = r.nextInt(9);
-            if(this.currentGrid.getCell(row, col).getNumber()==Cell.EMPTY) {
-                this.revealCell(row, col);
-                revealed = true;
+    @Override
+    public boolean isGridFilled() {
+        for(int i=0; i<9; i++) {
+            for(int j=0; j<9; j++) {
+                if(this.currentGrid.getCell(i, j).getNumber()==Cell.EMPTY) {
+                    return false;
+                }
             }
         }
-    }    
-    public void revealCell(int row, int col) {
-        this.currentGrid.getCell(row, col).setNumber(this.answerGrid.getCell(row, col).getNumber());
-    }
-    
-    public void undoMove() {
-        if(undoStack.isEmpty()) {
-            return;
-        }
-        String move = undoStack.pop();
-        Scanner s = new Scanner(move);
-        String command = s.next();
-        Stack<String> tmp = this.redoStack;
-        this.redoStack = new Stack<String>();
-        if(command.equals("giveCellNumber")) {
-            removeCellNumber(s.nextInt(), s.nextInt());
-        } else if (command.equals("removeCellNumber")) {
-            giveCellNumber(s.nextInt(), s.nextInt(), s.nextInt());
-        } else if (command.equals("setCellNumber")) {
-            clearCellNumber(s.nextInt(), s.nextInt());
-        } else if (command.equals("clearCellNumber")) {
-            setCellNumber(s.nextInt(), s.nextInt(), s.nextInt());
-        }
-        s.close();
-        this.redoStack = tmp;
-        this.redoStack.push(undoStack.pop());
-        
-    }
-    public void redoMove() {
-        if(redoStack.isEmpty()) {
-            return;
-        }
-        String move = redoStack.pop();
-        Scanner s = new Scanner(move);
-        String command = s.next();
-        Stack<String> tmp = this.redoStack;
-        this.redoStack = new Stack<String>();
-        if(command.equals("giveCellNumber")) {
-            removeCellNumber(s.nextInt(), s.nextInt());
-        } else if (command.equals("removeCellNumber")) {
-            giveCellNumber(s.nextInt(), s.nextInt(), s.nextInt());
-        } else if (command.equals("setCellNumber")) {
-            clearCellNumber(s.nextInt(), s.nextInt());
-        } else if (command.equals("clearCellNumber")) {
-            setCellNumber(s.nextInt(), s.nextInt(), s.nextInt());
-        }
-        s.close();
-        this.redoStack = tmp;
+        return true;
     }
     
     @Override
+    public Position revealRandom() {
+        if(isGridFilled()) {
+            //return;
+            return null;
+        }
+        Random r = new Random();
+        int row = r.nextInt(9);
+        int col = r.nextInt(9);
+        boolean revealed = false;
+        while(!revealed) {
+            if(this.currentGrid.getCell(row, col).getNumber()==Cell.EMPTY) {
+                this.revealCell(row, col);
+                revealed = true;
+            } else {
+                row = r.nextInt(9);
+                col = r.nextInt(9);
+            }
+        }
+        return new Position(row, col);
+    }    
+    @Override
+    public void revealCell(int row, int col) {
+        this.currentGrid.getCell(row, col).setNumber(this.answerGrid.getCell(row, col).getNumber());
+    }
+    @Override
+    public Position undoMove() {
+        if(undoStack.isEmpty()) {
+            //return;
+            return null;
+        }
+        Scanner s = new Scanner(undoStack.pop());
+        String command = s.next();
+        int row = s.nextInt();
+        int col = s.nextInt();
+        
+        // So the undo move doesn't get added to the redo stack
+        Stack<String> tmp = this.redoStack;
+        this.redoStack = new Stack<String>();
+        
+        if(command.equals("giveCellNumber")) {
+            removeCellNumber(row, col);
+        } else if (command.equals("removeCellNumber")) {
+            giveCellNumber(row, col, s.nextInt());
+        } else if (command.equals("setCellNumber")) {
+            clearCellNumber(row, col);
+        } else if (command.equals("clearCellNumber")) {
+            setCellNumber(row, col, s.nextInt());
+        }
+        s.close();
+        
+        this.redoStack = tmp;
+        this.redoStack.push(undoStack.pop());
+        return new Position(row, col);
+    }
+    @Override
+    public Position redoMove() {
+        if(redoStack.isEmpty()) {
+            //return;
+            return null;
+        }
+        Scanner s = new Scanner(redoStack.pop());
+        String command = s.next();
+        int row = s.nextInt();
+        int col = s.nextInt();
+        
+        // So the redo move doesn't get added to the redo stack
+        Stack<String> tmp = this.redoStack;
+        this.redoStack = new Stack<String>();
+        
+        if(command.equals("giveCellNumber")) {
+            removeCellNumber(row, col);
+        } else if (command.equals("removeCellNumber")) {
+            giveCellNumber(row, col, s.nextInt());
+        } else if (command.equals("setCellNumber")) {
+            clearCellNumber(row, col);
+        } else if (command.equals("clearCellNumber")) {
+            setCellNumber(row, col, s.nextInt());
+        }
+        s.close();
+        this.redoStack = tmp;
+        return new Position(row, col);
+    }
+    
+    /* 
+     @Override
+     public boolean canUndo() {
+        return (!redoStack.isEmpty());   
+     }
+     
+     @Override
+     public boolean canRedo() {
+        return (!undoStack.isEmpty());
+     }
+     */
+    @Override
     public void saveGame(File save) {
-    	/*File parentDir = new File(location);
-    	parentDir.mkdir();
-    	File save = new File(parentDir, name + ".txt");
-    	try {
-    		save.createNewFile();
-    	} catch (IOException e) {
-    		
-    	}*/
-    	String newline = System.getProperty("line.separator");
-    	String original = "Original:" + newline;
-    	String candidates = "Candidates:" + newline;
-    	for (int i=0; i<Grid.NUM_ROWS; i++) {
-    		for (int j=0; j<Grid.NUM_COLS; j++) {
-    			if (currentGrid.grid.get(i).get(j).isGiven() == true) {
-    				original = original + "|" + currentGrid.grid.get(i).get(j).getNumber();
-    			} else if (currentGrid.grid.get(i).get(j).isGiven() == false) {
-    				original = original + "|-";
-    			}
-    			if ((j+1)%3 == 0) {
-    				original = original + "| ";
-    			}
-    		}
-    		original = original + newline;
-    		if ((i+1)%3 == 0) {
-    			original = original + newline;
-    		}
-    	}
-    	String s = original + newline + "Answer:" + newline + answerGrid.toString() + newline + "Current:" + newline + currentGrid.toString();
-    	for (int i=0; i<Grid.NUM_ROWS; i++) {
-    		for (int j=0; j<Grid.NUM_COLS; j++) {
-    				candidates = candidates + currentGrid.grid.get(i).get(j).getCandidates();
-    				if ((j+1)%3 == 0) {
-        				candidates = candidates + " ";
-        			}
-    			}
-    			candidates = candidates + " ";
-    			if ((i+1)%3 == 0) {
-    				candidates = candidates + " ";
-    			}
-    		}
-    	s = s + newline + candidates;
-    	try {
-    		PrintWriter print = new PrintWriter(save);
-    		print.write(s);
-    		print.close();
-    	} catch (FileNotFoundException e) {}
+        /*File parentDir = new File(location);
+        parentDir.mkdir();
+        File save = new File(parentDir, name + ".txt");
+        try {
+            save.createNewFile();
+        } catch (IOException e) {
+            
+        }*/
+        String newline = System.getProperty("line.separator");
+        String original = "Original:" + newline;
+        for (int i=0; i<Grid.NUM_ROWS; i++) {
+            for (int j=0; j<Grid.NUM_COLS; j++) {
+                if (currentGrid.grid.get(i).get(j).isGiven() == true) {
+                    original = original + "|" + currentGrid.grid.get(i).get(j).getNumber();
+                } else if (currentGrid.grid.get(i).get(j).isGiven() == false) {
+                    original = original + "|-";
+                }
+                if ((j+1)%3 == 0) {
+                    original = original + "| ";
+                }
+            }
+            original = original + newline;
+        }
+        String s = original + newline + "Current:" + newline + currentGrid.toString();
+        try {
+            PrintWriter print = new PrintWriter(save);
+            print.write(s);
+            print.close();
+        } catch (FileNotFoundException e) {}
     }
 
     @Override
     public void loadGame(File save) {
-//    	File save = new File(location);
-    	String newline = System.getProperty("line.separator");
-    	try {
-    		Scanner s = new Scanner(save);
-    		s.skip("Original:" + newline);
-    		for (int i=0; i<Grid.NUM_ROWS; i++) {
-        		for (int j=0; j<Grid.NUM_COLS; j++) {
-        			s.skip("|");
-        			giveCellNumber(i, j, s.nextInt());
-        		}
-        	}
-    		for (int i=0; i<Grid.NUM_ROWS; i++) {
-        		for (int j=0; j<Grid.NUM_COLS; j++) {
-        			if (currentGrid.grid.get(i).get(j).isGiven() == false) {
-        				setCellNumber(i, j, s.nextInt());
-        			} else {
-        				giveCellNumber(i, j, s.nextInt());
-        			}
-        		}
-        	}
-    		s.close();   		
-    	} catch (NoSuchElementException e) {
-    	
-    	} catch (FileNotFoundException e) {
-			
-		}
+//      File save = new File(location);
+        try {
+            Scanner s = new Scanner(save);
+            for (int i=0; i<Grid.NUM_ROWS; i++) {
+                for (int j=0; j<Grid.NUM_COLS; j++) {
+                    giveCellNumber(i, j, s.nextInt());
+                }
+            }
+            for (int i=0; i<Grid.NUM_ROWS; i++) {
+                for (int j=0; j<Grid.NUM_COLS; j++) {
+                    if (currentGrid.grid.get(i).get(j).isGiven() == false) {
+                        setCellNumber(i, j, s.nextInt());
+                    } else {
+                        giveCellNumber(i, j, s.nextInt());
+                    }
+                }
+            }
+            s.close();
+        } catch (FileNotFoundException e) {
+
+        } catch (NoSuchElementException e) {
+        
+        }
     }
     
     //*****************************************
