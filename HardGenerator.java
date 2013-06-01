@@ -4,7 +4,7 @@ public class HardGenerator extends SudokuGenerator{
 
     public HardGenerator(Grid currentGrid, Grid answerGrid) {
         super(currentGrid, answerGrid);
-	}
+    }
 	
     @Override
     protected void removeCells() {
