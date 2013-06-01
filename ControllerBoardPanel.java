@@ -12,9 +12,9 @@ import javax.swing.JOptionPane;
 public class ControllerBoardPanel {
 	private ViewerBoardPanel board;
 	private ViewerInputPanel inputPanel;
-	private Model model;
+	private SudokuModel model;
 	
-	public ControllerBoardPanel(ViewerBoardPanel board, Model model, ViewerInputPanel inputPanel){
+	public ControllerBoardPanel(ViewerBoardPanel board, SudokuModel model, ViewerInputPanel inputPanel){
 		this.board = board;
 		this.inputPanel = inputPanel;
 		this.model = model;

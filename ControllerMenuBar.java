@@ -10,10 +10,10 @@ import javax.swing.JOptionPane;
 
 public class ControllerMenuBar {
 	private ViewerMenuBar menuBar;
-	private Model model;
+	private SudokuModel model;
 	private ControllerBoardPanel boardController;
 	
-	public ControllerMenuBar(Model model, ViewerMenuBar menuBar, ControllerBoardPanel boardController) {
+	public ControllerMenuBar(SudokuModel model, ViewerMenuBar menuBar, ControllerBoardPanel boardController) {
 		this.model = model;
 		this.menuBar = menuBar;
 		this.boardController = boardController;

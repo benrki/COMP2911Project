@@ -7,9 +7,9 @@ import javax.swing.JOptionPane;
 
 public class ControllerInputPanel {
 	private ViewerInputPanel inputPanel;
-	private Model model;
+	private SudokuModel model;
 	
-	public ControllerInputPanel(Model model, ViewerInputPanel inputPanel) {
+	public ControllerInputPanel(SudokuModel model, ViewerInputPanel inputPanel) {
 		this.model = model;
 		this.inputPanel = inputPanel;
 		this.inputPanel.addActionListener(new ClearPress(inputPanel.getBoard()), inputPanel.getClearButton());
