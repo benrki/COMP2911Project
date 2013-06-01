@@ -1,4 +1,3 @@
-
 public class IntermediateGenerator extends SudokuGenerator{
 	private static final int INTERMEDIATE_DIFFICULTY = 45;
 	private static final int NUM_CELLS = 81;
