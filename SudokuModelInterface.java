@@ -98,7 +98,19 @@ public interface SudokuModelInterface {
     // Load game from <specified location> (includes the file name)
     public void loadGame(File save);
     
+    // Starts a Stopwatch with startingTime
+    public void startStopwatch(long startingTime);
+    // Starts a Countdown with remainingTime
+    public void startCountdown(long remainingTime);
+    // Gets time (of stopwatch/countdown)
+    public long getTime();
+    // Pauses time
+    public void pauseTime();
+    // Unpauses time
+    public void unpauseTime();
     
+    public void loadHighScores(File highscore);
+    public void saveHighScores(File highscore);
     //*****************************************
     //********** Reveal phase methods *********
     //*****************************************
@@ -117,13 +129,6 @@ public interface SudokuModelInterface {
     // Change "pencil marks" to "pen" (changes all single candidates to "pen") (Not actually intuitive).
     // public void solveCandidates();
     // Pause feature (pauses time, hides puzzle)
-    public void startStopwatch(long elapsedTime);  
-    public void startCountdown(long remainingTime);
-    public long getTime();
-    public void pauseTime();
-    public void unpauseTime();
-    
-    public void loadHighScores(File highscore);
-    public void saveHighScores(File highscore);
+
     
 }
