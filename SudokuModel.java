@@ -15,20 +15,22 @@ import java.io.PrintWriter;
 // Undo/Redo
 // Can remove a lot of the "checks" since I've implemented them in Cell
 // Potential bug: Generating then pressing undo will "ungive" (Potential fix: add undoStack.clear to hasAnswer (right before it returns true)
-public class Model implements ModelInterface{
+
+// Potential bug: Undo moves that haven't gone through.
+public class SudokuModel implements SudokuModelInterface{
     
     private ModelGrid currentGrid;
     private ModelGrid answerGrid;
-    private Stack<String> undoStack;
-    private Stack<String> redoStack;
-    //private String generator;
+    private ModelUndoRedo undoRedo;
+    private ModelTimer timer;
+    private String generator;
     
-    public Model () {
+    public SudokuModel () {
         this.currentGrid = new ModelGrid();
         this.answerGrid = new ModelGrid();
-        this.undoStack = new Stack<String>();
-        this.redoStack = new Stack<String>();
-        //this.generator = "clearPuzzle";
+        this.undoRedo = new ModelUndoRedo(this);
+        this.timer = new ModelStopwatch(0);
+        this.generator = "clearPuzzle";
     }
     
     //*****************************************
@@ -40,11 +42,10 @@ public class Model implements ModelInterface{
      */
     @Override
     public void generateEasyPuzzle() {
-    	ModelGenerator generator = new ModelEasyGenerator(this.currentGrid, this.answerGrid);
+        ModelGenerator generator = new ModelEasyGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
-        this.undoStack.clear();
-        this.redoStack.clear();
-        //this.generator = "genereateEasyPuzzle";
+        undoRedo.generateCalled();
+        this.generator = "genereateEasyPuzzle";
     }
     
     /**
@@ -54,9 +55,8 @@ public class Model implements ModelInterface{
     public void generateIntermediatePuzzle() {
         ModelGenerator generator = new ModelIntermediateGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
-        this.undoStack.clear();
-        this.redoStack.clear();
-      //this.generator = "genereateIntermediatePuzzle";
+        undoRedo.generateCalled();
+        this.generator = "genereateIntermediatePuzzle";
     }
     
     /**
@@ -66,19 +66,19 @@ public class Model implements ModelInterface{
     public void generateHardPuzzle() {
         ModelGenerator generator = new ModelHardGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
-        this.undoStack.clear();
-        this.redoStack.clear();
-      //this.generator = "genereateHardPuzzle";
+        undoRedo.generateCalled();
+        this.generator = "genereateHardPuzzle";
     }
     
     @Override
     public void clearPuzzle() {
         this.currentGrid = new ModelGrid();
         this.answerGrid = new ModelGrid();
-      //this.generator = "clearPuzzle";
+        undoRedo.generateCalled();
+        this.generator = "clearPuzzle";
     }
     
-    /*
+    
     @Override
     public void regenerate() {
       if(this.generator.equals("genereateEasyPuzzle")) {
@@ -91,7 +91,7 @@ public class Model implements ModelInterface{
           this.clearPuzzle();
       }
     }
-    */
+    
     /**
      * Sets the number in the specified cell in the grid as the specified number. 
      * (Different to setCellNumber as it makes the cell a "given", preventing it from being changed by setCellNumber and clearCellNumber.)
@@ -102,10 +102,9 @@ public class Model implements ModelInterface{
     @Override
     public void giveCellNumber(int row, int col, int n) {
         if((ModelCell.MIN_NUM <= n) && (n <= ModelCell.MAX_NUM)) {
+            undoRedo.giveCellNumberCalled(row, col, n, this.currentGrid.getCell(row, col).getNumber());
             this.currentGrid.getCell(row, col).giveNumber(n);
             this.answerGrid.getCell(row, col).giveNumber(n);
-            this.undoStack.push("giveCellNumber " + row + " " + col + " " + n);
-            this.redoStack.clear();
         }
     } 
     
@@ -121,8 +120,7 @@ public class Model implements ModelInterface{
         if(n!=ModelCell.EMPTY) {
             this.currentGrid.getCell(row, col).removeNumber();
             this.answerGrid.getCell(row, col).removeNumber();
-            this.undoStack.push("removeCellNumber " + row + " " + col + " " + n);
-            this.redoStack.clear();
+            undoRedo.removeCellNumberCalled(row, col, n);
         }
     }
     
@@ -182,45 +180,8 @@ public class Model implements ModelInterface{
     @Override
     // Recursion this later
     public boolean findSolution() {
-        int i = 0, j = 0;
-        boolean finished = true;
-        while(finished) {
-            int potential = answerGrid.getCell(i,j).getNumber() + 1;
-            // If exhausted all potential numbers, set cell to 0 then backtrack 
-            if(potential > 9) {
-                this.removeCellNumber(i, j);
-                boolean backtracked = false;
-                // Backtracks to the previous ungiven cell.
-                while(!backtracked || answerGrid.getCell(i, j).isGiven()) {
-                    // Make this better later
-                    i = i + (j-9)/9;
-                    j--;
-                    // Backtracked past the start of the grid (can't solve every cell)
-                    if(i<0) {
-                        return false;
-                    }
-                    backtracked = true;
-                }
-            // Else, set potential to cell.
-            } else {
-                answerGrid.getCell(i, j).giveNumber(potential);
-                boolean valid = answerGrid.isCellValid(i,j);
-                // If valid, advances to the next ungiven cell.
-                if(valid) {
-                    boolean advanced = false;
-                    while(!advanced || answerGrid.getCell(i, j).isGiven()) {
-                        i = i + j/8;
-                        j = (j+1)%9;
-                        advanced = true;
-                        // Advanced past the end of the grid (found solution)
-                        if (i>8) {
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        return false;
+        ModelSolver solver = new ModelSolver(this, this.currentGrid, this.answerGrid);
+        return solver.findSolution();
     }
     
     //*****************************************
@@ -245,10 +206,9 @@ public class Model implements ModelInterface{
      */
     @Override
     public void setCellNumber(int row, int col, int n) {
-        if((ModelCell.MIN_NUM <= n) && (n <= ModelCell.MAX_NUM)) {
+        if((ModelCell.MIN_NUM <= n) && (n <= ModelCell.MAX_NUM) && !this.currentGrid.getCell(row, col).isGiven()) {
+            undoRedo.setCellNumberCalled(row, col, n, this.currentGrid.getCell(row, col).getNumber());
             this.currentGrid.getCell(row, col).setNumber(n); 
-            this.undoStack.push("setCellNumber " + row + " " + col + " " + n);
-            this.redoStack.clear();
         }
     }
     
@@ -262,8 +222,7 @@ public class Model implements ModelInterface{
         int n = this.currentGrid.getCell(row, col).getNumber();
         if(n!=ModelCell.EMPTY) {
             this.currentGrid.getCell(row, col).clearNumber();
-            this.undoStack.push("clearCellNumber " + row + " " + col + " " + n);
-            this.redoStack.clear();
+            undoRedo.clearCellNumberCalled(row, col, n);
         }
     }
     
@@ -390,16 +349,16 @@ public class Model implements ModelInterface{
     }
     /*
     @Override
-	public boolean isSudokuFinished() {
-    	for(int i=0; i<9; i++) {
-    		for(int j=0; j<9; j++) {
-    			if(this.currentGrid.getCell(i, j).getNumber()!=this.answerGrid.getCell(i, j).getNumber()) {
-    				return false;
-    			}
-    		}
-    	}
+    public boolean isSudokuFinished() {
+        for(int i=0; i<9; i++) {
+            for(int j=0; j<9; j++) {
+                if(this.currentGrid.getCell(i, j).getNumber()!=this.answerGrid.getCell(i, j).getNumber()) {
+                    return false;
+                }
+            }
+        }
         return true;
-	}*/
+    }*/
 
     @Override
     public boolean isGridFilled() {
@@ -440,74 +399,24 @@ public class Model implements ModelInterface{
     }
     @Override
     public Position undoMove() {
-        if(undoStack.isEmpty()) {
-            //return;
-            return null;
-        }
-        Scanner s = new Scanner(undoStack.pop());
-        String command = s.next();
-        int row = s.nextInt();
-        int col = s.nextInt();
-        
-        // So the undo move doesn't get added to the redo stack
-        Stack<String> tmp = this.redoStack;
-        this.redoStack = new Stack<String>();
-        
-        if(command.equals("giveCellNumber")) {
-            removeCellNumber(row, col);
-        } else if (command.equals("removeCellNumber")) {
-            giveCellNumber(row, col, s.nextInt());
-        } else if (command.equals("setCellNumber")) {
-            clearCellNumber(row, col);
-        } else if (command.equals("clearCellNumber")) {
-            setCellNumber(row, col, s.nextInt());
-        }
-        s.close();
-        
-        this.redoStack = tmp;
-        this.redoStack.push(undoStack.pop());
-        return new Position(row, col);
+        return undoRedo.undo();
     }
     @Override
     public Position redoMove() {
-        if(redoStack.isEmpty()) {
-            //return;
-            return null;
-        }
-        Scanner s = new Scanner(redoStack.pop());
-        String command = s.next();
-        int row = s.nextInt();
-        int col = s.nextInt();
-        
-        // So the redo move doesn't get added to the redo stack
-        Stack<String> tmp = this.redoStack;
-        this.redoStack = new Stack<String>();
-        
-        if(command.equals("giveCellNumber")) {
-            removeCellNumber(row, col);
-        } else if (command.equals("removeCellNumber")) {
-            giveCellNumber(row, col, s.nextInt());
-        } else if (command.equals("setCellNumber")) {
-            clearCellNumber(row, col);
-        } else if (command.equals("clearCellNumber")) {
-            setCellNumber(row, col, s.nextInt());
-        }
-        s.close();
-        this.redoStack = tmp;
-        return new Position(row, col);
+        return undoRedo.redo();
     }
     
-    /* 
+    
      @Override
      public boolean canUndo() {
-        return (!redoStack.isEmpty());   
+        return undoRedo.canRedo(); 
      }
      
      @Override
      public boolean canRedo() {
-        return (!undoStack.isEmpty());
+        return undoRedo.canRedo();
      }
-     */
+     
     @Override
     public void saveGame(File save) {
         /*File parentDir = new File(location);
@@ -594,6 +503,42 @@ public class Model implements ModelInterface{
     }
     public void printAnswerGrid() {
         this.answerGrid.printGrid();
+    }
+
+    @Override
+    public void startStopwatch(long startingTime) {
+        this.timer = new ModelStopwatch(startingTime);
+    }
+
+    @Override
+    public void startCountdown(long remainingTime) {
+       this.timer = new ModelCountdown(remainingTime);
+    }
+    
+    @Override
+    public long getTime() {
+        return this.timer.getTimer();
+    }
+
+    @Override
+    public void pauseTime() {
+       this.timer.pauseTimer();  
+    }
+
+    @Override
+    public void unpauseTime() {
+       this.timer.unpauseTimer();
+    }
+
+    @Override
+    public void loadHighScores(File highscore) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void saveHighScores(File highscore) {
+        // TODO Auto-generated method stub       
     }
 
 }

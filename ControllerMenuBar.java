@@ -83,6 +83,7 @@ public class ControllerMenuBar {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			
 		}
 	}
 	
@@ -120,16 +121,21 @@ public class ControllerMenuBar {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+			if (model.isGridCorrect() && model.isGridFilled()) {
+				JOptionPane.showMessageDialog(menuBar.getTopLevelAncestor(), "Trophy 4 u");
+			}
 		}
-		
 	}
 	
 	class checkListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+			if (model.isGridCorrect()) {
+				JOptionPane.showMessageDialog(menuBar.getTopLevelAncestor(), "All numbers correct.");
+			} else {
+				JOptionPane.showMessageDialog(menuBar.getTopLevelAncestor(), "A number is incorrect.");
+			}
 		}
 
 	}
@@ -137,13 +143,12 @@ public class ControllerMenuBar {
 	class exitListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JFrame frame = (JFrame) menuBar.getParent(); // Might not work, test
+			JFrame frame = (JFrame) menuBar.getTopLevelAncestor();
 			int result = JOptionPane.showConfirmDialog(
-					null,
+					frame,
 					"Are you sure you want to exit the application?",
 					"Exit Application",
 					JOptionPane.YES_NO_OPTION);
-
 			if (result == JOptionPane.YES_OPTION) {
 				frame.setVisible(false);
 				frame.dispose();
@@ -157,7 +162,6 @@ public class ControllerMenuBar {
 			model.undoMove();
 			boardController.updateBoard();
 		}
-		
 	}
 	
 	class redoListener implements ActionListener {

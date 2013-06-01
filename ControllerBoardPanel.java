@@ -148,5 +148,20 @@ public class ControllerBoardPanel {
 		public void keyTyped(KeyEvent arg0) {
 		}
 	}
+
+	public void updatePosition(Position p) {
+		int x = p.getRow();
+		int y = p.getCol();
+		int curr = (model.getCellNumber(x, y));
+		if (curr != 0) {
+			board.getButton(p).setNumberLabel(Integer.toString(curr));
+		}
+		if(model.isCellGiven(p.getRow(), p.getCol())){
+			board.getButton(p).setNumberColor(Color.BLACK);
+		}else{
+			board.getButton(p).setNumberColor(Color.BLUE);
+			board.getButton(p).setCandidateColor(Color.BLUE);
+		}
+	}
 }
 

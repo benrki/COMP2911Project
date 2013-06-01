@@ -3,11 +3,11 @@ import java.util.Stack;
 
 
 public class ModelUndoRedo {
-    Model sudokuModel;
+    SudokuModel sudokuModel;
     private Stack<String> undoStack;
     private Stack<String> redoStack;
     
-    public ModelUndoRedo(Model sudokuModel) {
+    public ModelUndoRedo(SudokuModel sudokuModel) {
         this.sudokuModel = sudokuModel;
         this.undoStack = new Stack<String>();
         this.redoStack = new Stack<String>();

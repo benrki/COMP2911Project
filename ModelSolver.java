@@ -1,10 +1,9 @@
-
 public class ModelSolver {
-    Model sudokuModel;
+    SudokuModel sudokuModel;
     ModelGrid currentGrid;
     ModelGrid answerGrid;
 
-    public ModelSolver(Model sudokuModel, ModelGrid currentGrid, ModelGrid answerGrid) {
+    public ModelSolver(SudokuModel sudokuModel, ModelGrid currentGrid, ModelGrid answerGrid) {
         this.sudokuModel = sudokuModel;
         this.currentGrid = currentGrid;
         this.answerGrid = answerGrid;
