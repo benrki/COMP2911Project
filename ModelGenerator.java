@@ -1,8 +1,7 @@
 import java.util.Random;
 import java.util.Scanner;
 
-public abstract class SudokuGenerator {
-	
+public abstract class ModelGenerator {
     //http://zhangroup.aporc.org/images/files/Paper_3485.pdf
     // Basic logic:
     // 1) Take in a blank currentGrid and a blank answerGrid
@@ -12,13 +11,13 @@ public abstract class SudokuGenerator {
     // 5) "Dig holes" in the currentGrid
     
     private Random random;
-    private Grid currentGrid;
-    private Grid answerGrid;
+    private ModelGrid currentGrid;
+    private ModelGrid answerGrid;
     
     // **************************************
     // ************** STEP 1 ****************
     // **************************************
-    public SudokuGenerator (Grid currentGrid, Grid answerGrid) {
+    public ModelGenerator (ModelGrid currentGrid, ModelGrid answerGrid) {
         this.random = new Random();
         this.currentGrid = currentGrid;
         this.answerGrid = answerGrid;
@@ -46,8 +45,8 @@ public abstract class SudokuGenerator {
                 "8 3 6 5 1 9 2 7 4\n" + 
                 "1 2 7 8 3 4 5 9 6\n";
         Scanner s = new Scanner(input);
-        for(int i=0; i<Grid.NUM_ROWS; i++) {
-            for(int j=0; j<Grid.NUM_COLS; j++) {
+        for(int i=0; i<ModelGrid.NUM_ROWS; i++) {
+            for(int j=0; j<ModelGrid.NUM_COLS; j++) {
                 int n = s.nextInt();
                 answerGrid.getCell(i, j).giveNumber(n);
             }
@@ -89,8 +88,8 @@ public abstract class SudokuGenerator {
         while(two==one) {
             two = random.nextInt(9)+1;
         }
-        for(int i=0; i<Grid.NUM_ROWS; i++) {
-            for(int j=0; j<Grid.NUM_COLS; j++) {
+        for(int i=0; i<ModelGrid.NUM_ROWS; i++) {
+            for(int j=0; j<ModelGrid.NUM_COLS; j++) {
                 if(answerGrid.getCell(i, j).getNumber()==one) {
                     answerGrid.getCell(i, j).giveNumber(two);
                 } else if (answerGrid.getCell(i, j).getNumber()==two) {
@@ -109,7 +108,7 @@ public abstract class SudokuGenerator {
         while(two==one) {
             two = 3*(one/3) + random.nextInt(3);       
         }
-        for(int i=0; i<Grid.NUM_ROWS; i++) {
+        for(int i=0; i<ModelGrid.NUM_ROWS; i++) {
             tmp = answerGrid.getCell(i, one).getNumber();
             answerGrid.getCell(i, one).giveNumber(answerGrid.getCell(i, two).getNumber());
             answerGrid.getCell(i, two).giveNumber(tmp);
@@ -124,7 +123,7 @@ public abstract class SudokuGenerator {
         while(two==one) {
             two = random.nextInt(3);
         }
-        for(int i=0; i<Grid.NUM_ROWS; i++) {
+        for(int i=0; i<ModelGrid.NUM_ROWS; i++) {
             for(int j=0; j<3; j++) {
                 tmp = answerGrid.getCell(i, (3*one)+j).getNumber();
                 answerGrid.getCell(i, (3*one)+j).giveNumber(answerGrid.getCell(i, (3*two)+j).getNumber());
@@ -141,7 +140,7 @@ public abstract class SudokuGenerator {
         while(two==one) {
             two = 3*(one/3) + random.nextInt(3);
         }
-        for(int i=0; i<Grid.NUM_COLS; i++) {
+        for(int i=0; i<ModelGrid.NUM_COLS; i++) {
             tmp = answerGrid.getCell(one, i).getNumber();
             answerGrid.getCell(one, i).giveNumber(answerGrid.getCell(two, i).getNumber());
             answerGrid.getCell(two, i).giveNumber(tmp);
@@ -155,7 +154,7 @@ public abstract class SudokuGenerator {
         while(two==one) {
             two = random.nextInt(3);
         }
-        for(int i=0; i<Grid.NUM_COLS; i++) {
+        for(int i=0; i<ModelGrid.NUM_COLS; i++) {
             for(int j=0; j<3; j++) {
                 tmp = answerGrid.getCell((3*one)+j, i).getNumber();
                 answerGrid.getCell((3*one)+j, i).giveNumber(answerGrid.getCell((3*two)+j, i).getNumber());
@@ -176,8 +175,8 @@ public abstract class SudokuGenerator {
     // ************** STEP 4 ****************
     // **************************************
     private void duplicateAnswerGrid() {
-        for(int i=0; i<Grid.NUM_ROWS; i++) {
-            for(int j=0; j<Grid.NUM_COLS; j++) {
+        for(int i=0; i<ModelGrid.NUM_ROWS; i++) {
+            for(int j=0; j<ModelGrid.NUM_COLS; j++) {
                 currentGrid.getCell(i, j).giveNumber(answerGrid.getCell(i, j).getNumber());
             }
         }
@@ -195,7 +194,7 @@ public abstract class SudokuGenerator {
         int boxCol = 3*(box%3);
         int row = boxRow + random.nextInt(3);
         int col = boxCol + random.nextInt(3);
-        while(this.currentGrid.getCell(row, col).getNumber()==Cell.EMPTY) {
+        while(this.currentGrid.getCell(row, col).getNumber()==ModelCell.EMPTY) {
             row = boxRow + random.nextInt(3);
             col = boxCol + random.nextInt(3);
         }
