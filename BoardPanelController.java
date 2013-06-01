@@ -42,14 +42,14 @@ public class BoardPanelController {
 					board.setSelectedCell(selectedButton.getPosition());
 					selectedButton.setBackground(Color.YELLOW);
 				//  debugging messages
-				//	System.out.println("You selected " + board.getSelectedCell().getX() + " " + board.getSelectedCell().getY());
+				//	System.out.println("You selected " + board.getSelectedCell().getRow() + " " + board.getSelectedCell().getCol());
 		
 				}else{
 					board.getSelectedButton().setBackground(Color.WHITE);
 					board.setSelectedCell(selectedButton.getPosition());
 					selectedButton.setBackground(Color.YELLOW);
 				//  debugging messages
-				//	System.out.println("You selected " + board.getSelectedCell().getX() + " " + board.getSelectedCell().getY());
+				//	System.out.println("You selected " + board.getSelectedCell().getRow() + " " + board.getSelectedCell().getCol());
 				}
 			} catch (NullPointerException o){
 				System.out.println("sumting wong");
@@ -62,14 +62,14 @@ public class BoardPanelController {
 			for (CellButton cb : cbList) {
 				cb.clearNumberLabel();
 				cb.clearCandidateLabel();
-				int x = cb.getPosition().getX();
-				int y = cb.getPosition().getY();
+				int x = cb.getPosition().getRow();
+				int y = cb.getPosition().getCol();
 				Position p = new Position(x, y);
 				int curr = (model.getCellNumber(x, y));
 				if (curr != 0) {
 					board.getButton(p).setNumberLabel(Integer.toString(curr));
 				}
-				if(model.isCellGiven(p.getX(), p.getY())){
+				if(model.isCellGiven(p.getRow(), p.getCol())){
 					board.getButton(p).setNumberColor(Color.BLACK);
 				}else{
 					board.getButton(p).setNumberColor(Color.BLUE);
@@ -98,44 +98,41 @@ public class BoardPanelController {
 			Position p = board.getSelectedCell();
 			if(p != null){
 				if(label.contains(pressedKey)){
-					if (!model.isCellGiven(p.getX(), p.getY())) {
+					if (!model.isCellGiven(p.getRow(), p.getCol())) {
 						if(!inputPanel.getCandidateButton().isSelected()){
-							model.setCellNumber(p.getX(), p.getY(), Integer.parseInt(pressedKey));
+							model.setCellNumber(p.getRow(), p.getCol(), Integer.parseInt(pressedKey));
 							board.getSelectedButton().setNumberLabel(pressedKey);
-							if (model.isSudokuFinished()) {
-								JOptionPane.showMessageDialog(null, "Trophy 4 u");
-							}
 						}else{
-							if(model.hasCellCandidate(p.getX(), p.getY(), Integer.parseInt(pressedKey))){
+							if(model.hasCellCandidate(p.getRow(), p.getCol(), Integer.parseInt(pressedKey))){
 							//	System.out.println(label);
-								model.removeCellCandidate(p.getX(), p.getY(), Integer.parseInt(pressedKey));
-								board.getSelectedButton().setCandidateLabel(model.getCandidates(p.getX(), p.getY()));
+								model.removeCellCandidate(p.getRow(), p.getCol(), Integer.parseInt(pressedKey));
+								board.getSelectedButton().setCandidateLabel(model.getCandidates(p.getRow(), p.getCol()));
 							}else{
 							//	System.out.println(label);
-								model.addCellCandidate(p.getX(), p.getY(), Integer.parseInt(pressedKey));
-								board.getSelectedButton().setCandidateLabel(model.getCandidates(p.getX(), p.getY()));
+								model.addCellCandidate(p.getRow(), p.getCol(), Integer.parseInt(pressedKey));
+								board.getSelectedButton().setCandidateLabel(model.getCandidates(p.getRow(), p.getCol()));
 							}
 						}
 					}
 				}else{
-					if(arg0.getKeyCode() == KeyEvent.VK_UP && p.getX() != 0){
+					if(arg0.getKeyCode() == KeyEvent.VK_UP && p.getRow() != 0){
 						board.getSelectedButton().setBackground(Color.WHITE);
-						board.setSelectedCell(new Position(p.getX()-1, p.getY()));
+						board.setSelectedCell(new Position(p.getRow()-1, p.getCol()));
 						board.getSelectedButton().setBackground(Color.YELLOW);
 						System.out.println("up");
-					}else if(arg0.getKeyCode() == KeyEvent.VK_DOWN && p.getX() != 8){
+					}else if(arg0.getKeyCode() == KeyEvent.VK_DOWN && p.getRow() != 8){
 						board.getSelectedButton().setBackground(Color.WHITE);
-						board.setSelectedCell(new Position(p.getX()+1, p.getY()));
+						board.setSelectedCell(new Position(p.getRow()+1, p.getCol()));
 						board.getSelectedButton().setBackground(Color.YELLOW);
 						System.out.println("down");
-					}else if(arg0.getKeyCode() == KeyEvent.VK_LEFT && p.getY() != 0){
+					}else if(arg0.getKeyCode() == KeyEvent.VK_LEFT && p.getCol() != 0){
 						board.getSelectedButton().setBackground(Color.WHITE);
-						board.setSelectedCell(new Position(p.getX(), p.getY()-1));
+						board.setSelectedCell(new Position(p.getRow(), p.getCol()-1));
 						board.getSelectedButton().setBackground(Color.YELLOW);
 						System.out.println("left");
-					}else if(arg0.getKeyCode() == KeyEvent.VK_RIGHT && p.getY() != 8){
+					}else if(arg0.getKeyCode() == KeyEvent.VK_RIGHT && p.getCol() != 8){
 						board.getSelectedButton().setBackground(Color.WHITE);
-						board.setSelectedCell(new Position(p.getX(), p.getY()+1));
+						board.setSelectedCell(new Position(p.getRow(), p.getCol()+1));
 						board.getSelectedButton().setBackground(Color.YELLOW);
 						System.out.println("right");
 					}

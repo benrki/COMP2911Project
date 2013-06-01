@@ -30,15 +30,15 @@ public class InputPanelController {
 			Position p = board.getSelectedCell();
 			if (p != null) {
 				if(!inputPanel.getCandidateButton().isSelected()){
-					model.clearCellNumber(p.getX(), p.getY());
-					int curr = model.getCellNumber(p.getX(), p.getY());
+					model.clearCellNumber(p.getRow(), p.getCol());
+					int curr = model.getCellNumber(p.getRow(), p.getCol());
 					if (curr == 0) {
 						board.getButton(p).setNumberLabel(null);
 					} else {
 						board.getButton(p).setNumberLabel(Integer.toString(curr));
 					}
 				}else{
-					model.clearCellCandidates(p.getX(), p.getY());
+					model.clearCellCandidates(p.getRow(), p.getCol());
 					board.getButton(p).clearCandidateLabel();
 				}
 			}
@@ -64,33 +64,29 @@ public class InputPanelController {
 
 		private void setSelectedCell() {
 			Position p = board.getSelectedCell();
-			if (p != null && !model.isCellGiven(p.getX(), p.getY())) {
+			if (p != null && !model.isCellGiven(p.getRow(), p.getCol())) {
 				if(!inputPanel.getCandidateButton().isSelected()){
-					model.setCellNumber(p.getX(), p.getY(), Integer.parseInt(label));
+					model.setCellNumber(p.getRow(), p.getCol(), Integer.parseInt(label));
 					board.getSelectedButton().setNumberLabel(label);
-					if (model.isSudokuFinished()) {
-						JOptionPane.showMessageDialog(null, "Trophy 4 u");
-					}
 				}else{
-					if(model.hasCellCandidate(p.getX(), p.getY(), Integer.parseInt(label))){
+					if(model.hasCellCandidate(p.getRow(), p.getCol(), Integer.parseInt(label))){
 					//	System.out.println(label);
-						model.removeCellCandidate(p.getX(), p.getY(), Integer.parseInt(label));
-						board.getSelectedButton().setCandidateLabel(model.getCandidates(p.getX(), p.getY()));
+						model.removeCellCandidate(p.getRow(), p.getCol(), Integer.parseInt(label));
+						board.getSelectedButton().setCandidateLabel(model.getCandidates(p.getRow(), p.getCol()));
 					}else{
 					//	System.out.println(label);
-						model.addCellCandidate(p.getX(), p.getY(), Integer.parseInt(label));
-						board.getSelectedButton().setCandidateLabel(model.getCandidates(p.getX(), p.getY()));
+						model.addCellCandidate(p.getRow(), p.getCol(), Integer.parseInt(label));
+						board.getSelectedButton().setCandidateLabel(model.getCandidates(p.getRow(), p.getCol()));
 					}
 				}
-				checkFinished();
 			}
 		}
 
-		private void checkFinished() {
-			if (model.isSudokuFinished()) {
-				JOptionPane.showMessageDialog(null, "Trophy 4 u!");
-			}
-		}
+	//	private void checkFinished() {
+	//		if (model.isSudokuFinished()) {
+	//			JOptionPane.showMessageDialog(null, "Trophy 4 u!");
+	//		}
+	//	}
 	}
 	
 }

@@ -15,6 +15,7 @@ public class MenuBar extends JMenuBar {
 	 */
 	private static final long serialVersionUID = 1L;
 	private static final String ABOUT_MESSAGE = "2013s1 COMP2911 Project\n\nCreated by Benjamin Ki, Kenny Ho, Nathan Ho and Denaysh Selvakkumar.";
+	
 	JMenu fileMenu;
 	JMenu newGameMenu;
 	JMenuItem easy;

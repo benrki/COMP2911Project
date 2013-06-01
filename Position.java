@@ -4,30 +4,30 @@
  *
  */
 public class Position {
-	private int x;
-	private int y;
+	private int row;
+	private int col;
 	
 	/**
 	 * @param x
 	 * @param y
 	 */
-	public Position(int x, int y) {
-		this.x = x;
-		this.y = y;
+	public Position(int row, int col) {
+		this.row = row;
+		this.col = col;
 	}
 
 	/**
 	 * @return
 	 */
-	public int getX() {
-		return x;
+	public int getRow() {
+		return row;
 	}
 
 	/**
 	 * @return
 	 */
-	public int getY() {
-		return y;
+	public int getCol() {
+		return col;
 	}
 	
 	

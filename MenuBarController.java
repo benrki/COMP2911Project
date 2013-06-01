@@ -85,10 +85,7 @@ public class MenuBarController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			model.generatePuzzle();
-			boardController.updateBoard();
 		}
-		
 	}
 	
 	class loadGameListener implements ActionListener {
@@ -99,7 +96,7 @@ public class MenuBarController {
 			int returnVal = fc.showOpenDialog(null);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                model.loadGame(file.getAbsolutePath());
+                model.loadGame(file);
                 boardController.updateBoard();
             } 
 		}
@@ -114,7 +111,7 @@ public class MenuBarController {
 			int returnVal = fc.showDialog(null, "Save");
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                model.saveGame(file.getParent(), file.getName());
+                model.saveGame(file);
                 System.out.println(file.getParent());
                 boardController.updateBoard();
             } 

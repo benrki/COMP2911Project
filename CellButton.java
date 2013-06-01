@@ -21,6 +21,8 @@ public class CellButton extends JButton {
 	private JLabel canLine1;
 	private JLabel canLine2;
 	private JLabel canLine3;
+	private Color numberColor;
+	private Color candidatesColor;
 
 	private final static int MAX_NUM_CANDIDATES = 9;
 	private final static Font NUMBER_FONT = new Font("sansserif",Font.BOLD,18);
@@ -43,6 +45,8 @@ public class CellButton extends JButton {
 		this.canLine3.setText(null);
 		candidatesVisible(false);
 		numberVisible(false);
+		this.numberColor = Color.BLACK;
+		this.candidatesColor = Color.BLUE;
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints line1c = new GridBagConstraints();
 		GridBagConstraints line2c = new GridBagConstraints();
@@ -116,6 +120,10 @@ public class CellButton extends JButton {
 	
 	public void setNumberColor(Color c){
 		number.setForeground(c);
+	}
+	
+	public void updateNumberColor(){
+		
 	}
 	
 	public void setCandidateColor(Color c){

@@ -33,12 +33,15 @@ public class MainInterface extends JFrame {
 		super.setLayout(new GridBagLayout());
 		mainController = new MainController();
 		model = new SudokuModel();
+		menuBar = new MenuBar();
+		board = new BoardPanel();
+		inputPanel = new InputPanel(board);
 		
 		GridBagConstraints inputConstraints = new GridBagConstraints();
 		inputConstraints.gridy = 1;
 		inputConstraints.fill = GridBagConstraints.BOTH;
 		inputConstraints.anchor = GridBagConstraints.SOUTH;
-		inputPanel = new InputPanel(board);
+	
 		inputController = new InputPanelController(model, inputPanel);
 		super.getContentPane().add(inputPanel, inputConstraints);
 		
@@ -47,11 +50,8 @@ public class MainInterface extends JFrame {
 		boardConstraints.fill = GridBagConstraints.BOTH;
 		boardConstraints.weightx = 1;
 		boardConstraints.weighty = 1;
-		board = new BoardPanel();
 		boardController = new BoardPanelController(board, model, inputPanel);
 		super.getContentPane().add(board, boardConstraints);
-		
-		menuBar = new MenuBar();
 		menuController = new MenuBarController(model, menuBar, boardController, this);
 
 		super.setJMenuBar(menuBar);

@@ -79,12 +79,12 @@ public class BoardPanel extends JPanel {
 		if(selectedCell == null){
 			return null;
 		}else{
-			return buttons.get(selectedCell.getX()).get(selectedCell.getY());
+			return buttons.get(selectedCell.getRow()).get(selectedCell.getCol());
 		}
 	}
 	
 	public CellButton getButton(Position position) {
-		return buttons.get(position.getX()).get(position.getY());
+		return buttons.get(position.getRow()).get(position.getCol());
 	}
 	
 	public void addActionListener(ActionListener listener, CellButton b){
