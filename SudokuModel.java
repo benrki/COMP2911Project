@@ -15,20 +15,24 @@ import java.io.PrintWriter;
 // Undo/Redo
 // Can remove a lot of the "checks" since I've implemented them in Cell
 // Potential bug: Generating then pressing undo will "ungive" (Potential fix: add undoStack.clear to hasAnswer (right before it returns true)
+
+// Potential bug: Undo moves that haven't gone through.
 public class SudokuModel implements SudokuModelInterface{
     
-    private Grid currentGrid;
-    private Grid answerGrid;
+    private ModelGrid currentGrid;
+    private ModelGrid answerGrid;
     private Stack<String> undoStack;
     private Stack<String> redoStack;
-    //private String generator;
+    private ModelTimer timer;
+    private String generator;
     
     public SudokuModel () {
-        this.currentGrid = new Grid();
-        this.answerGrid = new Grid();
+        this.currentGrid = new ModelGrid();
+        this.answerGrid = new ModelGrid();
         this.undoStack = new Stack<String>();
         this.redoStack = new Stack<String>();
-        //this.generator = "clearPuzzle";
+        this.timer = new ModelStopwatch(0);
+        this.generator = "clearPuzzle";
     }
     
     //*****************************************
@@ -40,11 +44,11 @@ public class SudokuModel implements SudokuModelInterface{
      */
     @Override
     public void generateEasyPuzzle() {
-    	SudokuGenerator generator = new EasyGenerator(this.currentGrid, this.answerGrid);
+        ModelGenerator generator = new ModelEasyGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
         this.undoStack.clear();
         this.redoStack.clear();
-        //this.generator = "genereateEasyPuzzle";
+        this.generator = "genereateEasyPuzzle";
     }
     
     /**
@@ -52,11 +56,11 @@ public class SudokuModel implements SudokuModelInterface{
      */
     @Override
     public void generateIntermediatePuzzle() {
-    	SudokuGenerator generator = new IntermediateGenerator(this.currentGrid, this.answerGrid);
+        ModelGenerator generator = new ModelIntermediateGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
         this.undoStack.clear();
         this.redoStack.clear();
-      //this.generator = "genereateIntermediatePuzzle";
+        this.generator = "genereateIntermediatePuzzle";
     }
     
     /**
@@ -64,21 +68,23 @@ public class SudokuModel implements SudokuModelInterface{
      */
     @Override
     public void generateHardPuzzle() {
-    	SudokuGenerator generator = new HardGenerator(this.currentGrid, this.answerGrid);
+        ModelGenerator generator = new ModelHardGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
         this.undoStack.clear();
         this.redoStack.clear();
-      //this.generator = "genereateHardPuzzle";
+        this.generator = "genereateHardPuzzle";
     }
     
     @Override
     public void clearPuzzle() {
-        this.currentGrid = new Grid();
-        this.answerGrid = new Grid();
-      //this.generator = "clearPuzzle";
+        this.currentGrid = new ModelGrid();
+        this.answerGrid = new ModelGrid();
+        this.undoStack.clear();
+        this.redoStack.clear();
+        this.generator = "clearPuzzle";
     }
     
-    /*
+    
     @Override
     public void regenerate() {
       if(this.generator.equals("genereateEasyPuzzle")) {
@@ -91,7 +97,7 @@ public class SudokuModel implements SudokuModelInterface{
           this.clearPuzzle();
       }
     }
-    */
+    
     /**
      * Sets the number in the specified cell in the grid as the specified number. 
      * (Different to setCellNumber as it makes the cell a "given", preventing it from being changed by setCellNumber and clearCellNumber.)
@@ -101,11 +107,16 @@ public class SudokuModel implements SudokuModelInterface{
      */
     @Override
     public void giveCellNumber(int row, int col, int n) {
-        if((Cell.MIN_NUM <= n) && (n <= Cell.MAX_NUM)) {
+        if((ModelCell.MIN_NUM <= n) && (n <= ModelCell.MAX_NUM)) {
+            if(this.currentGrid.getCell(row, col).getNumber()==ModelCell.EMPTY) {
+                this.undoStack.push("giveCellNumber " + row + " " + col + " " + n);
+                this.redoStack.clear();
+            } else {
+                this.undoStack.push("changeGiveCellNumber " + row + " " + col + " " + this.currentGrid.getCell(row, col).getNumber());
+                this.redoStack.clear();
+            }
             this.currentGrid.getCell(row, col).giveNumber(n);
             this.answerGrid.getCell(row, col).giveNumber(n);
-            this.undoStack.push("giveCellNumber " + row + " " + col + " " + n);
-            this.redoStack.clear();
         }
     } 
     
@@ -118,7 +129,7 @@ public class SudokuModel implements SudokuModelInterface{
     @Override
     public void removeCellNumber(int row, int col) {
         int n = this.answerGrid.getCell(row, col).getNumber();
-        if(n!=Cell.EMPTY) {
+        if(n!=ModelCell.EMPTY) {
             this.currentGrid.getCell(row, col).removeNumber();
             this.answerGrid.getCell(row, col).removeNumber();
             this.undoStack.push("removeCellNumber " + row + " " + col + " " + n);
@@ -245,10 +256,15 @@ public class SudokuModel implements SudokuModelInterface{
      */
     @Override
     public void setCellNumber(int row, int col, int n) {
-        if((Cell.MIN_NUM <= n) && (n <= Cell.MAX_NUM)) {
-            this.currentGrid.getCell(row, col).setNumber(n); 
-            this.undoStack.push("setCellNumber " + row + " " + col + " " + n);
-            this.redoStack.clear();
+        if((ModelCell.MIN_NUM <= n) && (n <= ModelCell.MAX_NUM) && !this.currentGrid.getCell(row, col).isGiven()) {
+            if(this.currentGrid.getCell(row, col).getNumber()==ModelCell.EMPTY) {
+                this.undoStack.push("setCellNumber " + row + " " + col + " " + n);
+                this.redoStack.clear();
+            } else {
+                this.undoStack.push("changeSetCellNumber " + row + " " + col + " " + this.currentGrid.getCell(row, col).getNumber());
+                this.redoStack.clear();
+            }
+                this.currentGrid.getCell(row, col).setNumber(n); 
         }
     }
     
@@ -260,7 +276,7 @@ public class SudokuModel implements SudokuModelInterface{
     @Override
     public void clearCellNumber(int row, int col) {
         int n = this.currentGrid.getCell(row, col).getNumber();
-        if(n!=Cell.EMPTY) {
+        if(n!=ModelCell.EMPTY) {
             this.currentGrid.getCell(row, col).clearNumber();
             this.undoStack.push("clearCellNumber " + row + " " + col + " " + n);
             this.redoStack.clear();
@@ -275,20 +291,20 @@ public class SudokuModel implements SudokuModelInterface{
      */
     @Override
     public void addCellCandidate(int row, int col, int n) {
-        if((Cell.MIN_NUM <= n) && (n <= Cell.MAX_NUM)) {
+        if((ModelCell.MIN_NUM <= n) && (n <= ModelCell.MAX_NUM)) {
             currentGrid.getCell(row, col).addCandidate(n);
         }
     }
     
     
     public void removeCellCandidate(int row, int col, int n) {
-        if((Cell.MIN_NUM <= n) && (n <= Cell.MAX_NUM)) {
+        if((ModelCell.MIN_NUM <= n) && (n <= ModelCell.MAX_NUM)) {
             currentGrid.getCell(row, col).removeCandidate(n);
         }
     }
     @Override
     public boolean hasCellCandidate(int row, int col, int n) {
-        if((Cell.MIN_NUM <= n) && (n <= Cell.MAX_NUM)) {
+        if((ModelCell.MIN_NUM <= n) && (n <= ModelCell.MAX_NUM)) {
             return currentGrid.getCell(row, col).hasCandidate(n);
         }
         return false;
@@ -319,8 +335,8 @@ public class SudokuModel implements SudokuModelInterface{
     
     @Override
     public void addAllCandidates() {
-        for (int i=0; i<Grid.NUM_ROWS; i++) {
-            for (int j=0; j<Grid.NUM_COLS; j++) {
+        for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
+            for (int j=0; j<ModelGrid.NUM_COLS; j++) {
                 addAllCellCandidates(i, j);
             }
         }
@@ -343,7 +359,7 @@ public class SudokuModel implements SudokuModelInterface{
 
     @Override
     public boolean isCellCorrect(int row, int col) {
-        if(this.currentGrid.getCell(row, col).getNumber()==Cell.EMPTY) {
+        if(this.currentGrid.getCell(row, col).getNumber()==ModelCell.EMPTY) {
             return true;
         }
         return (this.currentGrid.getCell(row, col).getNumber()==this.answerGrid.getCell(row, col).getNumber());
@@ -359,7 +375,7 @@ public class SudokuModel implements SudokuModelInterface{
     }
     @Override
     public boolean isRowCorrect(int row) {
-        for(int i=0; i<Grid.NUM_COLS; i++) {
+        for(int i=0; i<ModelGrid.NUM_COLS; i++) {
             if(!isCellCorrect(row, i)) {
                 return false;
             }
@@ -368,7 +384,7 @@ public class SudokuModel implements SudokuModelInterface{
     }
     @Override
     public boolean isColumnCorrect(int col) {
-        for(int i=0; i<Grid.NUM_ROWS; i++) {
+        for(int i=0; i<ModelGrid.NUM_ROWS; i++) {
             if(!isCellCorrect(i, col)) {
                 return false;
             }
@@ -405,7 +421,7 @@ public class SudokuModel implements SudokuModelInterface{
     public boolean isGridFilled() {
         for(int i=0; i<9; i++) {
             for(int j=0; j<9; j++) {
-                if(this.currentGrid.getCell(i, j).getNumber()==Cell.EMPTY) {
+                if(this.currentGrid.getCell(i, j).getNumber()==ModelCell.EMPTY) {
                     return false;
                 }
             }
@@ -424,7 +440,7 @@ public class SudokuModel implements SudokuModelInterface{
         int col = r.nextInt(9);
         boolean revealed = false;
         while(!revealed) {
-            if(this.currentGrid.getCell(row, col).getNumber()==Cell.EMPTY) {
+            if(this.currentGrid.getCell(row, col).getNumber()==ModelCell.EMPTY) {
                 this.revealCell(row, col);
                 revealed = true;
             } else {
@@ -455,10 +471,14 @@ public class SudokuModel implements SudokuModelInterface{
         
         if(command.equals("giveCellNumber")) {
             removeCellNumber(row, col);
+        } else if (command.equals("changeGiveCellNumber")) {
+            giveCellNumber(row, col, s.nextInt());
         } else if (command.equals("removeCellNumber")) {
             giveCellNumber(row, col, s.nextInt());
         } else if (command.equals("setCellNumber")) {
             clearCellNumber(row, col);
+        } else if (command.equals("changeSetCellNumber")) {
+            setCellNumber(row, col, s.nextInt());
         } else if (command.equals("clearCellNumber")) {
             setCellNumber(row, col, s.nextInt());
         }
@@ -485,10 +505,14 @@ public class SudokuModel implements SudokuModelInterface{
         
         if(command.equals("giveCellNumber")) {
             removeCellNumber(row, col);
+        } else if (command.equals("changeGiveCellNumber")) {
+            giveCellNumber(row, col, s.nextInt());
         } else if (command.equals("removeCellNumber")) {
             giveCellNumber(row, col, s.nextInt());
         } else if (command.equals("setCellNumber")) {
             clearCellNumber(row, col);
+        } else if (command.equals("changeSetCellNumber")) {
+            setCellNumber(row, col, s.nextInt());
         } else if (command.equals("clearCellNumber")) {
             setCellNumber(row, col, s.nextInt());
         }
@@ -520,8 +544,8 @@ public class SudokuModel implements SudokuModelInterface{
         }*/
         String newline = System.getProperty("line.separator");
         String original = "Original:" + newline;
-        for (int i=0; i<Grid.NUM_ROWS; i++) {
-            for (int j=0; j<Grid.NUM_COLS; j++) {
+        for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
+            for (int j=0; j<ModelGrid.NUM_COLS; j++) {
                 if (currentGrid.grid.get(i).get(j).isGiven() == true) {
                     original = original + "|" + currentGrid.grid.get(i).get(j).getNumber();
                 } else if (currentGrid.grid.get(i).get(j).isGiven() == false) {
@@ -546,13 +570,13 @@ public class SudokuModel implements SudokuModelInterface{
 //      File save = new File(location);
         try {
             Scanner s = new Scanner(save);
-            for (int i=0; i<Grid.NUM_ROWS; i++) {
-                for (int j=0; j<Grid.NUM_COLS; j++) {
+            for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
+                for (int j=0; j<ModelGrid.NUM_COLS; j++) {
                     giveCellNumber(i, j, s.nextInt());
                 }
             }
-            for (int i=0; i<Grid.NUM_ROWS; i++) {
-                for (int j=0; j<Grid.NUM_COLS; j++) {
+            for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
+                for (int j=0; j<ModelGrid.NUM_COLS; j++) {
                     if (currentGrid.grid.get(i).get(j).isGiven() == false) {
                         setCellNumber(i, j, s.nextInt());
                     } else {
@@ -576,8 +600,8 @@ public class SudokuModel implements SudokuModelInterface{
      */
     @Override
     public void revealSolution() {
-        for(int i=0; i<Grid.NUM_ROWS; i++) {
-            for(int j=0; j<Grid.NUM_COLS; j++) {
+        for(int i=0; i<ModelGrid.NUM_ROWS; i++) {
+            for(int j=0; j<ModelGrid.NUM_COLS; j++) {
                 this.revealCell(i, j);
             }
         }
@@ -594,6 +618,42 @@ public class SudokuModel implements SudokuModelInterface{
     }
     public void printAnswerGrid() {
         this.answerGrid.printGrid();
+    }
+
+    @Override
+    public void startStopwatch(long elapsedTime) {
+        this.timer = new ModelStopwatch(elapsedTime);
+    }
+
+    @Override
+    public void startCountdown(long remainingTime) {
+       this.timer = new ModelCountdown(remainingTime);
+    }
+    
+    @Override
+    public long getTime() {
+        return this.timer.getTimer();
+    }
+
+    @Override
+    public void pauseTime() {
+       this.timer.pauseTimer();  
+    }
+
+    @Override
+    public void unpauseTime() {
+       this.timer.unpauseTimer();
+    }
+
+    @Override
+    public void loadHighScores(File highscore) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void saveHighScores(File highscore) {
+        // TODO Auto-generated method stub       
     }
 
 }
