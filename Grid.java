@@ -134,12 +134,23 @@ public class Grid {
 
     @Override
     public String toString() {
-        String sudoku = "";
+        String newline = System.getProperty("line.separator");
+    	String sudoku = "";
     	for (int i=0; i<NUM_ROWS; i++) {
     		for (int j=0; j<NUM_COLS; j++) {
-    			sudoku = sudoku + grid.get(i).get(j).getNumber() + " ";
+    			if (grid.get(i).get(j).getNumber() == EMPTY) {
+    				sudoku = sudoku + "|-";
+    			} else {
+    				sudoku = sudoku + "|" + grid.get(i).get(j).getNumber();
+    			}
+    			if ((j+1)%3 == 0) {
+    				sudoku = sudoku + "| ";
+    			}
     		}
     		sudoku = sudoku + newline;
+    		if ((i+1)%3 == 0) {
+    			sudoku = sudoku + newline;
+    		}
     	}
     	return sudoku;
     }
