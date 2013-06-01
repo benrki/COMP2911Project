@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Grid {
+public class ModelGrid {
     
     // To do:
     // Reorder methods
@@ -9,17 +9,17 @@ public class Grid {
     public static final int NUM_ROWS = 9;
     public static final int NUM_COLS = 9;
     public static final int NUM_CELLS = 81;
-    ArrayList<ArrayList<Cell>> grid;     
+    ArrayList<ArrayList<ModelCell>> grid;     
     
     /**
      * Constructs a Grid.
      */
-    public Grid () {
-        this.grid = new ArrayList<ArrayList<Cell>>();
+    public ModelGrid () {
+        this.grid = new ArrayList<ArrayList<ModelCell>>();
         for(int i=0; i<NUM_ROWS; i++) {
-            grid.add(new ArrayList<Cell>());
+            grid.add(new ArrayList<ModelCell>());
             for(int j=0; j<NUM_COLS; j++) {
-                grid.get(i).add(new Cell(i, j));
+                grid.get(i).add(new ModelCell(i, j));
             }
         }
     }
@@ -30,7 +30,7 @@ public class Grid {
      * @param col The column of the cell.
      * @return the Cell in row "row" and column "col".
      */
-    public Cell getCell(int row, int col) {
+    public ModelCell getCell(int row, int col) {
         return this.grid.get(row).get(col);
     }
     
@@ -68,7 +68,7 @@ public class Grid {
        ArrayList<Integer> row = new ArrayList<Integer>();
        for(int i=0; i<NUM_COLS; i++) {
           if(!row.contains(grid.get(n).get(i).getNumber())) {
-              if(grid.get(n).get(i).getNumber()!=Cell.EMPTY) {
+              if(grid.get(n).get(i).getNumber()!=ModelCell.EMPTY) {
                   row.add(grid.get(n).get(i).getNumber());
               }
           } else {
@@ -86,7 +86,7 @@ public class Grid {
        ArrayList<Integer> col = new ArrayList<Integer>();
        for(int i=0; i<NUM_COLS; i++) {
           if(!col.contains(grid.get(i).get(n).getNumber())) {
-             if(grid.get(i).get(n).getNumber()!=Cell.EMPTY) {
+             if(grid.get(i).get(n).getNumber()!=ModelCell.EMPTY) {
                 col.add(grid.get(i).get(n).getNumber());
              }
           } else {
@@ -108,7 +108,7 @@ public class Grid {
        for(int i=row; i<row+3; i++) {
            for(int j=col; j<col+3; j++) {
                if(!box.contains(grid.get(i).get(j).getNumber())) {
-                   if(grid.get(i).get(j).getNumber()!=Cell.EMPTY) {
+                   if(grid.get(i).get(j).getNumber()!=ModelCell.EMPTY) {
                       box.add(grid.get(i).get(j).getNumber());
                    }
                } else {
@@ -124,7 +124,7 @@ public class Grid {
         String sudoku = "";
         for (int i=0; i<NUM_ROWS; i++) {
             for (int j=0; j<NUM_COLS; j++) {
-                if(grid.get(i).get(j).getNumber()==Cell.EMPTY) {
+                if(grid.get(i).get(j).getNumber()==ModelCell.EMPTY) {
                     sudoku = sudoku + "- ";
                 } else {
                    sudoku = sudoku + grid.get(i).get(j).getNumber() + " ";
@@ -145,7 +145,7 @@ public class Grid {
                 if(j%3==0&&j!=0) {
                     System.out.print("| ");
                 }
-                if(this.grid.get(i).get(j).getNumber()==Cell.EMPTY){
+                if(this.grid.get(i).get(j).getNumber()==ModelCell.EMPTY){
                     System.out.print("|-");
                 } else {
                     System.out.print("|" + this.grid.get(i).get(j).getNumber());
