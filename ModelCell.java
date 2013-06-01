@@ -1,6 +1,6 @@
 import java.util.ArrayList;
  
-public class Cell {
+public class ModelCell {
     
     // To do:
     // Reorder methods
@@ -20,10 +20,10 @@ public class Cell {
      * @param row The row position of the cell.
      * @param column The column position of the cell
      */
-    public Cell (int row, int column) {
+    public ModelCell (int row, int column) {
         this.row = row;
         this.column = column;
-        this.number = Cell.EMPTY;
+        this.number = ModelCell.EMPTY;
         this.given = false;
         candidates = new ArrayList<Integer>();
     }
@@ -33,7 +33,7 @@ public class Cell {
      * @param number The number to give the Cell.
      */
     public void giveNumber(int number) {
-        if( (Cell.MIN_NUM <= number) && (number <= Cell.MAX_NUM)) {
+        if( (ModelCell.MIN_NUM <= number) && (number <= ModelCell.MAX_NUM)) {
             this.number = number;
             this.given = true;
         }
@@ -52,7 +52,7 @@ public class Cell {
      * @param number The number to set the Cell number to.
      */
     public void setNumber(int number) {
-        if(!this.given && (Cell.MIN_NUM <= number) && (number <= Cell.MAX_NUM)) {
+        if(!this.given && (ModelCell.MIN_NUM <= number) && (number <= ModelCell.MAX_NUM)) {
             this.number = number;
         }
     }
@@ -112,7 +112,7 @@ public class Cell {
      * @param number The candidate to this cell.
      */
     public void addCandidate(int number) {
-        if(!this.candidates.contains(number) && (Cell.MIN_NUM <= number) && (number <= Cell.MAX_NUM)) {
+        if(!this.candidates.contains(number) && (ModelCell.MIN_NUM <= number) && (number <= ModelCell.MAX_NUM)) {
             for(int i=0; i<candidates.size(); i++) {
                 if(number < this.candidates.get(i)) {
                     this.candidates.add(i, number);
