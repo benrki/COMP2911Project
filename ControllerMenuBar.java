@@ -8,17 +8,15 @@ import javax.swing.JOptionPane;
 
 
 
-public class MenuBarController {
-	private MenuBar menuBar;
-	private SudokuModel model;
-	private BoardPanelController boardController;
-	private JFrame frame;
+public class ControllerMenuBar {
+	private ViewerMenuBar menuBar;
+	private Model model;
+	private ControllerBoardPanel boardController;
 	
-	public MenuBarController(SudokuModel model, MenuBar menuBar, BoardPanelController boardController, JFrame frame) {
+	public ControllerMenuBar(Model model, ViewerMenuBar menuBar, ControllerBoardPanel boardController) {
 		this.model = model;
 		this.menuBar = menuBar;
 		this.boardController = boardController;
-		this.frame = frame;
 		this.menuBar.addActionListener(new easyGameListener(), menuBar.getEasy());
 		this.menuBar.addActionListener(new mediumGameListener(), menuBar.getMedium());
 		this.menuBar.addActionListener(new hardGameListener(), menuBar.getHard());
@@ -137,12 +135,11 @@ public class MenuBarController {
 	}
 
 	class exitListener implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
+			JFrame frame = (JFrame) menuBar.getParent(); // Might not work, test
 			int result = JOptionPane.showConfirmDialog(
-					frame,
+					null,
 					"Are you sure you want to exit the application?",
 					"Exit Application",
 					JOptionPane.YES_NO_OPTION);

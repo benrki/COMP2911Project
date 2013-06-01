@@ -13,7 +13,7 @@ import javax.swing.JPanel;
  * @author Ben
  *
  */
-public class BoardPanel extends JPanel {
+public class ViewerBoardPanel extends JPanel {
 	/**
 	 * 
 	 */
@@ -23,22 +23,22 @@ public class BoardPanel extends JPanel {
 	final static int NO_OF_ROWS_IN_SQ = 3;
 	final static int NO_OF_COLUMNS_IN_SQ = 3;
 	
-	private ArrayList<ArrayList<CellButton>> buttons;
+	private ArrayList<ArrayList<ViewerCellButton>> buttons;
 	private Position selectedCell;
 	
 	/**
 	 * 
 	 */
-	public BoardPanel(){
+	public ViewerBoardPanel(){
 		super();
 		GridLayout layout = new GridLayout(NO_OF_ROWS_IN_SQ, NO_OF_COLUMNS_IN_SQ, 5, 5);
-		buttons = new ArrayList<ArrayList<CellButton>>();
+		buttons = new ArrayList<ArrayList<ViewerCellButton>>();
 		this.setLayout(layout);
 		this.setBackground(Color.BLACK);
 		selectedCell = null;
 		
 		for(int h = 0; h < NO_OF_SQ; h++) {
-			buttons.add(new ArrayList<CellButton>());
+			buttons.add(new ArrayList<ViewerCellButton>());
 		}
 		
 		for(int i = 0; i < NO_OF_SQ; i++) {
@@ -53,7 +53,7 @@ public class BoardPanel extends JPanel {
 					} else {
 						row = j+6;
 					}
-					CellButton cell = new CellButton(new Position(row, buttons.get(row).size()));
+					ViewerCellButton cell = new ViewerCellButton(new Position(row, buttons.get(row).size()));
 					cell.setBackground(Color.WHITE);
 					buttons.get(row).add(cell);
 					square.add(cell);
@@ -63,7 +63,7 @@ public class BoardPanel extends JPanel {
 		}
 	}
 	
-	public ArrayList<ArrayList<CellButton>> getButtons(){
+	public ArrayList<ArrayList<ViewerCellButton>> getButtons(){
 		return buttons;
 	}
 	
@@ -75,7 +75,7 @@ public class BoardPanel extends JPanel {
 		this.selectedCell = position;
 	}
 	
-	public CellButton getSelectedButton(){
+	public ViewerCellButton getSelectedButton(){
 		if(selectedCell == null){
 			return null;
 		}else{
@@ -83,11 +83,11 @@ public class BoardPanel extends JPanel {
 		}
 	}
 	
-	public CellButton getButton(Position position) {
+	public ViewerCellButton getButton(Position position) {
 		return buttons.get(position.getRow()).get(position.getCol());
 	}
 	
-	public void addActionListener(ActionListener listener, CellButton b){
+	public void addActionListener(ActionListener listener, ViewerCellButton b){
 		b.addActionListener(listener);
 	}
 	

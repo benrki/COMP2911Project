@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
-public class CellButton extends JButton {
+public class ViewerCellButton extends JButton {
 	
 	/**
 	 * 
@@ -29,7 +29,7 @@ public class CellButton extends JButton {
 	private final static Font CANDIDATES_FONT = new Font("sansserif",Font.BOLD,10);
 	
 	
-	public CellButton(Position pos){
+	public ViewerCellButton(Position pos){
 		this.pos = pos;
 		this.number = new JLabel();
 		this.number.setFont(NUMBER_FONT);

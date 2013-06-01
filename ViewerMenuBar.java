@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 
-public class MenuBar extends JMenuBar {
+public class ViewerMenuBar extends JMenuBar {
 	/**
 	 * 
 	 */
@@ -42,8 +42,9 @@ public class MenuBar extends JMenuBar {
 	JMenu aboutMenu;
 	JMenuItem aboutItem;
 	
-	
-	public MenuBar() {
+	public ViewerMenuBar() {
+		super();
+		
 		fileMenu = new JMenu("File");
 		fileMenu.setMnemonic(KeyEvent.VK_F);
 		fileMenu.getAccessibleContext().setAccessibleDescription(

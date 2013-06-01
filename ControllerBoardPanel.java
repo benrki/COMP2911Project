@@ -9,18 +9,18 @@ import javax.swing.JOptionPane;
 
 
 
-public class BoardPanelController {
-	private BoardPanel board;
-	private InputPanel inputPanel;
-	private SudokuModel model;
+public class ControllerBoardPanel {
+	private ViewerBoardPanel board;
+	private ViewerInputPanel inputPanel;
+	private Model model;
 	
-	public BoardPanelController(BoardPanel board, SudokuModel model, InputPanel inputPanel){
+	public ControllerBoardPanel(ViewerBoardPanel board, Model model, ViewerInputPanel inputPanel){
 		this.board = board;
 		this.inputPanel = inputPanel;
 		this.model = model;
 		
-		for(ArrayList<CellButton> a : board.getButtons()){
-			for(CellButton b : a){
+		for(ArrayList<ViewerCellButton> a : board.getButtons()){
+			for(ViewerCellButton b : a){
 				board.addActionListener(new SelectCell(b), b);
 				board.addKeyListener(new KeyPress(b), b);
 			}
@@ -28,9 +28,9 @@ public class BoardPanelController {
 	}
 
 	class SelectCell implements ActionListener {
-		private CellButton selectedButton;
+		private ViewerCellButton selectedButton;
 		
-		SelectCell(CellButton cell){
+		SelectCell(ViewerCellButton cell){
 			this.selectedButton = cell;
 		}
 		
@@ -58,8 +58,8 @@ public class BoardPanelController {
 	}
 	
 	public void updateBoard() {
-		for (ArrayList<CellButton> cbList: board.getButtons()) {
-			for (CellButton cb : cbList) {
+		for (ArrayList<ViewerCellButton> cbList: board.getButtons()) {
+			for (ViewerCellButton cb : cbList) {
 				cb.clearNumberLabel();
 				cb.clearCandidateLabel();
 				int x = cb.getPosition().getRow();

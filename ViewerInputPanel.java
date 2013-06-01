@@ -7,27 +7,27 @@ import javax.swing.*;
  * @author Ben
  *
  */
-public class InputPanel extends JPanel  {
+public class ViewerInputPanel extends JPanel  {
 	
 	/**
 	 * Default serialization
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private BoardPanel board;
+	private ViewerBoardPanel board;
 	private JButton clearButton;
-	private ArrayList<KeyButton> keyButtons;
+	private ArrayList<ViewerKeyButton> keyButtons;
 	private JToggleButton candidateButton;
 
-	public InputPanel(BoardPanel board) {
+	public ViewerInputPanel(ViewerBoardPanel board) {
 		super();
 		this.board = board;
-		this.keyButtons = new ArrayList<KeyButton>();
+		this.keyButtons = new ArrayList<ViewerKeyButton>();
 		String keyLabels = "789456123";
 		this.setLayout(new GridLayout(4, 3));
 		for (int i = 0; i < keyLabels.length(); i++) {
 			final String label = keyLabels.substring(i, i + 1);
-			KeyButton keyButton = new KeyButton(label);
+			ViewerKeyButton keyButton = new ViewerKeyButton(label);
 			keyButton.setFocusable(false);
 			this.add(keyButton);
 			keyButtons.add(keyButton);
@@ -47,7 +47,7 @@ public class InputPanel extends JPanel  {
 
 	}	
 	
-	public BoardPanel getBoard(){
+	public ViewerBoardPanel getBoard(){
 		return board;
 	}
 	
@@ -55,7 +55,7 @@ public class InputPanel extends JPanel  {
 		return clearButton;
 	}
 	
-	public ArrayList<KeyButton> getKeyButtons(){
+	public ArrayList<ViewerKeyButton> getKeyButtons(){
 		return keyButtons;
 	}
 	

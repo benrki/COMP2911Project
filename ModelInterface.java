@@ -1,7 +1,7 @@
 import java.io.File;
 import java.util.ArrayList;
 
-public interface SudokuModelInterface {
+public interface ModelInterface {
     //*****************************************
     //*** Creating/Generating phase methods ***
     //*****************************************
@@ -28,9 +28,6 @@ public interface SudokuModelInterface {
     public boolean isBoxValid(int box);
     public boolean isCellValid(int row, int col);
     
-    // ** OTHER GENERATING METHODS **
-    // Call the last called regenerate (default is clearPuzzle) and yes clearPuzzle is counted as a generator
-    public void regenerate();
     // Finds the solution for current Grid.
     // Returns true if it has a solution, false otherwise. 
     // (What I planned was, you can't go to the "next phase" if this returns false)
@@ -85,32 +82,20 @@ public interface SudokuModelInterface {
     // giveCellNumber, removeCellNumber
     // setCellNumber, clearCellNumber
     // Undo
+    //public void undoMove();
     public Position undoMove();
     // Redo 
+    //public void redoMove();
     public Position redoMove();
-    // Can undo
-    public boolean canUndo();
-    // Can redo
-    public boolean canRedo();
+    // public boolean canUndo();
+    // public boolean canRedo();
     
     // Saves game to textfile to <specified location> with <specified name>
     public void saveGame(File save);
     // Load game from <specified location> (includes the file name)
     public void loadGame(File save);
     
-    // Starts a Stopwatch with startingTime
-    public void startStopwatch(long startingTime);
-    // Starts a Countdown with remainingTime
-    public void startCountdown(long remainingTime);
-    // Gets time (of stopwatch/countdown)
-    public long getTime();
-    // Pauses time
-    public void pauseTime();
-    // Unpauses time
-    public void unpauseTime();
     
-    public void loadHighScores(File highscore);
-    public void saveHighScores(File highscore);
     //*****************************************
     //********** Reveal phase methods *********
     //*****************************************
@@ -129,6 +114,9 @@ public interface SudokuModelInterface {
     // Change "pencil marks" to "pen" (changes all single candidates to "pen") (Not actually intuitive).
     // public void solveCandidates();
     // Pause feature (pauses time, hides puzzle)
+    // public void startTimer();
+    // public void stopTimer();
+    // public void pauseGame();
 
     
 }

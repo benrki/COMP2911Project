@@ -1,7 +1,7 @@
 import javax.swing.JButton;
 
 
-public class KeyButton extends JButton {
+public class ViewerKeyButton extends JButton {
 	/**
 	 * 
 	 */
@@ -9,7 +9,7 @@ public class KeyButton extends JButton {
 	
 	private String label;
 	
-	public KeyButton(String label){
+	public ViewerKeyButton(String label){
 		this.label = label;
 		this.setText(label);
 	}

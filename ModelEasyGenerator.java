@@ -1,4 +1,4 @@
-public class ModelEasyGenerator extends ModelGenerator{
+public class ModelEasyGenerator extends SudokuGenerator{
     // The number of "given" cells.
 	private static final int EASY_DIFFICULTY = 60;
 	public ModelEasyGenerator(ModelGrid currentGrid, ModelGrid answerGrid) {

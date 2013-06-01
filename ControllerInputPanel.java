@@ -5,23 +5,23 @@ import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
 
-public class InputPanelController {
-	private InputPanel inputPanel;
-	private SudokuModel model;
+public class ControllerInputPanel {
+	private ViewerInputPanel inputPanel;
+	private Model model;
 	
-	public InputPanelController(SudokuModel model, InputPanel inputPanel) {
+	public ControllerInputPanel(Model model, ViewerInputPanel inputPanel) {
 		this.model = model;
 		this.inputPanel = inputPanel;
 		this.inputPanel.addActionListener(new ClearPress(inputPanel.getBoard()), inputPanel.getClearButton());
-		for(KeyButton k : inputPanel.getKeyButtons()){
+		for(ViewerKeyButton k : inputPanel.getKeyButtons()){
 			this.inputPanel.addActionListener(new KeyClick(inputPanel.getBoard(), k.getLabel()), k);
 		}
 	}
 	
 	class ClearPress implements ActionListener {
-		private BoardPanel board;
+		private ViewerBoardPanel board;
 		
-		public ClearPress(BoardPanel board){
+		public ClearPress(ViewerBoardPanel board){
 			this.board = board;
 		}
 		
@@ -47,11 +47,11 @@ public class InputPanelController {
 	
 	class KeyClick implements ActionListener {
 		
-		private BoardPanel board;
+		private ViewerBoardPanel board;
 		private String label;
 		private Font font;
 		
-		public KeyClick(BoardPanel board, String label){
+		public KeyClick(ViewerBoardPanel board, String label){
 			this.board = board;
 			this.label = label;
 			this.font = new Font("sansserif",Font.BOLD,18);
