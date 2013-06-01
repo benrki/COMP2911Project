@@ -21,16 +21,14 @@ public class SudokuModel implements SudokuModelInterface{
     
     private ModelGrid currentGrid;
     private ModelGrid answerGrid;
-    private Stack<String> undoStack;
-    private Stack<String> redoStack;
+    private ModelUndoRedo undoRedo;
     private ModelTimer timer;
     private String generator;
     
     public SudokuModel () {
         this.currentGrid = new ModelGrid();
         this.answerGrid = new ModelGrid();
-        this.undoStack = new Stack<String>();
-        this.redoStack = new Stack<String>();
+        this.undoRedo = new ModelUndoRedo(this);
         this.timer = new ModelStopwatch(0);
         this.generator = "clearPuzzle";
     }
@@ -46,8 +44,7 @@ public class SudokuModel implements SudokuModelInterface{
     public void generateEasyPuzzle() {
         ModelGenerator generator = new ModelEasyGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
-        this.undoStack.clear();
-        this.redoStack.clear();
+        undoRedo.generateCalled();
         this.generator = "genereateEasyPuzzle";
     }
     
@@ -58,8 +55,7 @@ public class SudokuModel implements SudokuModelInterface{
     public void generateIntermediatePuzzle() {
         ModelGenerator generator = new ModelIntermediateGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
-        this.undoStack.clear();
-        this.redoStack.clear();
+        undoRedo.generateCalled();
         this.generator = "genereateIntermediatePuzzle";
     }
     
@@ -70,8 +66,7 @@ public class SudokuModel implements SudokuModelInterface{
     public void generateHardPuzzle() {
         ModelGenerator generator = new ModelHardGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
-        this.undoStack.clear();
-        this.redoStack.clear();
+        undoRedo.generateCalled();
         this.generator = "genereateHardPuzzle";
     }
     
@@ -79,8 +74,7 @@ public class SudokuModel implements SudokuModelInterface{
     public void clearPuzzle() {
         this.currentGrid = new ModelGrid();
         this.answerGrid = new ModelGrid();
-        this.undoStack.clear();
-        this.redoStack.clear();
+        undoRedo.generateCalled();
         this.generator = "clearPuzzle";
     }
     
@@ -108,13 +102,7 @@ public class SudokuModel implements SudokuModelInterface{
     @Override
     public void giveCellNumber(int row, int col, int n) {
         if((ModelCell.MIN_NUM <= n) && (n <= ModelCell.MAX_NUM)) {
-            if(this.currentGrid.getCell(row, col).getNumber()==ModelCell.EMPTY) {
-                this.undoStack.push("giveCellNumber " + row + " " + col + " " + n);
-                this.redoStack.clear();
-            } else {
-                this.undoStack.push("changeGiveCellNumber " + row + " " + col + " " + this.currentGrid.getCell(row, col).getNumber());
-                this.redoStack.clear();
-            }
+            undoRedo.giveCellNumberCalled(row, col, n, this.currentGrid.getCell(row, col).getNumber());
             this.currentGrid.getCell(row, col).giveNumber(n);
             this.answerGrid.getCell(row, col).giveNumber(n);
         }
@@ -132,8 +120,7 @@ public class SudokuModel implements SudokuModelInterface{
         if(n!=ModelCell.EMPTY) {
             this.currentGrid.getCell(row, col).removeNumber();
             this.answerGrid.getCell(row, col).removeNumber();
-            this.undoStack.push("removeCellNumber " + row + " " + col + " " + n);
-            this.redoStack.clear();
+            undoRedo.removeCellNumberCalled(row, col, n);
         }
     }
     
@@ -257,14 +244,8 @@ public class SudokuModel implements SudokuModelInterface{
     @Override
     public void setCellNumber(int row, int col, int n) {
         if((ModelCell.MIN_NUM <= n) && (n <= ModelCell.MAX_NUM) && !this.currentGrid.getCell(row, col).isGiven()) {
-            if(this.currentGrid.getCell(row, col).getNumber()==ModelCell.EMPTY) {
-                this.undoStack.push("setCellNumber " + row + " " + col + " " + n);
-                this.redoStack.clear();
-            } else {
-                this.undoStack.push("changeSetCellNumber " + row + " " + col + " " + this.currentGrid.getCell(row, col).getNumber());
-                this.redoStack.clear();
-            }
-                this.currentGrid.getCell(row, col).setNumber(n); 
+            undoRedo.setCellNumberCalled(row, col, n, this.currentGrid.getCell(row, col).getNumber());
+            this.currentGrid.getCell(row, col).setNumber(n); 
         }
     }
     
@@ -278,8 +259,7 @@ public class SudokuModel implements SudokuModelInterface{
         int n = this.currentGrid.getCell(row, col).getNumber();
         if(n!=ModelCell.EMPTY) {
             this.currentGrid.getCell(row, col).clearNumber();
-            this.undoStack.push("clearCellNumber " + row + " " + col + " " + n);
-            this.redoStack.clear();
+            undoRedo.clearCellNumberCalled(row, col, n);
         }
     }
     
@@ -456,82 +436,24 @@ public class SudokuModel implements SudokuModelInterface{
     }
     @Override
     public Position undoMove() {
-        if(undoStack.isEmpty()) {
-            //return;
-            return null;
-        }
-        Scanner s = new Scanner(undoStack.pop());
-        String command = s.next();
-        int row = s.nextInt();
-        int col = s.nextInt();
-        
-        // So the undo move doesn't get added to the redo stack
-        Stack<String> tmp = this.redoStack;
-        this.redoStack = new Stack<String>();
-        
-        if(command.equals("giveCellNumber")) {
-            removeCellNumber(row, col);
-        } else if (command.equals("changeGiveCellNumber")) {
-            giveCellNumber(row, col, s.nextInt());
-        } else if (command.equals("removeCellNumber")) {
-            giveCellNumber(row, col, s.nextInt());
-        } else if (command.equals("setCellNumber")) {
-            clearCellNumber(row, col);
-        } else if (command.equals("changeSetCellNumber")) {
-            setCellNumber(row, col, s.nextInt());
-        } else if (command.equals("clearCellNumber")) {
-            setCellNumber(row, col, s.nextInt());
-        }
-        s.close();
-        
-        this.redoStack = tmp;
-        this.redoStack.push(undoStack.pop());
-        return new Position(row, col);
+        return undoRedo.undo();
     }
     @Override
     public Position redoMove() {
-        if(redoStack.isEmpty()) {
-            //return;
-            return null;
-        }
-        Scanner s = new Scanner(redoStack.pop());
-        String command = s.next();
-        int row = s.nextInt();
-        int col = s.nextInt();
-        
-        // So the redo move doesn't get added to the redo stack
-        Stack<String> tmp = this.redoStack;
-        this.redoStack = new Stack<String>();
-        
-        if(command.equals("giveCellNumber")) {
-            removeCellNumber(row, col);
-        } else if (command.equals("changeGiveCellNumber")) {
-            giveCellNumber(row, col, s.nextInt());
-        } else if (command.equals("removeCellNumber")) {
-            giveCellNumber(row, col, s.nextInt());
-        } else if (command.equals("setCellNumber")) {
-            clearCellNumber(row, col);
-        } else if (command.equals("changeSetCellNumber")) {
-            setCellNumber(row, col, s.nextInt());
-        } else if (command.equals("clearCellNumber")) {
-            setCellNumber(row, col, s.nextInt());
-        }
-        s.close();
-        this.redoStack = tmp;
-        return new Position(row, col);
+        return undoRedo.redo();
     }
     
-    /* 
+    
      @Override
      public boolean canUndo() {
-        return (!redoStack.isEmpty());   
+        return undoRedo.canRedo(); 
      }
      
      @Override
      public boolean canRedo() {
-        return (!undoStack.isEmpty());
+        return undoRedo.canRedo();
      }
-     */
+     
     @Override
     public void saveGame(File save) {
         /*File parentDir = new File(location);
