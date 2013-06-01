@@ -28,6 +28,9 @@ public interface SudokuModelInterface {
     public boolean isBoxValid(int box);
     public boolean isCellValid(int row, int col);
     
+    // ** OTHER GENERATING METHODS **
+    // Call the last called regenerate (default is clearPuzzle) and yes clearPuzzle is counted as a generator
+    public void regenerate();
     // Finds the solution for current Grid.
     // Returns true if it has a solution, false otherwise. 
     // (What I planned was, you can't go to the "next phase" if this returns false)
@@ -114,9 +117,13 @@ public interface SudokuModelInterface {
     // Change "pencil marks" to "pen" (changes all single candidates to "pen") (Not actually intuitive).
     // public void solveCandidates();
     // Pause feature (pauses time, hides puzzle)
-    // public void startTimer();
-    // public void stopTimer();
-    // public void pauseGame();
-
+    public void startStopwatch(long elapsedTime);  
+    public void startCountdown(long remainingTime);
+    public long getTime();
+    public void pauseTime();
+    public void unpauseTime();
+    
+    public void loadHighScores(File highscore);
+    public void saveHighScores(File highscore);
     
 }
