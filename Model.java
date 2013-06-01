@@ -40,7 +40,7 @@ public class Model implements ModelInterface{
      */
     @Override
     public void generateEasyPuzzle() {
-    	SudokuGenerator generator = new ModelEasyGenerator(this.currentGrid, this.answerGrid);
+    	ModelGenerator generator = new ModelEasyGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
         this.undoStack.clear();
         this.redoStack.clear();
@@ -52,7 +52,7 @@ public class Model implements ModelInterface{
      */
     @Override
     public void generateIntermediatePuzzle() {
-    	SudokuGenerator generator = new ModelIntermediateGenerator(this.currentGrid, this.answerGrid);
+        ModelGenerator generator = new ModelIntermediateGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
         this.undoStack.clear();
         this.redoStack.clear();
@@ -64,7 +64,7 @@ public class Model implements ModelInterface{
      */
     @Override
     public void generateHardPuzzle() {
-    	SudokuGenerator generator = new ModelHardGenerator(this.currentGrid, this.answerGrid);
+        ModelGenerator generator = new ModelHardGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
         this.undoStack.clear();
         this.redoStack.clear();
