@@ -21,16 +21,31 @@ public class ViewerCellButton extends JButton {
 	private JLabel canLine1;
 	private JLabel canLine2;
 	private JLabel canLine3;
-	private Color numberColor;
-	private Color candidatesColor;
+	private boolean given;
+	private boolean selected;
+	private boolean valid;
+	private boolean correct;
 
 	private final static int MAX_NUM_CANDIDATES = 9;
 	private final static Font NUMBER_FONT = new Font("sansserif",Font.BOLD,18);
 	private final static Font CANDIDATES_FONT = new Font("sansserif",Font.BOLD,10);
 	
+	private final static Color SELECTED_BACKGROUND_COLOR = Color.YELLOW;
+	private final static Color INVALID_BACKGROUND_COLOR = Color.RED;
+	private final static Color INCORRECT_NUMBER_COLOR = Color.MAGENTA;
+	private final static Color DEFAULT_BACKGROUND_COLOR = Color.WHITE;
+	private final static Color GIVEN_NUMBER_COLOR = Color.BLACK;
+	private final static Color SET_NUMBER_COLOR = Color.BLUE;
+	private final static Color DEFAULT_CANDIDATES_COLOR = Color.BLUE;
+	
+	
 	
 	public ViewerCellButton(Position pos){
 		this.pos = pos;
+		this.selected = false;
+		this.valid = true;
+		this.given = false;
+		this.correct = true;
 		this.number = new JLabel();
 		this.number.setFont(NUMBER_FONT);
 		this.number.setText(null);
@@ -45,8 +60,6 @@ public class ViewerCellButton extends JButton {
 		this.canLine3.setText(null);
 		candidatesVisible(false);
 		numberVisible(false);
-		this.numberColor = Color.BLACK;
-		this.candidatesColor = Color.BLUE;
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints line1c = new GridBagConstraints();
 		GridBagConstraints line2c = new GridBagConstraints();
@@ -61,7 +74,8 @@ public class ViewerCellButton extends JButton {
 		this.add(canLine2, line2c);
 		this.add(canLine3, line3c);
 		this.candidates = null;
-		this.setMargin(new Insets(1,1,1,1));
+		this.setMargin(new Insets(0,0,0,0));
+		updateColors();
 	}
 
 
@@ -89,7 +103,6 @@ public class ViewerCellButton extends JButton {
 	
 	public void setCandidateLabel(ArrayList<Integer> candidates){
 		this.candidates = candidates;
-		System.out.println(candidates.toString());
 		StringBuffer line1 = new StringBuffer();
 		StringBuffer line2 = new StringBuffer();
 		StringBuffer line3 = new StringBuffer();
@@ -118,20 +131,27 @@ public class ViewerCellButton extends JButton {
 		this.updateLabel();
 	}
 	
-	public void setNumberColor(Color c){
-		number.setForeground(c);
-	}
-	
-	public void updateNumberColor(){
+	public void updateColors(){
+		if(given == true){
+			number.setForeground(GIVEN_NUMBER_COLOR);
+		}else if(correct == false){
+			number.setForeground(INCORRECT_NUMBER_COLOR);
+		}else{
+			number.setForeground(SET_NUMBER_COLOR);
+		}
+		if(selected == true){
+			this.setBackground(SELECTED_BACKGROUND_COLOR);
+		}else if(valid == true){
+			this.setBackground(DEFAULT_BACKGROUND_COLOR);
+		}else{
+			this.setBackground(INVALID_BACKGROUND_COLOR);
+		}
 		
+		canLine1.setForeground(DEFAULT_CANDIDATES_COLOR);
+		canLine2.setForeground(DEFAULT_CANDIDATES_COLOR);
+		canLine3.setForeground(DEFAULT_CANDIDATES_COLOR);
 	}
 	
-	public void setCandidateColor(Color c){
-		canLine1.setForeground(c);
-		canLine2.setForeground(c);
-		canLine3.setForeground(c);
-	}
-
 	private void updateLabel(){
 		if(number.getText() == null){
 			if(candidates != null){
@@ -150,6 +170,7 @@ public class ViewerCellButton extends JButton {
 			candidatesVisible(false);
 			numberVisible(true);
 		}
+		updateColors();
 	}
 	
 	private void candidatesVisible(boolean b){
@@ -162,4 +183,27 @@ public class ViewerCellButton extends JButton {
 		number.setVisible(b);
 	}
 	
+	public void setSelected(boolean b){
+		this.selected = b;
+		updateColors();
+	}
+	
+	public boolean getSelected(){
+		return this.selected;
+	}
+	
+	public void setValid(boolean b){
+		this.valid = b;
+		updateColors();
+	}
+	
+	public void setGiven(boolean b){
+		this.given = b;
+		updateColors();
+	}
+	
+	public void setCorrect(boolean b){
+		this.correct = b;
+		updateColors();
+	}
 }

@@ -5,8 +5,8 @@ public class Controller {
 	private ControllerMenuBar menuController;
 	
 	public Controller(Model model, Viewer mainInterface) {
-		this.boardController = new ControllerBoardPanel(mainInterface.getBoard(), model, mainInterface.getInputPanel());
 		this.inputController = new ControllerInputPanel(model, mainInterface.getInputPanel());
+		this.boardController = new ControllerBoardPanel(mainInterface.getBoard(), model, mainInterface.getInputPanel(), inputController);
 		this.menuController = new ControllerMenuBar(model, mainInterface.getMenuBarViewer(), boardController);
 	}
 
