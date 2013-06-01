@@ -621,8 +621,8 @@ public class SudokuModel implements SudokuModelInterface{
     }
 
     @Override
-    public void startStopwatch(long elapsedTime) {
-        this.timer = new ModelStopwatch(elapsedTime);
+    public void startStopwatch(long startingTime) {
+        this.timer = new ModelStopwatch(startingTime);
     }
 
     @Override
