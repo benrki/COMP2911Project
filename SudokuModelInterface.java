@@ -85,13 +85,13 @@ public interface SudokuModelInterface {
     // giveCellNumber, removeCellNumber
     // setCellNumber, clearCellNumber
     // Undo
-    //public void undoMove();
     public Position undoMove();
     // Redo 
-    //public void redoMove();
     public Position redoMove();
-    // public boolean canUndo();
-    // public boolean canRedo();
+    // Can undo
+    public boolean canUndo();
+    // Can redo
+    public boolean canRedo();
     
     // Saves game to textfile to <specified location> with <specified name>
     public void saveGame(File save);
