@@ -1,17 +1,17 @@
 import java.util.ArrayList;
  
 public class Cell {
-   
+    
     // To do:
     // Reorder methods
     // Fix documentation
-	
+    
     public final static int EMPTY = 0;
     public final static int MIN_NUM = 1;
     public final static int MAX_NUM = 9;
     private final int row;
     private final int column;
-    private int number;
+    private int number; 
     private boolean given; // If this cell was "given" (i.e You can't change the guess)
     private ArrayList<Integer> candidates;
    
@@ -38,6 +38,7 @@ public class Cell {
             this.given = true;
         }
     }
+    
     /**
      * Remove the Cell number. Sets the Cell as not given.
      */
@@ -64,7 +65,8 @@ public class Cell {
             this.number = EMPTY;
         }
     }
-
+    
+    
     /**
      * Returns the number of the Cell.
      * @return the number of the Cell.
@@ -140,7 +142,7 @@ public class Cell {
     public boolean hasCandidate(int number) {
         return this.candidates.contains(number);
     }
-
+    
     /**
      * Returns an ordered ArrayList of the candidates.
      * @param number The candidate to this cell.
