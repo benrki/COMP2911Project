@@ -8,6 +8,7 @@ import javax.swing.JButton;
 
 public class ControllerBoardPanel {
 	private ViewerBoardPanel board;
+<<<<<<< HEAD
 
 	private ControllerInputPanel inputPanelController;
 	private SudokuModel model;
@@ -17,6 +18,12 @@ public class ControllerBoardPanel {
 	
 	
 
+=======
+	private ViewerInputPanel inputPanel;
+	private SudokuModel model;
+	
+	public ControllerBoardPanel(ViewerBoardPanel board, SudokuModel model, ViewerInputPanel inputPanel){
+>>>>>>> ba8a3e98ba6fb98b68d338765d7e89dc8861aaeb
 		this.board = board;
 		this.model = model;
 		this.inputPanelController = inputPanelController;
@@ -136,6 +143,7 @@ public class ControllerBoardPanel {
 	}
 
 	public void updatePosition(Position p) {
+<<<<<<< HEAD
 		int row = p.getRow();
 		int col = p.getCol();
 		int curr = (model.getCellNumber(row, col));
@@ -143,6 +151,20 @@ public class ControllerBoardPanel {
 			board.getButton(p).setNumberLabel(Integer.toString(curr));
 		}
 		board.getButton(p).setGiven(model.isCellGiven(p.getRow(), p.getCol()));
+=======
+		int x = p.getRow();
+		int y = p.getCol();
+		int curr = (model.getCellNumber(x, y));
+		if (curr != 0) {
+			board.getButton(p).setNumberLabel(Integer.toString(curr));
+		}
+		if(model.isCellGiven(p.getRow(), p.getCol())){
+			board.getButton(p).setNumberColor(Color.BLACK);
+		}else{
+			board.getButton(p).setNumberColor(Color.BLUE);
+			board.getButton(p).setCandidateColor(Color.BLUE);
+		}
+>>>>>>> ba8a3e98ba6fb98b68d338765d7e89dc8861aaeb
 	}
 }
 

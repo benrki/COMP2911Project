@@ -7,8 +7,11 @@ import javax.swing.JOptionPane;
 
 public class ControllerInputPanel {
 	private ViewerInputPanel inputPanel;
+<<<<<<< HEAD
 
 	private ViewerBoardPanel board;
+=======
+>>>>>>> ba8a3e98ba6fb98b68d338765d7e89dc8861aaeb
 	private SudokuModel model;
 	
 	public ControllerInputPanel(SudokuModel model, ViewerInputPanel inputPanel) {
