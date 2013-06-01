@@ -1,4 +1,3 @@
-
 public class ModelSolver {
     SudokuModel sudokuModel;
     ModelGrid currentGrid;

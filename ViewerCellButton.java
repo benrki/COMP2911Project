@@ -206,4 +206,8 @@ public class ViewerCellButton extends JButton {
 		this.correct = b;
 		updateColors();
 	}
+	
+	public boolean getCorrect(){
+		return correct;
+	}
 }

@@ -7,10 +7,11 @@ import javax.swing.JOptionPane;
 
 public class ControllerInputPanel {
 	private ViewerInputPanel inputPanel;
-	private Model model;
+
 	private ViewerBoardPanel board;
+	private SudokuModel model;
 	
-	public ControllerInputPanel(Model model, ViewerInputPanel inputPanel) {
+	public ControllerInputPanel(SudokuModel model, ViewerInputPanel inputPanel) {
 		this.model = model;
 		this.inputPanel = inputPanel;
 		this.board = inputPanel.getBoard();
@@ -26,6 +27,7 @@ public class ControllerInputPanel {
 		public void actionPerformed(ActionEvent arg0) {
 			clearSelectedCell();
 			showInvalid();
+			showIncorrect();
 		}
 		
 		private void clearSelectedCell(){

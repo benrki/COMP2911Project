@@ -3,7 +3,7 @@ public class ModelTest {
     public static void main(String[] args) {
         
         // Testing generating puzzles
-        Model sudoku = new Model();
+    	SudokuModel sudoku = new SudokuModel();
         //sudoku.generatePuzzle();
         System.out.println("Empty Grid");
         sudoku.printCurrentGrid();

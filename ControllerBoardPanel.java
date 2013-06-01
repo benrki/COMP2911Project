@@ -1,23 +1,23 @@
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
-
 
 
 public class ControllerBoardPanel {
 	private ViewerBoardPanel board;
-	private ViewerInputPanel inputPanel;
+
 	private ControllerInputPanel inputPanelController;
-	private Model model;
+	private SudokuModel model;
 	
-	public ControllerBoardPanel(ViewerBoardPanel board, Model model, ViewerInputPanel inputPanel, ControllerInputPanel inputPanelController){
+	public ControllerBoardPanel(ViewerBoardPanel board, SudokuModel model, ControllerInputPanel inputPanelController){
+
+	
+	
+
 		this.board = board;
-		this.inputPanel = inputPanel;
 		this.model = model;
 		this.inputPanelController = inputPanelController;
 		
@@ -133,6 +133,16 @@ public class ControllerBoardPanel {
 		@Override
 		public void keyTyped(KeyEvent arg0) {
 		}
+	}
+
+	public void updatePosition(Position p) {
+		int row = p.getRow();
+		int col = p.getCol();
+		int curr = (model.getCellNumber(row, col));
+		if (curr != 0) {
+			board.getButton(p).setNumberLabel(Integer.toString(curr));
+		}
+		board.getButton(p).setGiven(model.isCellGiven(p.getRow(), p.getCol()));
 	}
 }
 
