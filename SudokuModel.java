@@ -400,7 +400,7 @@ public class SudokuModel implements SudokuModelInterface{
     }    
     @Override
     public void revealCell(int row, int col) {
-        this.currentGrid.getCell(row, col).setNumber(this.answerGrid.getCell(row, col).getNumber());
+        this.setCellNumber(row, col, this.answerGrid.getCell(row, col).getNumber());
     }
     @Override
     public Position undoMove() {
