@@ -40,10 +40,10 @@ public class ModelGrid {
      */
     public boolean isCellValid(int row, int col) {
        int box = getCell(row, col).getBox();
-       if(!isRowValid(row) || !isColumnValid(col) || !isBoxValid(box)) {
-          return false;
+       if(isRowValid(row) && isColumnValid(col) && isBoxValid(box)) {
+          return true;
        }
-       return true;
+       return false;
     }
     
     /**
@@ -51,7 +51,7 @@ public class ModelGrid {
      * @return <tt>true</tt> if Grid is valid, false otherwise.
      */
     public boolean isGridValid() {
-       for(int i=0; i<NUM_ROWS; i++) {
+       for(int i=0; i<9; i++) {
            if(!isRowValid(i) || !isColumnValid(i) || !isBoxValid(i)) {
               return false;
            }
@@ -117,22 +117,6 @@ public class ModelGrid {
            }
        }
        return true;
-    }
-    
-    @Override
-    public String toString() {
-        String sudoku = "";
-        for (int i=0; i<NUM_ROWS; i++) {
-            for (int j=0; j<NUM_COLS; j++) {
-                if(grid.get(i).get(j).getNumber()==ModelCell.EMPTY) {
-                    sudoku = sudoku + "- ";
-                } else {
-                   sudoku = sudoku + grid.get(i).get(j).getNumber() + " ";
-                }
-            }
-            sudoku = sudoku + System.getProperty("line.separator");
-        }
-        return sudoku;
     }
     
     // Used only for testing
