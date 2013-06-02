@@ -113,11 +113,11 @@ public class ModelUndoRedo {
     }
     
     public boolean canUndo() {
-       return (!redoStack.isEmpty());   
+       return (!undoStack.isEmpty());   
     }
     
     public boolean canRedo() {
-       return (!undoStack.isEmpty());
+       return (!redoStack.isEmpty());
     }
 
 }
