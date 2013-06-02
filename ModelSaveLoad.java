@@ -16,8 +16,110 @@ public class ModelSaveLoad {
         this.currentGrid = currentGrid;
         this.answerGrid = answerGrid;
     }
-   
-    public String toString(ModelGrid string) {
+    
+    public void saveGame(File save) {
+        String newline = System.getProperty("line.separator");
+        String original = originalToString(newline);
+        String candidates = candidatesToString(newline);
+        String s = original + newline + "Answer:" + newline + this.gridToString(answerGrid) 
+                + "Current:" + newline + this.gridToString(currentGrid) + newline + candidates;
+        try {
+            PrintWriter print = new PrintWriter(save);
+            print.write(s);
+            print.close();
+        } catch (FileNotFoundException e) {}
+    }
+ 
+    public void loadGame(File save) {
+        try {
+            model.clearPuzzle();
+            Scanner s = new Scanner(save);
+            loadOriginal(s);
+            loadAnswer(s);
+            loadCurrent(s);
+            loadCandidates(s);
+            s.close();
+        } catch (FileNotFoundException e) {
+ 
+        } catch (NoSuchElementException e) {
+       
+        }
+    }
+
+ private void loadCandidates(Scanner s) {
+		s.next();
+		for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
+		    for (int j=0; j<ModelGrid.NUM_COLS; j++) {
+		            if (s.next() == "[") {
+		                    s.skip("[");
+		            }
+		            if (s.next() == "]") {
+		                    s.skip("]");
+		        }
+		            while (s.hasNextInt()) {
+		                currentGrid.grid.get(i).get(j).addCandidate(s.nextInt());
+		            }
+ 
+		    }
+		}
+	}
+
+	private void loadCurrent(Scanner s) {
+		s.next();
+		for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
+		    for (int j=0; j<ModelGrid.NUM_COLS; j++) {
+		            s.next();
+		            if (s.hasNextInt()) {
+		                    if (currentGrid.grid.get(i).get(j).isGiven() == false) {
+		                currentGrid.grid.get(i).get(j).setNumber(s.nextInt());
+		                    } else {
+		                            s.next();
+		                    }
+		            } else {
+		                    s.next();
+		            }
+		        if ((j+1)%3 == 0) {
+		             s.next();
+		        }
+		    }
+		}
+	}
+
+	private void loadAnswer(Scanner s) {
+		s.next();
+		for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
+		    for (int j=0; j<ModelGrid.NUM_COLS; j++) {
+		            s.next();
+		            if (s.hasNextInt()) {
+		            answerGrid.grid.get(i).get(j).giveNumber(s.nextInt());
+		            } else {
+		                    s.next();
+		            }
+		        if ((j+1)%3 == 0) {
+		             s.next();
+		        }
+		    }
+		}
+	}
+
+	private void loadOriginal(Scanner s) {
+		s.next();
+		for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
+		    for (int j=0; j<ModelGrid.NUM_COLS; j++) {
+		            s.next();
+		            if (s.hasNextInt()) {
+		            currentGrid.grid.get(i).get(j).giveNumber(s.nextInt());
+		            } else {
+		                    s.next();
+		            }
+		        if ((j+1)%3 == 0) {
+		             s.next();
+		        }
+		    }
+		}
+	}
+    
+    public String gridToString(ModelGrid string) {
         String sudoku = "";
         for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
             for (int j=0; j<ModelGrid.NUM_COLS; j++) {
@@ -37,18 +139,9 @@ public class ModelSaveLoad {
         }
         return sudoku;
     }
- 
-    public void saveGame(File save) {
-        /*File parentDir = new File(location);
-        parentDir.mkdir();
-        File save = new File(parentDir, name + ".txt");
-        try {
-            save.createNewFile();
-        } catch (IOException e) {
-           
-        }*/
-        String newline = System.getProperty("line.separator");
-        String original = "Original:" + newline;
+    
+	private String originalToString(String newline) {
+		String original = "Original:" + newline;
         for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
             for (int j=0; j<ModelGrid.NUM_COLS; j++) {
                 if (currentGrid.grid.get(i).get(j).isGiven() == false) {
@@ -65,8 +158,11 @@ public class ModelSaveLoad {
                 original = original + System.getProperty("line.separator");
             }
         }
-        String s = original + newline + "Answer:" + newline + this.toString(answerGrid) + "Current:" + newline + this.toString(currentGrid);
-        String candidates = "Candidates:" + newline;
+		return original;
+	}
+	
+	private String candidatesToString(String newline) {
+		String candidates = "Candidates:" + newline;
         for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
             for (int j=0; j<ModelGrid.NUM_COLS; j++) {
                 candidates = candidates + "[ ";
@@ -82,94 +178,6 @@ public class ModelSaveLoad {
             }
             candidates = candidates + " ";
         }
-        s = s + newline + candidates;
-        try {
-            PrintWriter print = new PrintWriter(save);
-            print.write(s);
-            print.close();
-        } catch (FileNotFoundException e) {}
-    }
- 
-    public void loadGame(File save) {
-//      File save = new File(location);
-        try {
-            model.clearPuzzle();
-            Scanner s = new Scanner(save);
-            s.next();
-            for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
-                for (int j=0; j<ModelGrid.NUM_COLS; j++) {
-                        s.next();
-                        if (s.hasNextInt()) {
-                        currentGrid.grid.get(i).get(j).giveNumber(s.nextInt());
-                        } else {
-                                s.next();
-                        }
-                    if ((j+1)%3 == 0) {
-                         s.next();
-                    }
-                }
-            }
-            s.next();
-            for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
-                for (int j=0; j<ModelGrid.NUM_COLS; j++) {
-                        s.next();
-                        if (s.hasNextInt()) {
-                        answerGrid.grid.get(i).get(j).giveNumber(s.nextInt());
-                        } else {
-                                s.next();
-                        }
-                    if ((j+1)%3 == 0) {
-                         s.next();
-                    }
-                }
-            }
-            s.next();
-            for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
-                for (int j=0; j<ModelGrid.NUM_COLS; j++) {
-                        s.next();
-                        if (s.hasNextInt()) {
-                                if (currentGrid.grid.get(i).get(j).isGiven() == false) {
-                            currentGrid.grid.get(i).get(j).setNumber(s.nextInt());
-                                } else {
-                                        s.next();
-                                }
-                        } else {
-                                s.next();
-                        }
-                    if ((j+1)%3 == 0) {
-                         s.next();
-                    }
-                }
-            }
-            s.next();
-            for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
-                for (int j=0; j<ModelGrid.NUM_COLS; j++) {
-                        if (s.next() == "[") {
-                                s.skip("[");
-                        }
-                        if (s.next() == "]") {
-                                s.skip("]");
-                    }
-                        while (s.hasNextInt()) {
-                            currentGrid.grid.get(i).get(j).addCandidate(s.nextInt());
-                        }
- 
-                }
-            }
-            s.close();
-        } catch (FileNotFoundException e) {
- 
-        } catch (NoSuchElementException e) {
-       
-        }
-    }
-   
-   
-    public void printCandidates() {
-        for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
-            for (int j=0; j<ModelGrid.NUM_COLS; j++) {
-                System.out.print(this.currentGrid.grid.get(i).get(j).getCandidates());
-            }
-        }
-    }
+		return candidates;
+	}
 }
