@@ -44,6 +44,7 @@ public class SudokuModel implements SudokuModelInterface{
     public void generateEasyPuzzle() {
         ModelGenerator generator = new ModelEasyGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
+        clearAllCandidates();
         undoRedo.generateCalled();
         this.generator = "generateEasyPuzzle";
     }
@@ -55,6 +56,7 @@ public class SudokuModel implements SudokuModelInterface{
     public void generateIntermediatePuzzle() {
         ModelGenerator generator = new ModelIntermediateGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
+        clearAllCandidates();
         undoRedo.generateCalled();
         this.generator = "generateIntermediatePuzzle";
     }
@@ -66,6 +68,7 @@ public class SudokuModel implements SudokuModelInterface{
     public void generateHardPuzzle() {
         ModelGenerator generator = new ModelHardGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
+        clearAllCandidates();
         undoRedo.generateCalled();
         this.generator = "generateHardPuzzle";
     }
@@ -79,6 +82,7 @@ public class SudokuModel implements SudokuModelInterface{
                 this.clearCellCandidates(i, j);
             }
         }
+        clearAllCandidates();
         undoRedo.generateCalled();
         this.generator = "clearPuzzle";
     }
