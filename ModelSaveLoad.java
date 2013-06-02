@@ -50,13 +50,15 @@ public class ModelSaveLoad {
 		s.next();
 		for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
 		    for (int j=0; j<ModelGrid.NUM_COLS; j++) {
-		            if (!s.hasNextInt()) {
-		                    s.next();
-		            }
-		            while (s.hasNextInt()) {
-		                currentGrid.grid.get(i).get(j).addCandidate(s.nextInt());
-		            }
- 
+		        if (!s.hasNextInt()) {
+		                s.next();
+		        }
+		        while (s.hasNextInt()) {
+		         	currentGrid.grid.get(i).get(j).addCandidate(s.nextInt());
+		        }
+		        if (!s.hasNextInt()) {
+	                s.next();
+	            } 
 		    }
 		}
 	}
