@@ -1,0 +1,36 @@
+
+public class ModelScore {
+    private String difficulty;
+    private String name;
+    private long time;
+    
+    public ModelScore (String difficulty, String name, long time) {
+        this.difficulty = difficulty;
+        this.name = name;
+        this.time = time;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
+}
