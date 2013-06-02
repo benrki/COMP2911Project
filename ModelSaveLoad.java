@@ -46,77 +46,77 @@ public class ModelSaveLoad {
         }
     }
 
-	private void loadCandidates(Scanner s) {
-		s.next();
-		for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
-		    for (int j=0; j<ModelGrid.NUM_COLS; j++) {
-		        if (!s.hasNextInt()) {
-		                s.next();
-		        }
-		        while (s.hasNextInt()) {
-		         	currentGrid.grid.get(i).get(j).addCandidate(s.nextInt());
-		        }
-		        if (!s.hasNextInt()) {
-	                s.next();
-	            } 
-		    }
-		}
+    private void loadOriginal(Scanner s) {
+        s.next();
+        for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
+            for (int j=0; j<ModelGrid.NUM_COLS; j++) {
+                s.next();
+                if (s.hasNextInt()) {
+                    currentGrid.grid.get(i).get(j).giveNumber(s.nextInt());
+                } else {
+                    s.next();
+                }
+                if ((j+1)%3 == 0) {
+                    s.next();
+                }
+            }
+        }
+    }
+    
+    private void loadAnswer(Scanner s) {
+        s.next();
+        for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
+            for (int j=0; j<ModelGrid.NUM_COLS; j++) {
+                s.next();
+                if (s.hasNextInt()) {
+                    answerGrid.grid.get(i).get(j).giveNumber(s.nextInt());
+                } else {
+                    s.next();
+                }
+                if ((j+1)%3 == 0) {
+                    s.next();
+                }
+            }
+        }
+    }
+    
+    private void loadCurrent(Scanner s) {
+        s.next();
+        for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
+            for (int j=0; j<ModelGrid.NUM_COLS; j++) {
+                s.next();
+                if (s.hasNextInt()) {
+                    if (currentGrid.grid.get(i).get(j).isGiven() == false) {
+                        currentGrid.grid.get(i).get(j).setNumber(s.nextInt());
+                    } else {
+                        s.next();
+                    }
+                } else {
+                    s.next();
+                }
+                if ((j+1)%3 == 0) {
+                    s.next();
+                }
+            }
+        }
+    }
+    
+    private void loadCandidates(Scanner s) {
+	s.next();
+	for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
+	    for (int j=0; j<ModelGrid.NUM_COLS; j++) {
+	        if (!s.hasNextInt()) {
+	            s.next();
+	        }
+	        while (s.hasNextInt()) {
+                    currentGrid.grid.get(i).get(j).addCandidate(s.nextInt());
+	        }
+	        if (!s.hasNextInt()) {
+                    s.next();
+	        } 
+            }
 	}
-
-	private void loadCurrent(Scanner s) {
-		s.next();
-		for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
-		    for (int j=0; j<ModelGrid.NUM_COLS; j++) {
-		            s.next();
-		            if (s.hasNextInt()) {
-		                    if (currentGrid.grid.get(i).get(j).isGiven() == false) {
-		                currentGrid.grid.get(i).get(j).setNumber(s.nextInt());
-		                    } else {
-		                            s.next();
-		                    }
-		            } else {
-		                    s.next();
-		            }
-		        if ((j+1)%3 == 0) {
-		             s.next();
-		        }
-		    }
-		}
-	}
-
-	private void loadAnswer(Scanner s) {
-		s.next();
-		for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
-		    for (int j=0; j<ModelGrid.NUM_COLS; j++) {
-		            s.next();
-		            if (s.hasNextInt()) {
-		            answerGrid.grid.get(i).get(j).giveNumber(s.nextInt());
-		            } else {
-		                    s.next();
-		            }
-		        if ((j+1)%3 == 0) {
-		             s.next();
-		        }
-		    }
-		}
-	}
-
-	private void loadOriginal(Scanner s) {
-		s.next();
-		for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
-		    for (int j=0; j<ModelGrid.NUM_COLS; j++) {
-		            s.next();
-		            if (s.hasNextInt()) {
-		            currentGrid.grid.get(i).get(j).giveNumber(s.nextInt());
-		            } else {
-		                    s.next();
-		            }
-		        if ((j+1)%3 == 0) {
-		             s.next();
-		        }
-		    }
-		}
-	}
+    }   
     
     public String gridToString(ModelGrid string) {
         String sudoku = "";
@@ -165,7 +165,7 @@ public class ModelSaveLoad {
         for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
             for (int j=0; j<ModelGrid.NUM_COLS; j++) {
                 candidates = candidates + "[ ";
-                for (int k=1; k<9; k++) {
+                for (int k=1; k<=9; k++) {
                     if (currentGrid.grid.get(i).get(j).hasCandidate(k)) {
                         candidates = candidates + k + " ";
                     }
