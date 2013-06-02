@@ -45,7 +45,7 @@ public class SudokuModel implements SudokuModelInterface{
         ModelGenerator generator = new ModelEasyGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
         undoRedo.generateCalled();
-        this.generator = "genereateEasyPuzzle";
+        this.generator = "generateEasyPuzzle";
     }
     
     /**
@@ -56,7 +56,7 @@ public class SudokuModel implements SudokuModelInterface{
         ModelGenerator generator = new ModelIntermediateGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
         undoRedo.generateCalled();
-        this.generator = "genereateIntermediatePuzzle";
+        this.generator = "generateIntermediatePuzzle";
     }
     
     /**
@@ -67,13 +67,18 @@ public class SudokuModel implements SudokuModelInterface{
         ModelGenerator generator = new ModelHardGenerator(this.currentGrid, this.answerGrid);
         generator.generate();
         undoRedo.generateCalled();
-        this.generator = "genereateHardPuzzle";
+        this.generator = "generateHardPuzzle";
     }
     
     @Override
     public void clearPuzzle() {
-        this.currentGrid = new ModelGrid();
-        this.answerGrid = new ModelGrid();
+        for(int i=0; i<ModelGrid.NUM_ROWS; i++) {
+            for(int j=0; j<ModelGrid.NUM_COLS; j++) {
+                this.currentGrid.getCell(i, j).removeNumber();
+                this.answerGrid.getCell(i, j).removeNumber();
+                this.clearCellCandidates(i, j);
+            }
+        }
         undoRedo.generateCalled();
         this.generator = "clearPuzzle";
     }
@@ -81,11 +86,11 @@ public class SudokuModel implements SudokuModelInterface{
     
     @Override
     public void regenerate() {
-      if(this.generator.equals("genereateEasyPuzzle")) {
+      if(this.generator.equals("generateEasyPuzzle")) {
           this.generateEasyPuzzle();
-      } else if(this.generator.equals("genereateIntermediatePuzzle")) {
+      } else if(this.generator.equals("generateIntermediatePuzzle")) {
           this.generateIntermediatePuzzle();
-      } else if(this.generator.equals("genereateHardPuzzle")) {
+      } else if(this.generator.equals("generateHardPuzzle")) {
           this.generateHardPuzzle();
       } else if(this.generator.equals("clearPuzzle")) {
           this.clearPuzzle();
@@ -262,17 +267,19 @@ public class SudokuModel implements SudokuModelInterface{
         if(currentGrid.getCell(row, col).isGiven()) {
             return;
         }
+        if(currentGrid.getCell(row, col).getNumber()!=ModelCell.EMPTY) {
+            return;
+        }
         // Clear candidates
         clearCellCandidates(row, col);
-        int tmp = currentGrid.getCell(row, col).getNumber();
         // Check each number
-        for (int i=1; i<=9; i++) {
+        for (int i=ModelCell.MIN_NUM; i<=ModelCell.MAX_NUM; i++) {
             currentGrid.getCell(row, col).setNumber(i);
             if(this.currentGrid.isCellValid(row, col)) {
                 currentGrid.getCell(row, col).addCandidate(i);
             }
         }
-        currentGrid.getCell(row, col).setNumber(tmp);
+        currentGrid.getCell(row, col).clearNumber();
         
     }
     
@@ -283,19 +290,17 @@ public class SudokuModel implements SudokuModelInterface{
                 addAllCellCandidates(i, j);
             }
         }
-        
     }
+    
     public void clearCellCandidates (int row, int col) {
-        for(int i=1; i<=9; i++) {
+        for(int i=1; i<=ModelCell.MAX_NUM; i++) {
             currentGrid.getCell(row, col).removeCandidate(i);
         }
     }
     public void clearAllCandidates () {
-        for(int i=0; i<9; i++) {
-            for(int j=0; j<9; j++) {
-                for(int k=1; k<=9; k++) {
-                    currentGrid.getCell(i, j).removeCandidate(k);
-                }
+        for(int i=0; i<ModelGrid.NUM_ROWS; i++) {
+            for(int j=0; j<ModelGrid.NUM_COLS; j++) {
+                this.clearCellCandidates(i, j);
             }
         }
     }
@@ -409,7 +414,7 @@ public class SudokuModel implements SudokuModelInterface{
     
      @Override
      public boolean canUndo() {
-        return undoRedo.canRedo(); 
+        return undoRedo.canUndo(); 
      }
      
      @Override
@@ -419,62 +424,14 @@ public class SudokuModel implements SudokuModelInterface{
      
     @Override
     public void saveGame(File save) {
-        /*File parentDir = new File(location);
-        parentDir.mkdir();
-        File save = new File(parentDir, name + ".txt");
-        try {
-            save.createNewFile();
-        } catch (IOException e) {
-            
-        }*/
-        String newline = System.getProperty("line.separator");
-        String original = "Original:" + newline;
-        for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
-            for (int j=0; j<ModelGrid.NUM_COLS; j++) {
-                if (currentGrid.grid.get(i).get(j).isGiven() == true) {
-                    original = original + "|" + currentGrid.grid.get(i).get(j).getNumber();
-                } else if (currentGrid.grid.get(i).get(j).isGiven() == false) {
-                    original = original + "|-";
-                }
-                if ((j+1)%3 == 0) {
-                    original = original + "| ";
-                }
-            }
-            original = original + newline;
-        }
-        String s = original + newline + "Current:" + newline + currentGrid.toString();
-        try {
-            PrintWriter print = new PrintWriter(save);
-            print.write(s);
-            print.close();
-        } catch (FileNotFoundException e) {}
+        ModelSaveLoad saver = new ModelSaveLoad(this, this.currentGrid, this.answerGrid);
+        saver.saveGame(save);
     }
 
     @Override
     public void loadGame(File save) {
-//      File save = new File(location);
-        try {
-            Scanner s = new Scanner(save);
-            for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
-                for (int j=0; j<ModelGrid.NUM_COLS; j++) {
-                    giveCellNumber(i, j, s.nextInt());
-                }
-            }
-            for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
-                for (int j=0; j<ModelGrid.NUM_COLS; j++) {
-                    if (currentGrid.grid.get(i).get(j).isGiven() == false) {
-                        setCellNumber(i, j, s.nextInt());
-                    } else {
-                        giveCellNumber(i, j, s.nextInt());
-                    }
-                }
-            }
-            s.close();
-        } catch (FileNotFoundException e) {
-
-        } catch (NoSuchElementException e) {
-        
-        }
+        ModelSaveLoad saver = new ModelSaveLoad(this, this.currentGrid, this.answerGrid);
+        saver.loadGame(save);
     }
     
     //*****************************************
