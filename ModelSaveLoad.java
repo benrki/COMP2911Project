@@ -46,16 +46,13 @@ public class ModelSaveLoad {
         }
     }
 
- private void loadCandidates(Scanner s) {
+	private void loadCandidates(Scanner s) {
 		s.next();
 		for (int i=0; i<ModelGrid.NUM_ROWS; i++) {
 		    for (int j=0; j<ModelGrid.NUM_COLS; j++) {
-		            if (s.next() == "[") {
-		                    s.skip("[");
+		            if (!s.hasNextInt()) {
+		                    s.next();
 		            }
-		            if (s.next() == "]") {
-		                    s.skip("]");
-		        }
 		            while (s.hasNextInt()) {
 		                currentGrid.grid.get(i).get(j).addCandidate(s.nextInt());
 		            }
